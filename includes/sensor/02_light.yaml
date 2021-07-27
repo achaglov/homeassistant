@@ -1,0 +1,18 @@
+binary_sensor:
+# Сенсор автоотключения света 
+  - platform: template
+    sensors:
+    
+      motion_no_light:
+        friendly_name: "Сенсор движения без света"
+        value_template: >-
+          {{ is_state('switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34', 'off')  
+             and is_state('binary_sensor.motion_sensor_158d0003cc2d64', 'on')  }}
+        device_class: switch
+        
+      no_motion_light:
+        friendly_name: "Сенсор света без движения"
+        value_template: >-
+          {{ is_state('switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34', 'on')  
+             and is_state('binary_sensor.motion_sensor_158d0003cc2d64', 'off')  }}
+        device_class: switch

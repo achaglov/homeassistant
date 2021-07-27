@@ -1,0 +1,80 @@
+#Пылесос
+- alias: 'Vacuum Time Clean'
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '11:00'
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+  action: 
+    - service: vacuum.start
+      entity_id: vacuum.xiaomi_vacuum_cleaner
+
+- alias: 'Vacuum Cleaning'
+  trigger:
+    platform: state
+    entity_id: vacuum.xiaomi_vacuum_cleaner
+    to: 'cleaning'
+  action:
+     - service: notify.telegram
+       data:
+        message: 'Пылесос начал уборку'
+
+- alias: 'Vacuum Returning'
+  trigger:
+    platform: state
+    entity_id: vacuum.xiaomi_vacuum_cleaner
+    to: 'returning'
+  action:
+     - service: notify.telegram
+       data:
+#         message: 'Пылесос завершил уборку и возвращается на станцию. Время уборки: {{states.sensor.vacuum_cleaner_cleaning_time.state}} минут. Общая площадь уборки: {{sensor.vacuum_cleaner_cleaned_area}} m²' не работает пока.
+         message: 'Пылесос завершил уборку и возвращается на станцию'
+#- alias: 'Vacuum Docked'
+#  trigger:
+#    platform: state
+#    entity_id: vacuum.xiaomi_vacuum_cleaner
+#    to: 'docked'
+#  action:
+#     - service: notify.telegram
+#       data:
+#        message: 'Пылесос прибыл на станцию и заряжается'
+
+- alias: 'Vacuum Cleaner Error'
+  trigger:
+    - platform: state
+      entity_id: sensor.vacuum_cleaner_status_sensor
+      to: 'Error'
+    - platform: state
+      entity_id: sensor.vacuum_cleaner_status_sensor
+      to: 'In Error'
+    - platform: state
+      entity_id: sensor.vacuum_cleaner_status_sensor
+      to: 'Charging Error'
+  action:
+    - service: notify.telegram
+      data:
+        message: >-
+          {% if is_state('sensor.vacuum_cleaner_error_sensor', 'No Error')  %}
+            {{states.sensor.vacuum_cleaner_status_sensor.state}}
+          {% else %}
+            {{states.sensor.vacuum_cleaner_error_sensor.state}}
+          {% endif %}
+
+- alias: Vacuum Cleaner Error Solved
+  trigger:
+    - platform: state
+      entity_id: sensor.vacuum_cleaner_error_sensor
+      to: 'No Error'
+  action:
+    - service: notify.telegram
+      data:
+        message: Пылесос вне опасности

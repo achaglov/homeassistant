@@ -1,0 +1,417 @@
+title: Home Assistant - сервер
+views:
+
+  - title: Главная
+    icon: mdi:home-assistant
+    
+    cards:
+
+      - type: vertical-stack
+        cards:
+        
+        - type: markdown
+          content: >
+             **Текущее состояние**
+             
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.time
+              name: Текущее время
+              icon: mdi:clock-outline
+            - entity: sensor.date
+              name: Дата
+              icon: mdi:calendar-check-outline
+              
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.maria_db_size
+              name: Объем БД
+              icon: mdi:database
+
+      - type: vertical-stack
+        cards:
+        - type: markdown
+          content: >
+             **Графики** 
+
+        - type: horizontal-stack
+          cards:
+
+
+           - type: gauge
+             name: Загрузка CPU
+             unit: '%'
+             entity: sensor.processor_use_percent
+             severity:
+                green: 0
+                yellow: 60
+                red: 85
+             
+           - type: gauge
+             name: Загрузка ОЗУ
+             unit: '%'
+             entity: sensor.memory_use_percent
+             severity:
+                green: 0
+                yellow: 60
+                red: 85
+                
+        - type: horizontal-stack
+          cards:
+
+           - type: gauge
+             name: Диск заполнен
+             unit: '%'
+             entity: sensor.disk_use_percent
+             severity:
+                green: 0
+                yellow: 60
+                red: 85    
+                
+           - type: gauge
+             name: Температура CPU
+             unit: 'C°'
+             entity: sensor.cpu_temperature
+             severity:
+               green: 0
+               yellow: 60
+               red: 75
+                
+                
+        - type: history-graph
+          entities:
+           - entity: sensor.maria_db_size
+             name: Maria DB
+                
+              
+  - title: Погода
+    icon: mdi:weather-partly-snowy-rainy
+    
+    cards:
+
+        - type: weather-forecast
+          entity: weather.home_assistant 
+          
+          
+  - title: Освещение
+    icon: mdi:lightbulb-group
+    
+          
+    cards:
+    
+      - type: vertical-stack
+        cards:
+        - type: markdown
+          content: >
+             **Панель переключателей** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: light.192_168_1_249
+              name: Свет в гостиной
+            - entity: light.192_168_1_249_ambilight
+              name: Свет в гостиной амбилайт
+            - entity: switch.sonoff_100061d346
+              name: Бра в гостиной
+            - entity: light.yeelight_ceiling3_0x0000000007d1efa6
+              name: Свет в спальне
+            - entity: switch.sonoff_100061cac1
+              name: Подсветка в спальне
+            - entity: light.yeelight_ceiling5_0x0000000007f0e59f           
+              name: Свет на кухне
+            - entity: light.gateway_light_04cf8c8f8501
+              name: Ночник на кухне
+            - entity: switch.sonoff_1000f261e0
+              name: Подсветка на кухне
+            - entity: switch.wall_switch_no_neutral_lumi_158d0003d31289_ch0_lumi_158d0003d31289
+              name: Свет в прихожей
+            - entity: switch.plug_158d0003c73db6
+              name: Ночник в прихожей
+            - entity: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34            
+              name: Свет в ванной
+            - entity: switch.sonoff_100001f1ea
+              name: Сбербокс
+            - entity: switch.sonoff_1000d8e906
+              name: Ёлочка
+            - entity: switch.relay_lumi_158d0006d49f34_ch1_lumi_158d0006d49f34            
+              name: Вентиляция в ванной
+
+
+      - type: vertical-stack
+        cards:
+        - type: markdown
+          content: >
+             **Светильники**    
+              
+        - type: horizontal-stack
+          cards:
+            - type: light
+              entity: light.192_168_1_249
+              name: Свет в гостиной
+            - type: light
+              entity: light.192_168_1_249_ambilight
+              name: Свет в гостиной амбилайт
+            - type: light
+              entity: light.yeelight_ceiling3_0x0000000007d1efa6
+              name: Свет в спальне
+            - type: light
+              entity: light.yeelight_ceiling5_0x0000000007f0e59f           
+              name: Свет на кухне
+ 
+  - title: Zigbee
+    icon: mdi:zigbee
+    
+    cards:
+    
+
+
+
+      - type: vertical-stack
+        cards:
+        
+        - type: markdown
+          content: >
+             **Охрана** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: alarm_control_panel.lumi_gateway_v3_alarm
+              name: Панель сигнализации
+        
+        - type: markdown
+          content: >
+             **Двери, окна** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:   
+            - entity: binary_sensor.door_window_sensor_158d0002e2c1c7
+              name: Входная дверь
+              
+        - type: markdown
+          content: >
+             **Датчик дыма** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: binary_sensor.smoke_sensor_158d00045f1f2d
+              name: Задымление в спальне
+
+            
+        - type: markdown
+          content: >
+             **Уровень заряда** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: sensor.battery_158d0002b46857
+              name: Выключатель в гостиной
+            - entity: sensor.battery_158d0002e2c1c7
+              name: Входная дверь
+            - entity: sensor.battery_158d0003021440
+              name: Движение в спальне
+            - entity: sensor.battery_158d0003559ebf
+              name: Выключатель на кухне
+            - entity: sensor.battery_158d000355fbed
+              name: Выключатель в спальне
+            - entity: sensor.battery_158d0003cc2d64
+              name: Движение в ванной
+            - entity: sensor.battery_158d0003d12974
+              name: Движение в гостиной
+            - entity: sensor.battery_158d0003f1c963
+              name: Движение на кухне
+            - entity: sensor.battery_158d000421a109
+              name: Движение в прихожей
+            - entity: sensor.battery_158d00042d6278
+              name: Утечка на кухне
+            - entity: sensor.battery_158d00042d6314
+              name: Утечка в ванной
+            - entity: sensor.battery_158d00045abebb
+              name: Утечка в туалете
+            - entity: sensor.battery_158d00045f1f2d
+              name: Датчик дыма
+            - entity: sensor.battery_158d0001dc32b4
+              name: Температура и влажность в ванной
+              
+      - type: vertical-stack
+        cards:
+
+            
+            
+        - type: markdown
+          content: >
+             **Выключатели** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: switch.relay_lumi_158d0006d49f34_ch1_lumi_158d0006d49f34            
+              name: Вентиляция в ванной
+            - entity: switch.plug_158d0003c73db6
+              name: Ночник в прихожей
+            - entity: switch.plug_158d0003c779c9
+              name: Вода
+            
+        - type: markdown
+          content: >
+             **Шлюз** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: light.gateway_light_04cf8c8f8501
+              name: Ночник на кухне
+            - entity: sensor.lumi_gateway_v3_illuminance
+              name: Освещенность на кухне
+              
+
+
+        - type: markdown
+          content: >
+             **Движение** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: binary_sensor.motion_sensor_158d0003021440
+              name: Движение в спальне
+            - entity: binary_sensor.motion_sensor_158d0003cc2d64
+              name: Движение в ванной
+            - entity: binary_sensor.motion_sensor_158d0003d12974
+              name: Движение в гостиной
+            - entity: binary_sensor.motion_sensor_158d0003f1c963
+              name: Движение на кухне
+            - entity: binary_sensor.motion_sensor_158d000421a109
+              name: Движение в прихожей
+
+        - type: markdown
+          content: >
+             **Датчики протечки** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: binary_sensor.water_leak_sensor_158d00042d6278
+              name: Утечка на кухне
+            - entity: binary_sensor.water_leak_sensor_158d00042d6314
+              name: Утечка в ванной
+            - entity: binary_sensor.water_leak_sensor_158d00045abebb
+              name: Утечка в туалете
+              
+              
+  - title: Счетчики
+    icon: mdi:counter
+    
+    cards:
+    
+      - type: vertical-stack
+        cards:
+
+
+        - type: markdown
+          content: >
+             **Электроэнергия** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: sensor.energometr_energy_totalstarttime
+              name: Дата изменения состояния
+            - entity: sensor.energometr_energy_total
+              name: Энергия всего
+            - entity: sensor.energometr_energy_yesterday
+              name: Энергия вчера
+            - entity: sensor.energometr_energy_today
+              name: Энергия сегодня
+            - entity: sensor.energometr_energy_power
+              name: Мощность
+            - entity: sensor.energometr_energy_apparentpower
+              name: Полная мощность
+            - entity: sensor.energometr_energy_reactivepower
+              name: Реактивная мощность
+            - entity: sensor.energometr_energy_factor
+              name: Коэффициент мощности
+            - entity: sensor.energometr_energy_voltage
+              name: Напряжение
+            - entity: sensor.energometr_energy_current
+              name: Ток
+
+
+      - type: vertical-stack
+        cards:
+        
+
+        - type: markdown
+          content: >
+             **Вода** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:   
+            - entity: sensor.cold_water
+              name: Холодная (всего)
+            - entity: sensor.hot_water
+              name: Горячая (всего)
+            - entity: sensor.cold_day
+              name: Холодная (день)
+            - entity: sensor.hot_day
+              name: Горячая (день)  
+            - entity: sensor.waterius_voltage
+              name: Батарея
+            - entity: sensor.waterius_voltage_low
+              name: Низкий заряд
+
+
+  - title: Уборка помещений
+    icon: mdi:broom
+    
+    cards:
+      - type: 'custom:vacuum-card'
+        entity: vacuum.xiaomi_vacuum_cleaner
+        style: |
+          ha-card .preview {
+           background-color: var(--secondary-background-color);
+          }
+        stats:
+          default:
+            - attribute: filter_left
+              unit: часов
+              subtitle: Фильтр
+            - attribute: side_brush_left
+              unit: часов
+              subtitle: Боковая щетка
+            - attribute: main_brush_left
+              unit: часов
+              subtitle: Основная щетка
+            - attribute: sensor_dirty_left
+              unit: часов
+              subtitle: Датчики
+          cleaning:
+            - attribute: cleaned_area
+              unit: m2
+              subtitle: Убрано в кв.м.
+            - attribute: cleaning_time
+              unit: минут
+              subtitle: Время уборки
+        actions:
+          - name: Уборка в гостиной
+            service: script.clean_living_room
+            icon: 'mdi:sofa'
+          - name: Уборка в спальне
+            service: script.clean_badroom_room
+            icon: 'mdi:bed'
+          - name: Уборка на кухне
+            service: script.clean_kitchen_room
+            icon: 'mdi:silverware-fork-knife'
+          - name: Уборка в прихожей
+            service: script.clean_corridor_room
+            icon: 'mdi:door-open'
+          - name: Коврик в прихожей
+            service: script.clean_carpet_corridor
+            icon: 'mdi:rug'

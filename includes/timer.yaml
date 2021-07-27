@@ -1,0 +1,7 @@
+  timer_bathroom_fan: 
+    name: Ванная вент. выкл через -
+    duration: '00:05:00'
+    
+  timer_bathroom_light:
+    name: Отключение света в прихожей через -
+    duration: '00:01:00' 

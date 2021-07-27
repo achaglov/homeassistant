@@ -1,0 +1,116 @@
+clean_living_room:
+        alias: "Vacuum Living room"
+        sequence:
+          - service: vacuum.send_command
+            data:
+              entity_id: vacuum.xiaomi_vacuum_cleaner
+              command: app_zoned_clean
+              params: [[24312,28988,30262,32188,1]]
+clean_badroom_room:
+        alias: "Vacuum Badroom room"
+        sequence:
+          - service: vacuum.send_command
+            data:
+              entity_id: vacuum.xiaomi_vacuum_cleaner
+              command: app_zoned_clean
+              params: [[24475,23410,29925,26010,1]]
+clean_kitchen_room:
+        alias: "Vacuum Kitchen room"
+        sequence:
+          - service: vacuum.send_command
+            data:
+              entity_id: vacuum.xiaomi_vacuum_cleaner
+              command: app_zoned_clean
+              params: [[24541,26046,27191,27996,1]]
+
+clean_corridor_room:
+        alias: "Vacuum Corridor room"
+        sequence:
+          - service: vacuum.send_command
+            data:
+              entity_id: vacuum.xiaomi_vacuum_cleaner
+              command: app_zoned_clean
+              params: [[27382,26089,30432,28889,1]]
+
+clean_carpet_corridor:
+        alias: "Vacuum carpet corridor"
+        sequence:
+          - service: vacuum.send_command
+            data:
+              entity_id: vacuum.xiaomi_vacuum_cleaner
+              command: app_zoned_clean
+              params: [[29110,26052,30410,27402,2]]
+
+
+
+
+sunrise_effect:
+  alias: "Sunrise Effect"
+  sequence:
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 1
+      kelvin: 1700
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 23
+      kelvin: 1800
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 46
+      kelvin: 1900
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 69
+      kelvin: 2000
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 92
+      kelvin: 2100
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 115
+      kelvin: 2200
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 128
+      kelvin: 2300
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 151
+      kelvin: 2400
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 174
+      kelvin: 2500
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 197
+      kelvin: 2600
+  - delay: 00:03:00
+  - service: light.turn_on
+    entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+    data:
+      brightness: 220
+      kelvin: 2700
+  mode: single
+  icon: mdi:weather-sunset-up

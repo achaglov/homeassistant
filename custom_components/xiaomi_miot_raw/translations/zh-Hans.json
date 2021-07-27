@@ -1,0 +1,141 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "已经配置过这个设备了"
+        },
+        "create_entry": {
+            "default": ""
+        },
+        "error": {
+            "unexpected_error": "发生错误，请查看日志",
+            "cannot_connect": "无法连接",
+            "value_error": "输入错误",
+            "bad_params": "参数有误",
+            "no_local_access": "该设备不支持本地接入，已启用云端接入。请再次点击“提交”",
+            "no_connect_warning": "连接设备失败。如果您添加的是小爱音箱，这是正常现象；否则，请检查信息是否有误。请在下方输入小爱音箱的 model。",
+            "cant_login": "登录失败",
+            "account_tips": "登录账号是为了方便您添加设备，而不会自动添加所有设备。\n登录后再次添加此集成，即可选择要添加的设备。"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "name": "名称",
+                    "host": "IP",
+                    "token": "token"
+                },
+                "description": "登录小米账号以后，可以更快捷地添加设备。\n并非所有列表中的设备都支持。",
+                "title": "选择操作"
+            },
+            "xiaomi_account": {
+				"title": "小米账号登录",
+				"description": "",
+				"data": {
+					"username": "邮箱/小米 ID",
+					"password": "密码"
+				}
+			},
+            "localinfo": {
+                "data": {
+                    "name": "名称",
+                    "host": "IP",
+                    "token": "token"
+                },
+                "description": "本地通信需要获取以下信息",
+                "title": "配置"
+            },
+            "devinfo": {
+                "title": "设备信息",
+                "data": {
+                    "devtype": "请选择设备类型",
+                    "mapping": "mapping",
+                    "params": "配置参数",
+                    "cloud_read": "从云端获取设备状态",
+                    "cloud_write": "通过云端控制设备"
+
+                },
+                "description": "{device_info}"
+            },
+            "cloudinfo": {
+                "title": "账号信息",
+                "data": {
+                    "did": "did",
+                    "userId": "userId",
+                    "serviceToken": "serviceToken",
+                    "ssecurity": "ssecurity"
+                },
+                "description": "云端通信需要获取以下信息"
+            }
+        },
+        "title": "MIoT"
+    },
+    "system_health": {
+        "info": {
+            "logged_in": "已登录小米账号",
+            "can_reach_micloud_server": "可访问米家服务器",
+            "account_devices_count": "账号米家设备数",
+            "added_devices": "插件接入设备数",
+            "accounts_count": "云端接入账号数"
+        }
+    },
+    "options": {
+        "abort": {
+            "no_configurable_options": "没有可配置的选项",
+            "no_configurable_account": "小米账号没有可配置的选项。\n如需退出登录，删除此配置项即可。删除后不影响已添加的设备。\n如需刷新设备列表，请点击“重载”。"
+        },
+        "error": {
+            "plz_agree": "请阅读说明"
+        },
+        "step": {
+            "account": {
+                "data": {
+                    "server_location": "设备所在服务器",
+                    "batch_add": "批量添加设备"
+                },
+                "description": "可以在此选择设备所在的服务器。\n如需退出登录，请点击“删除”。删除后不影响已添加的设备。\n如需刷新设备列表，请点击“重载”。\n**如需添加 WiFi 设备，请点击“添加集成”-“Xiaomi MIoT”，勿使用“批量添加设备”**。",
+                "title": "账号设置"
+            },
+            "sensor": {
+                "data": {
+                },
+                "description": "勾选后，每个属性都会作为一个传感器实体出现。",
+                "title": "传感器设置"
+            },
+            "cover": {
+                "data": {
+                    "reverse_position_percentage": "反转位置百分比"
+                },
+                "description": "Home Assistant 定义的卷帘位置百分比：0 为关闭（放下），100 为开启（升起）。\n如果厂商的定义与之相反，就会出现“下降到底时上升按钮变灰”的问题。\n勾选后，位置百分比反转，可解决此问题。",
+                "title": "卷帘设置"
+            },
+            "climate": {
+                "data": {
+                    "current_temp_source": "环境温度传感器实体 ID"
+                },
+                "description": "如果您的空调没有环境温度传感器，空调实体的环境温度会显示为和目标温度一致。\n您可以在此处输入其他温度传感器的实体 ID，这样就可以把它作为环境温度来源。",
+                "title": "空调设置"
+            },
+            "light_and_lock": {
+                "data": {
+                    "show_indicator_light": "显示指示灯开关",
+                    "show_physical_controls_locked": "显示童锁开关"
+                },
+                "description": "",
+                "title": "指示灯和童锁设置"
+            },
+            "select_devices": {
+                "data": {
+                    "devices": "设备列表"
+                },
+                "description": "请选择要添加的设备。\n\n点击完成后，设备将在后台添加，请刷新页面查看已添加的设备。",
+                "title": "批量添加"
+            },
+            "batch_agreement": {
+                "data": {
+                    "iagree": "我已阅读并理解"
+                },
+                "description": "接下来，您可以选择多个要添加的设备，一次性将它们添加到 Home Assistant。\n点击提交后，设备会在后台添加，请等待一分钟。刷新页面可以实时看到已添加成功的设备。\n如果添加的某个设备不能正常工作，请将其删除，然后通过“添加集成”的方式手动添加。\n通过此方式添加设备，都是**云端接入**，需要互联网连接才能工作。\n如果设备支持本地接入，请不要通过此方法添加，请通过“添加集成”的方式手动添加。",
+                "title": "请认真阅读以下说明"
+            }
+        }
+    }
+}

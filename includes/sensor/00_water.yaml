@@ -1,0 +1,37 @@
+#Водосчетчики
+  - platform: mqtt
+    name: "Cold Water"
+    state_topic: "waterius/9772083/ch1"
+    value_template: "{{ value }}"
+    unit_of_measurement: "м3"
+    icon: mdi:water
+  - platform: mqtt
+    name: "Hot Water"
+    state_topic: "waterius/9772083/ch0"
+    value_template: "{{ value }}"
+    unit_of_measurement: "м3"
+    icon: mdi:water
+  - platform: mqtt
+    name: "Cold Day"
+    state_topic: "waterius/9772083/delta1"
+    value_template: "{{ value }}"
+    unit_of_measurement: "литр"
+    icon: mdi:delta
+  - platform: mqtt
+    name: "Hot Day"
+    state_topic: "waterius/9772083/delta0"
+    value_template: "{{ value }}"
+    unit_of_measurement: "литр"
+    icon: mdi:delta
+  - platform: mqtt
+    name: "Waterius Voltage"
+    state_topic: "waterius/9772083/voltage"
+    value_template: "{{ value }}"
+    unit_of_measurement: "V"
+    icon: mdi:battery
+  - platform: mqtt
+    name: "Waterius Voltage Low"
+    state_topic: "waterius/9772083/voltage_low"
+    value_template: "{{ value }}"
+    unit_of_measurement: ""
+    icon: mdi:battery-off-outline

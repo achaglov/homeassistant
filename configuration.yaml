@@ -1,0 +1,53 @@
+homeassistant:
+  customize: !include_dir_merge_named includes/customize
+  packages: !include_dir_merge_named includes/packages
+  
+  
+  
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+lovelace:
+  mode: yaml
+  resources:
+    - url: /hacsfiles/vacuum-card/vacuum-card.js
+      type: module   
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+sonoff:
+  username: !secret username_sonoff
+  password: !secret password_sonoff
+  
+#Telegram
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_token
+    parse_mode: html
+    allowed_chat_ids:
+      - !secret telegram_bot_chat_id
+
+notify:
+  - name: telegram
+    platform: telegram
+    chat_id: !secret telegram_bot_chat_id
+
+
+#Вынос во внешние файлы
+group: !include includes/groups.yaml
+script: !include includes/scripts.yaml
+scene: !include includes/scenes.yaml
+recorder: !include includes/recorder.yaml
+yeelight: !include includes/yeelight.yaml
+timer: !include includes/timer.yaml
+
+#Вынос во внешние папки
+sensor: !include_dir_merge_list includes/sensor
+automation: !include_dir_merge_list includes/automation
+
+#ble_monitor:
+#  devices:
+#    - mac: 'a4:c1:38:7d:8e:e6'
+#      name: 'xiaomi-smart-thermostat2'
