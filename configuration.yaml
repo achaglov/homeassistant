@@ -11,7 +11,11 @@ lovelace:
   mode: yaml
   resources:
     - url: /hacsfiles/vacuum-card/vacuum-card.js
-      type: module   
+      type: module
+    - url: /hacsfiles/animated-consumption-card/animated-consumption-card.js
+      type: module
+    - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+      type: module
 
 # Text to speech
 tts:
