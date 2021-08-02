@@ -119,11 +119,9 @@ condition:
   - fri
 - condition: and
   conditions:
-  - type: is_illuminance
-    condition: numeric_state
-    check_entity: !input 'check_entity'
-    domain: sensor
-    below: 500
+  - condition: numeric_state
+    entity_id: !input 'check_entity'
+    below: '400'
 action:
 - wait_template: '{{sensor == ''none'' or as_timestamp(states(sensor)) != None}}'
 - wait_template: '{{0 < as_timestamp(states(sensor) if sensor != ''none'' else states(''sensor.date'')

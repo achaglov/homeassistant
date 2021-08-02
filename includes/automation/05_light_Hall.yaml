@@ -1,0 +1,89 @@
+# Включить свет в прихожей по движению
+- alias: Hall_Turn_ON_light_(motion on)
+  initial_state: true
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_158d000421a109
+    to: 'on'
+  condition:
+  - condition: time
+    after: "07:30"
+    before: "20:00"
+  - condition: and
+    conditions:
+    - condition: numeric_state
+      entity_id: sensor.illumination_158d000421a109
+      below: 500
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: switch.wall_switch_158d0003d31289
+        state: "off"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.wall_switch_158d0003d31289
+    - service: timer.start
+      entity_id: timer.hall_light_off
+
+
+
+# Включить ночник в прихожей по движению
+- alias: Hall_Turn_ON_light_(motion on)_night
+  initial_state: true
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_158d000421a109
+    to: 'on'
+  condition:
+  - condition: time
+    after: "20:01"
+    before: "07:29"
+  - condition: and
+    conditions:
+    - condition: numeric_state
+      entity_id: sensor.illumination_158d000421a109
+      below: 400
+    - condition: and
+      conditions:
+      - condition: state
+        entity_id: switch.plug_158d0003c73db6
+        state: "off"      
+  action:
+    - service: switch_turn_on
+      entity_id: switch.plug_158d0003c73db6
+    - service: timer.start
+      entity_id: timer.hall_light_off 
+   
+
+# Выключить свет в прихожей по движению
+- alias: Hall_Turn_OFF_light_(motion on)
+  initial_state: true
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data: 
+      entity_id: timer.hall_light_off
+  condition:
+    - condition: state
+      entity_id: switch.wall_switch_158d0003d31289
+      state: "on"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.wall_switch_158d0003d31289
+
+# Выключить ночник в прихожей по движению
+- alias: Hall_Turn_OFF_light_(motion on)_night
+  initial_state: true
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data: 
+      entity_id: timer.hall_light_off
+  condition:
+    - condition: state
+      entity_id: switch.plug_158d0003c73db6
+      state: "on"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.plug_158d0003c73db6
+

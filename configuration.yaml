@@ -51,7 +51,3 @@ timer: !include includes/timer.yaml
 sensor: !include_dir_merge_list includes/sensor
 automation: !include_dir_merge_list includes/automation
 
-#ble_monitor:
-#  devices:
-#    - mac: 'a4:c1:38:7d:8e:e6'
-#      name: 'xiaomi-smart-thermostat2'

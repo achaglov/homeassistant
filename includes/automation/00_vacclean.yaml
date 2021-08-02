@@ -1,4 +1,4 @@
-#Пылесос
+# Пылесос
 - alias: 'Vacuum Time Clean'
   initial_state: 'on'
   trigger:
@@ -24,8 +24,8 @@
     entity_id: vacuum.xiaomi_vacuum_cleaner
     to: 'cleaning'
   action:
-     - service: notify.telegram
-       data:
+    - service: notify.telegram
+      data:
         message: 'Пылесос начал уборку'
 
 - alias: 'Vacuum Returning'
@@ -34,10 +34,9 @@
     entity_id: vacuum.xiaomi_vacuum_cleaner
     to: 'returning'
   action:
-     - service: notify.telegram
-       data:
-#         message: 'Пылесос завершил уборку и возвращается на станцию. Время уборки: {{states.sensor.vacuum_cleaner_cleaning_time.state}} минут. Общая площадь уборки: {{sensor.vacuum_cleaner_cleaned_area}} m²' не работает пока.
-         message: 'Пылесос завершил уборку и возвращается на станцию'
+    - service: notify.telegram
+      data:
+        message: 'Пылесос завершил уборку и возвращается на станцию'
 #- alias: 'Vacuum Docked'
 #  trigger:
 #    platform: state
@@ -46,7 +45,7 @@
 #  action:
 #     - service: notify.telegram
 #       data:
-#        message: 'Пылесос прибыл на станцию и заряжается'
+#         message: 'Пылесос прибыл на станцию и заряжается'
 
 - alias: 'Vacuum Cleaner Error'
   trigger:

@@ -110,9 +110,9 @@ views:
         - type: entities
           show_header_toggle: false
           entities:          
-            - entity: light.192_168_1_249
+            - entity: light.yeelight_ceiling20_0x000000001588e1a5
               #name: Свет в гостиной
-            - entity: light.192_168_1_249_ambilight
+            - entity: light.yeelight_ceiling20_0x000000001588e1a5_ambilight
               #name: Свет в гостиной амбилайт
             - entity: switch.sonoff_100061d346
               #name: Бра в гостиной
@@ -149,10 +149,10 @@ views:
         - type: horizontal-stack
           cards:
             - type: light
-              entity: light.192_168_1_249
+              entity: light.yeelight_ceiling20_0x000000001588e1a5
               name: Свет в гостиной
             - type: light
-              entity: light.192_168_1_249_ambilight
+              entity: light.yeelight_ceiling20_0x000000001588e1a5_ambilight
               name: Свет в гостиной амбилайт
             - type: light
               entity: light.yeelight_ceiling3_0x0000000007d1efa6
@@ -372,7 +372,7 @@ views:
             #- entity: sensor.waterius_voltage_low
             #  name: Низкий заряд
               
-        - type: vertical-stack
+        - type: horizontal-stack
           cards:
           - type: custom:mini-graph-card
             entities:
@@ -437,3 +437,28 @@ views:
           - name: Коврик в прихожей
             service: script.clean_carpet_corridor
             icon: 'mdi:rug'
+
+
+  - title: Камера
+    icon: mdi:camera
+    
+    cards:
+    
+      - type: vertical-stack
+        
+        cards:
+        - type: markdown
+          content: >
+             **Камера**
+        - type: iframe
+          url: http://192.168.1.110/cam.php
+          aspect_ratio: 75%
+          style:
+            #top: 90%
+            #left: 3%
+            margin-left: 1000px
+            margin-right: 1000px
+            heght: 100%
+            width: 100%
+            transform: none
+       

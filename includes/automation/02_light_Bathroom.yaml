@@ -1,0 +1,58 @@
+### Включение света в Ванной при наличии движения
+- alias: Bathroom_Turn_ON_light_(motion on)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.motion_sensor_158d0003cc2d64
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+    - service: timer.start
+      entity_id: timer.light_bathroom_30m_off
+
+
+### Выключение света в ванной при отсутствии движения в течении 1 минут
+- alias: Bathroom_Turn_OFF_light_above_10_min_(no motion)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.motion_sensor_158d0003cc2d64
+      to: 'off'
+      for:
+        minutes: 1
+  condition:
+    - condition: state
+      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+
+
+### Выключение света в Ванной в случае поломки датчиков (через 30 минут)
+# Если не сработали сценарии:
+#  - Bathroom1 Turn OFF light above 1 min (motion)
+
+- alias: Bathroom Turn OFF (LT) Timer On
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: timer.finished
+      event_data: 
+        entity_id: timer.light_bathroom_30m_off
+  condition:
+    - condition: state
+      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+    - service: notify.telegram
+      data:
+        message: "Внимание. Свет в Ванной не был выключен продолжительное время. Время выключения: {{ states('sensor.time') }}"
+
