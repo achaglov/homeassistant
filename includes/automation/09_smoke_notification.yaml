@@ -1,0 +1,11 @@
+# Задымление в спальне сообщение1
+- alias: Water_leak_message1
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.smoke_sensor_158d00045f1f2d
+      to: 'on'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Внимание! Задымление в спальне! "

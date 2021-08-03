@@ -255,21 +255,30 @@ views:
               name: Вентиляция в ванной
             - entity: switch.plug_158d0003c73db6
               name: Ночник в прихожей
+            - entity: light.gateway_light_04cf8c8f8501
+              name: Ночник на кухне
             - entity: switch.plug_158d0003c779c9
               name: Вода
-            
+
+
+
         - type: markdown
           content: >
-             **Шлюз** 
+             **Освещенность** 
              
         - type: entities
           show_header_toggle: false
           entities:          
-            - entity: light.gateway_light_04cf8c8f8501
-              name: Ночник на кухне
             - entity: sensor.lumi_gateway_v3_illuminance
-              name: Освещенность на кухне
-              
+              name: Шлюз освещенность
+            - entity: sensor.illumination_04cf8c8f8501
+              name: Датчик освещенности шлюз
+            - entity: sensor.illumination_158d0003021440
+              name: Датчик освещенности в спальне
+            - entity: sensor.illumination_158d0003f1c963
+              name: Датчик освещенности на кухне
+            - entity: sensor.illumination_158d000421a109
+              name: Датчик освещенности в прихожей
 
 
         - type: markdown

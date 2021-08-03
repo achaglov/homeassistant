@@ -21,7 +21,7 @@
     icon: mdi:ceiling-light
 
 
-#Розетки, выключатели 
+# Розетки, выключатели 
   switch.plug_158d0003c73db6:
     friendly_name: Ночник в прихожей
   switch.plug_158d0003c779c9:
@@ -30,7 +30,7 @@
     friendly_name: Вентиляция в ванной
   switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34:
     friendly_name: Свет в ванной
-  switch.wall_switch_158d0003d31289:
+  switch.wall_switch_no_neutral_lumi_158d0003d31289_ch0_lumi_158d0003d31289:
     friendly_name: Свет в прихожей
   light.lumi_gateway_v3_light:
     friendly_name: Ночник на кухне
@@ -44,6 +44,18 @@
     friendly_name: Подсветка в спальне
   switch.sonoff_100001f1ea:
    friendly_name: Сбербокс
+
+# Настенные выключатели
+  binary_sensor.wall_switch_158d0002b46857:
+    friendly_name: Выключатель в гостиной
+  binary_sensor.wall_switch_158d0003559ebf:
+    friendly_name: Выключатель на кухне
+  binary_sensor.wall_switch_158d000355fbed:
+    friendly_name: Выключатель в спальне
+  switch.wall_switch_158d0003d31289:
+    friendly_name: Выключатель в прихожей
+  
+
   
 #Сенсоры освещенности
   sensor.lumi_gateway_v3_illuminance:

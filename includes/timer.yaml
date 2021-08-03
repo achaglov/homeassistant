@@ -6,7 +6,3 @@
   fan_bathroom_60m_off:
     name: Отключение вентиляции в ванной через -
     duration: '01:00:00'
-    
-  hall_light_off:
-    name: Отключение света в прихожей через -
-    duration: '00:02:00'

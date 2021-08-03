@@ -1,0 +1,63 @@
+# Сработал датчик протечки сообщение1
+- alias: Water_leak_message1
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.water_leak_sensor_158d00042d6278
+      to: 'on'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Протечка на кухне! "
+
+# Сработал датчик протечки сообщение2
+- alias: Water_leak_message2
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.water_leak_sensor_158d00042d6314
+      to: 'on'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Протечка в ванной! "
+        
+# Сработал датчик протечки сообщение3
+- alias: Water_leak_message3
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.water_leak_sensor_158d00045abebb
+      to: 'on'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Протечка в туалете! "
+
+
+# Сработал датчик протечки закрыть воду
+- alias: Water_leak_stop
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.water_leak_sensor_158d00042d6278
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.water_leak_sensor_158d00042d6314
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.water_leak_sensor_158d00045abebb
+      to: 'on'
+  condition:
+  - condition: state
+    entity_id: switch.plug_158d0003c779c9
+    state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.plug_158d0003c779c9
+    - delay: 00:00:05
+    - service: switch.turn_off
+      entity_id: switch.plug_158d0003c779c9
+    - service: notify.telegram
+      data:
+        message: "Вода перекрыта в: {{ states('sensor.time') }}"

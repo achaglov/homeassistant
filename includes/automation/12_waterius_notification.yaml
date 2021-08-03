@@ -1,0 +1,11 @@
+# Заменить батарейки в Waterius
+- alias: Waterius_low_Voltage
+  initial_state: true
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.waterius_voltage_low
+      above: 0
+  action:
+    - service: notify.telegram
+      data:
+        message: "Замени 2 мизинчиковые батарейки в счетчике воды!"

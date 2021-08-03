@@ -1,3 +1,39 @@
+# ----- Включение света по одинарному клику ----- #
+- alias: Hall Switch Click Light Off
+  trigger:
+    - platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: switch.wall_switch_158d0003d31289
+        click_type: single
+  condition:
+    - condition: state
+      entity_id: switch.wall_switch_158d0003d31289
+      state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id:
+        - switch.wall_switch_158d0003d31289
+
+# ----- Выключение света по одинарному клику ----- #
+- alias: Hall Switch Click Light Off
+  trigger:
+    - platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: switch.wall_switch_158d0003d31289
+        click_type: single
+  condition:
+    - condition: state
+      entity_id: switch.wall_switch_158d0003d31289
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id:
+        - switch.wall_switch_158d0003d31289
+
+
+
 # Включить свет в прихожей по движению
 - alias: Hall_Turn_ON_light_(motion on)
   initial_state: true
@@ -13,7 +49,7 @@
     conditions:
     - condition: numeric_state
       entity_id: sensor.illumination_158d000421a109
-      below: 500
+      below: 5
     - condition: and
       conditions:
       - condition: state
@@ -22,8 +58,7 @@
   action:
     - service: switch.turn_on
       entity_id: switch.wall_switch_158d0003d31289
-    - service: timer.start
-      entity_id: timer.hall_light_off
+
 
 
 
@@ -38,52 +73,49 @@
   - condition: time
     after: "20:01"
     before: "07:29"
-  - condition: and
-    conditions:
-    - condition: numeric_state
-      entity_id: sensor.illumination_158d000421a109
-      below: 400
-    - condition: and
-      conditions:
-      - condition: state
-        entity_id: switch.plug_158d0003c73db6
-        state: "off"      
+  - condition: numeric_state
+    entity_id: sensor.illumination_158d000421a109
+    below: 5
+  - condition: state
+    entity_id: switch.plug_158d0003c73db6
+    state: "off"      
   action:
-    - service: switch_turn_on
+    - service: switch.turn_on
       entity_id: switch.plug_158d0003c73db6
-    - service: timer.start
-      entity_id: timer.hall_light_off 
+
    
 
 # Выключить свет в прихожей по движению
 - alias: Hall_Turn_OFF_light_(motion on)
   initial_state: true
   trigger:
-  - platform: event
-    event_type: timer.finished
-    event_data: 
-      entity_id: timer.hall_light_off
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_158d000421a109
+    to: 'off'
+    for:
+      minutes: 1
   condition:
     - condition: state
       entity_id: switch.wall_switch_158d0003d31289
       state: "on"
   action:
-    - service: switch.turn_on
+    - service: switch.turn_off
       entity_id: switch.wall_switch_158d0003d31289
 
 # Выключить ночник в прихожей по движению
 - alias: Hall_Turn_OFF_light_(motion on)_night
   initial_state: true
   trigger:
-  - platform: event
-    event_type: timer.finished
-    event_data: 
-      entity_id: timer.hall_light_off
+  - platform: state
+    entity_id: binary_sensor.motion_sensor_158d000421a109
+    to: 'off'
+    for:
+      minutes: 1
   condition:
     - condition: state
       entity_id: switch.plug_158d0003c73db6
       state: "on"
   action:
-    - service: switch.turn_on
+    - service: switch.turn_off
       entity_id: switch.plug_158d0003c73db6
 

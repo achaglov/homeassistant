@@ -1,0 +1,51 @@
+# Сообщение об открытии двери
+- alias: Door open message
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.door_window_sensor_158d0002e2c1c7
+      to: 'on'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003021440
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003cc2d64
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003d12974
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003f1c963
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d000421a109
+    state: 'off'
+    for:
+      minutes: 10
+  action:
+    - service: notify.telegram
+      data:
+        message: "Внимание. К нам кто-то пришел в: {{ states('sensor.time') }}"
+        
+        
+- alias: Door_open_message_10_min 
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.door_window_sensor_158d0002e2c1c7
+      to: 'on'
+      for:
+        minutes: 10
+  action:
+    - service: notify.telegram
+      data:
+        message: "Внимание. Входная дверь открыта 10 минут!"

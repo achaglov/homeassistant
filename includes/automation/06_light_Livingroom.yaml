@@ -1,0 +1,78 @@
+# ----- Включение света по одинарному клику ----- #
+- alias: Livingroom Switch Click Light On
+  trigger:
+    - platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: binary_sensor.wall_switch_158d0002b46857
+        click_type: single
+  condition:
+    - condition: state
+      entity_id: light.yeelight_ceiling20_0x000000001588e1a5
+      state: 'off'
+  action:
+    - service: light.turn_on
+      entity_id: 
+        - light.yeelight_ceiling20_0x000000001588e1a5
+      data_template:
+        brightness_pct: >-
+          {% set h = now().hour | int %}
+          {% if h >= 21 and h < 22 %}
+            10
+          {% elif h >= 22 and h < 6 %}
+            1
+          {% elif h >= 6 and h < 8 %}
+            10
+          {% elif h >= 8 and h < 21 %}
+            100
+          {% endif %}
+        kelvin: 4000
+
+# ----- Выключение света по одинарному клику ----- #
+- alias: Livingroom Switch Click Light Off
+  trigger:
+    - platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: binary_sensor.wall_switch_158d0002b46857
+        click_type: single
+  condition:
+    - condition: state
+      entity_id: light.yeelight_ceiling20_0x000000001588e1a5
+      state: 'on'
+  action:
+    - service: light.turn_off
+      entity_id:
+        - light.yeelight_ceiling20_0x000000001588e1a5
+
+# ----- Включение 25% яркости по двойному клику ----- #
+- alias: Livingroom Switch Doble Click Light_25
+  trigger:
+    - platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: binary_sensor.wall_switch_158d0002b46857
+        click_type: double
+  action:
+    - service: light.turn_on
+      entity_id:
+        - light.yeelight_ceiling20_0x000000001588e1a5
+      data_template:
+        brightness_pct: 25
+        kelvin: 3900
+
+# ----- Включение 4500К по длинному нажатию ----- #
+- alias: Livingroom Switch Long Click Light Max
+  trigger:
+    - platform: event
+      event_type: xiaomi_aqara.click
+      event_data:
+        entity_id: binary_sensor.wall_switch_158d0002b46857
+        click_type: long_click_press
+  action:
+    - service: light.turn_on
+      entity_id:
+        - light.yeelight_ceiling20_0x000000001588e1a5
+      data_template:
+        brightness_pct: 100
+        kelvin: 4500
