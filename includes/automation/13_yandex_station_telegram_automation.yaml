@@ -1,0 +1,45 @@
+automation:
+- trigger:
+    platform: event
+    event_type: yandex_station_response
+  action:
+    service: telegram_bot.send_message
+    data_template:
+      target: "{{ trigger.event.data.request_id }}"
+      message: "{{ trigger.event.data.text }}"
+          
+- trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/Мини'
+  action:
+    service: media_player.play_media
+    entity_id: media_player.yandex_station_mini
+    data_template:
+      media_content_id: "{{ trigger.event.data['args']|join(' ') }}"
+      media_content_type: "question:{{ trigger.event.data.chat_id }}"
+        
+- trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/Станция'
+  action:
+    service: media_player.play_media
+    entity_id: media_player.yandex_station
+    data_template:
+      media_content_id: "{{ trigger.event.data['args']|join(' ') }}"
+      media_content_type: "question:{{ trigger.event.data.chat_id }}"
+      
+- trigger:
+    platform: event
+    event_type: telegram_command
+    event_data:
+      command: '/Кухня'
+  action:
+    service: media_player.play_media
+    entity_id: media_player.yandex_station_irbis_black
+    data_template:
+      media_content_id: "{{ trigger.event.data['args']|join(' ') }}"
+      media_content_type: "question:{{ trigger.event.data.chat_id }}"

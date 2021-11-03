@@ -1,5 +1,5 @@
-# ----- Включение света по одинарному клику ----- #
-- alias: Kitchen Switch Click Light On
+# -----Включение света по одинарному клику ----- #
+- alias: Kitchen Switch Click Light ON
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -12,23 +12,10 @@
       state: 'off'
   action:
     - service: light.turn_on
-      entity_id: 
+      entity_id:
         - light.yeelight_ceiling5_0x0000000007f0e59f
-      data_template:
-        brightness_pct: >-
-          {% set h = now().hour | int %}
-          {% if h >= 21 and h < 22 %}
-            10
-          {% elif h >= 22 and h < 6 %}
-            1
-          {% elif h >= 6 and h < 8 %}
-            10
-          {% elif h >= 8 and h < 21 %}
-            100
-          {% endif %}
-        kelvin: 4000
 
-# ----- Выключение света по одинарному клику ----- #
+# -----Выключение света по одинарному клику ----- #
 - alias: Kitchen Switch Click Light Off
   trigger:
     - platform: event
@@ -68,7 +55,7 @@
       event_type: xiaomi_aqara.click
       event_data:
         entity_id: binary_sensor.wall_switch_158d0003559ebf
-        click_type: long_click_press
+        click_type: long
   action:
     - service: light.turn_on
       entity_id:
@@ -86,7 +73,10 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+#      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+      entity_id:
+      - binary_sensor.motion_sensor_158d0003f1c963
+      - binary_sensor.motion_sensor_158d0003021440
       to: 'on'
   condition:
   - condition: time
@@ -94,7 +84,7 @@
     before: '20:00'
   - condition: numeric_state
     entity_id: sensor.lumi_gateway_v3_illuminance
-    below: 600
+    below: 500
   - condition: state
     entity_id: light.yeelight_ceiling5_0x0000000007f0e59f
     state: 'off'
@@ -108,10 +98,13 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+#      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+      entity_id:
+      - binary_sensor.motion_sensor_158d0003f1c963
+      - binary_sensor.motion_sensor_158d0003021440
       to: 'off'
       for:
-        minutes: 1
+        minutes: 2
   condition:
     - condition: state
       entity_id: light.yeelight_ceiling5_0x0000000007f0e59f
@@ -126,7 +119,10 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+#      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+      entity_id:
+      - binary_sensor.motion_sensor_158d0003f1c963
+      - binary_sensor.motion_sensor_158d0003021440
       to: 'on'
   condition:
   - condition: time
@@ -134,23 +130,30 @@
     before: '07:59'
   - condition: numeric_state
     entity_id: sensor.lumi_gateway_v3_illuminance
-    below: 500
+    below: 400
   - condition: state
     entity_id: light.lumi_gateway_v3_light
     state: 'off'
   action:
     - service: light.turn_on
-      entity_id: light.lumi_gateway_v3_light
+      entity_id:
+        - light.lumi_gateway_v3_light
+      data_template:
+        brightness: 255
+#        rgb_color: 255, 255, 255
 
 ### Выключение ночника на кухне при отсутствии движения в течении 3 минут
 - alias: Kitchen_Turn_OFF_light_above_1_min_(no motion)_night
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+#      entity_id: binary_sensor.motion_sensor_158d0003f1c963
+      entity_id:
+      - binary_sensor.motion_sensor_158d0003f1c963
+      - binary_sensor.motion_sensor_158d0003021440
       to: 'off'
       for:
-        minutes: 1
+        minutes: 3
   condition:
     - condition: state
       entity_id: light.lumi_gateway_v3_light

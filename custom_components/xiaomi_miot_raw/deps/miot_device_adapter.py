@@ -67,7 +67,11 @@ def get_type_by_mitype(mitype:str):
             return k
     return None
 
-translate = {"on":"switch_status", "fan_level":"speed", "horizontal_swing":"oscillate", "speed_level":"stepless_speed"}
+translate = {"on":"switch_status", 
+             "fan_level":"speed", 
+             "horizontal_swing":"oscillate", 
+             "speed_level":"stepless_speed", 
+             "stepless_fan_level":"stepless_speed"}
 
 def get_range_by_list(value_list: list):
     l = [item['value'] for item in value_list]
@@ -555,7 +559,7 @@ class MiotAdapter:
             try:
                 ret[list(ret.keys())[0]]['main'] = True
             except IndexError:
-                _LOGGER.error("识别不出主设备，请手动指定")
+                pass
 
         for item in CUSTOM_SERVICES:
             ret.pop(item, None)

@@ -23,12 +23,7 @@ views:
               name: Дата
               icon: mdi:calendar-check-outline
               
-        - type: entities
-          show_header_toggle: false
-          entities:
-            - entity: sensor.maria_db_size
-              name: Объем БД
-              icon: mdi:database
+
 
       - type: vertical-stack
         cards:
@@ -78,22 +73,45 @@ views:
                green: 0
                yellow: 60
                red: 75
-                
-              
-        - type: history-graph
+
+        - type: custom:mini-graph-card
           entities:
-           - entity: sensor.maria_db_size
-             name: Maria DB
+            - sensor.maria_db_size
+          name: Объем БД
+          icon: mdi:database
+          line_color: blue
+          line_width: 4
+          font_size: 75
                 
               
   - title: Погода
     icon: mdi:weather-partly-snowy-rainy
-    
     cards:
-
+      - type: vertical-stack
+        cards:
         - type: weather-forecast
-          entity: weather.home_assistant 
-          
+          entity: weather.home_assistant
+
+        - type: custom:mini-graph-card
+          entities:
+            - sensor.pressure_mmhg_158d0001dc32b4
+          name: Давление
+          line_color: blue
+          line_width: 4
+          font_size: 75
+
+        - type: markdown
+          content: >
+             **Климат дома**
+
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.zhimi_humidifier_ca1_temperature
+            - entity: sensor.humidity_158d0001dc32b4
+            - entity: sensor.temperature_158d0001dc32b4
+
+
           
   - title: Освещение
     icon: mdi:lightbulb-group
@@ -117,27 +135,32 @@ views:
             - entity: switch.sonoff_100061d346
               #name: Бра в гостиной
             - entity: light.yeelight_ceiling3_0x0000000007d1efa6
-              name: Свет в спальне
+              #name: Свет в спальне
             - entity: switch.sonoff_100061cac1
-              name: Подсветка в спальне
+              #name: Подсветка в спальне
             - entity: light.yeelight_ceiling5_0x0000000007f0e59f           
-              name: Свет на кухне
-            - entity: light.gateway_light_04cf8c8f8501
-              name: Ночник на кухне
+              #name: Свет на кухне
+            - entity: light.lumi_gateway_v3_light
+              #name: Ночник на кухне
             - entity: switch.sonoff_1000f261e0
-              name: Подсветка на кухне
+              #name: Подсветка на кухне
             - entity: switch.wall_switch_no_neutral_lumi_158d0003d31289_ch0_lumi_158d0003d31289
-              name: Свет в прихожей
+              #name: Свет в прихожей
             - entity: switch.plug_158d0003c73db6
-              name: Ночник в прихожей
+              #name: Ночник в прихожей
             - entity: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34            
-              name: Свет в ванной
+              #name: Свет в ванной
             - entity: switch.sonoff_100001f1ea
-              name: Сбербокс
+              #name: Сбербокс
             - entity: switch.sonoff_1000d8e906
-              name: Ёлочка
+              #name: Ёлочка
             - entity: switch.relay_lumi_158d0006d49f34_ch1_lumi_158d0006d49f34            
-              name: Вентиляция в ванной
+              #name: Вентиляция в ванной
+            - entity: switch.sonoff02
+            - entity: light.gyver_lamp_esp_c09fc7
+
+              
+              
 
 
       - type: vertical-stack
@@ -165,9 +188,6 @@ views:
     icon: mdi:zigbee
     
     cards:
-    
-
-
 
       - type: vertical-stack
         cards:
@@ -211,39 +231,37 @@ views:
           show_header_toggle: false
           entities:          
             - entity: sensor.battery_158d0002b46857
-              name: Выключатель в гостиной
+#              name: Выключатель в гостиной
             - entity: sensor.battery_158d0002e2c1c7
-              name: Входная дверь
-            - entity: sensor.battery_158d0003021440
-              name: Движение в спальне
+#              name: Входная дверь
             - entity: sensor.battery_158d0003559ebf
-              name: Выключатель на кухне
+#              name: Выключатель на кухне
             - entity: sensor.battery_158d000355fbed
-              name: Выключатель в спальне
+#              name: Выключатель в спальне
             - entity: sensor.battery_158d0003cc2d64
-              name: Движение в ванной
-            - entity: sensor.battery_158d0003d12974
-              name: Движение в гостиной
+#              name: Движение в ванной
             - entity: sensor.battery_158d0003f1c963
-              name: Движение на кухне
+#              name: Движение на кухне
+            - entity: sensor.battery_158d0003021440
+#              name: Движение в спальне
             - entity: sensor.battery_158d000421a109
-              name: Движение в прихожей
+#              name: Движение в прихожей
+            - entity: sensor.battery_158d0003d12974
+#              name: Движение в гостиной
             - entity: sensor.battery_158d00042d6278
-              name: Утечка на кухне
+#              name: Утечка на кухне
             - entity: sensor.battery_158d00042d6314
-              name: Утечка в ванной
+#              name: Утечка в ванной
             - entity: sensor.battery_158d00045abebb
-              name: Утечка в туалете
+#              name: Утечка в туалете
             - entity: sensor.battery_158d00045f1f2d
-              name: Датчик дыма
+#              name: Датчик дыма
             - entity: sensor.battery_158d0001dc32b4
-              name: Температура и влажность в ванной
+#              name: Температура и влажность в ванной
               
       - type: vertical-stack
         cards:
 
-            
-            
         - type: markdown
           content: >
              **Выключатели** 
@@ -255,12 +273,10 @@ views:
               name: Вентиляция в ванной
             - entity: switch.plug_158d0003c73db6
               name: Ночник в прихожей
-            - entity: light.gateway_light_04cf8c8f8501
+            - entity: light.lumi_gateway_v3_light
               name: Ночник на кухне
             - entity: switch.plug_158d0003c779c9
-              name: Вода
-
-
+              name: Отключение водоснабжения
 
         - type: markdown
           content: >
@@ -270,15 +286,15 @@ views:
           show_header_toggle: false
           entities:          
             - entity: sensor.lumi_gateway_v3_illuminance
-              name: Шлюз освещенность
+#              name: Шлюз освещенность
             - entity: sensor.illumination_04cf8c8f8501
-              name: Датчик освещенности шлюз
+#              name: Датчик освещенности шлюз
             - entity: sensor.illumination_158d0003021440
-              name: Датчик освещенности в спальне
+#              name: Датчик освещенности в спальне
             - entity: sensor.illumination_158d0003f1c963
-              name: Датчик освещенности на кухне
+#              name: Датчик освещенности на кухне
             - entity: sensor.illumination_158d000421a109
-              name: Датчик освещенности в прихожей
+#              name: Датчик освещенности в прихожей
 
 
         - type: markdown
@@ -288,16 +304,17 @@ views:
         - type: entities
           show_header_toggle: false
           entities:          
-            - entity: binary_sensor.motion_sensor_158d0003021440
-              name: Движение в спальне
+
             - entity: binary_sensor.motion_sensor_158d0003cc2d64
-              name: Движение в ванной
-            - entity: binary_sensor.motion_sensor_158d0003d12974
-              name: Движение в гостиной
+#              name: Движение в ванной
             - entity: binary_sensor.motion_sensor_158d0003f1c963
-              name: Движение на кухне
+#              name: Движение на кухне
+            - entity: binary_sensor.motion_sensor_158d0003021440
+#              name: Движение в спальне
             - entity: binary_sensor.motion_sensor_158d000421a109
-              name: Движение в прихожей
+#              name: Движение в прихожей
+            - entity: binary_sensor.motion_sensor_158d0003d12974
+#              name: Движение в гостиной
 
         - type: markdown
           content: >
@@ -307,11 +324,11 @@ views:
           show_header_toggle: false
           entities:          
             - entity: binary_sensor.water_leak_sensor_158d00042d6278
-              name: Утечка на кухне
+#              name: Утечка на кухне
             - entity: binary_sensor.water_leak_sensor_158d00042d6314
-              name: Утечка в ванной
+#              name: Утечка в ванной
             - entity: binary_sensor.water_leak_sensor_158d00045abebb
-              name: Утечка в туалете
+#              name: Утечка в туалете
               
               
   - title: Счетчики
@@ -399,6 +416,23 @@ views:
             font_size: 75    
 
 
+  - title: Увлажнение в спальне
+    icon: mdi:water-percent
+    cards:
+      - type: vertical-stack    
+        cards:
+        - type: 'custom:mini-humidifier'
+          entity: humidifier.zhimi_humidifier_ca1
+        - type: custom:mini-graph-card
+          entities:
+            - sensor.zhimi_humidifier_ca1_humidity
+          name: Влажность
+          line_color: blue
+          line_width: 4
+          font_size: 75
+
+
+
   - title: Уборка помещений
     icon: mdi:broom
     
@@ -471,3 +505,77 @@ views:
             width: 100%
             transform: none
        
+  - title: Медиа
+    icon: mdi:music
+    
+    cards:
+    
+      - type: vertical-stack
+        
+        cards:
+          - type: 'custom:mini-media-player'
+            entity: media_player.yandex_station
+            artwork: cover
+            sound_mode: icon
+            shortcuts:
+              attribute: sound_mode
+              buttons:
+                - icon: 'mdi:account-voice'
+                  id: Произнеси текст
+                  type: sound_mode
+                - icon: 'mdi:robot'
+                  id: Выполни команду
+                  type: sound_mode
+                - icon: 'mdi:playlist-star'
+                  id: включи мою любимую музыку вперемешку
+                  type: command
+                - icon: 'mdi:playlist-music'
+                  id: включи плейлист дня
+                  type: command
+                - icon: 'mdi:heart'
+                  id: лайк
+                  type: command
+                - icon: 'mdi:heart-off'
+                  id: снять лайк
+                  type: command
+              columns: 6
+            hide:
+              sound_mode: false
+              runtime: false
+            tts:
+              platform: yandex_station
+              
+      - type: vertical-stack
+        
+        cards:
+          - type: 'custom:mini-media-player'
+            entity: media_player.yandex_station_mini
+            artwork: cover
+            sound_mode: icon
+            shortcuts:
+              attribute: sound_mode
+              buttons:
+                - icon: 'mdi:account-voice'
+                  id: Произнеси текст
+                  type: sound_mode
+                - icon: 'mdi:robot'
+                  id: Выполни команду
+                  type: sound_mode
+                - icon: 'mdi:playlist-star'
+                  id: включи мою любимую музыку вперемешку
+                  type: command
+                - icon: 'mdi:playlist-music'
+                  id: включи плейлист дня
+                  type: command
+                - icon: 'mdi:heart'
+                  id: лайк
+                  type: command
+                - icon: 'mdi:heart-off'
+                  id: снять лайк
+                  type: command
+              columns: 6
+            hide:
+              sound_mode: false
+              runtime: false
+            tts:
+              platform: yandex_station

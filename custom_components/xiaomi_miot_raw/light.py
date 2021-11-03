@@ -21,7 +21,14 @@ from homeassistant.util import color
 from miio.exceptions import DeviceException
 from .deps.miio_new import MiotDevice
 
-from . import GenericMiotDevice, ToggleableMiotDevice, MiotSubToggleableDevice, dev_info, async_generic_setup_platform
+from .basic_dev_class import (
+    GenericMiotDevice,
+    ToggleableMiotDevice,
+    MiotSubDevice,
+    MiotSubToggleableDevice,
+    MiotIRDevice,
+)
+from . import async_generic_setup_platform
 from .deps.const import (
     DOMAIN,
     CONF_UPDATE_INSTANT,
@@ -60,7 +67,7 @@ async def async_setup_platform(hass, config, async_add_devices, discovery_info=N
         async_add_devices,
         discovery_info,
         TYPE,
-        {'default': MiotLight},
+        {'default': MiotLight, '_ir_light': MiotIRLight},
         {'default': MiotSubLight}
     )
 
@@ -76,6 +83,7 @@ class MiotLight(ToggleableMiotDevice, LightEntity):
         self._color = None
         self._color_temp = None
         self._effect = None
+        hass.async_add_job(self.create_sub_entities)
 
     @property
     def supported_features(self):
@@ -323,3 +331,38 @@ class MiotSubLight(MiotSubToggleableDevice, LightEntity):
         except KeyError:
             self._color = None
         return self._color
+
+class MiotIRLight(MiotIRDevice, LightEntity):
+    @property
+    def supported_features(self):
+        """Return the supported features."""
+        return SUPPORT_BRIGHTNESS
+
+    @property
+    def brightness(self):
+        return 128
+
+    @property
+    def is_on(self):
+        return self._state
+
+    async def async_turn_on(self, **kwargs):
+        result = False
+        if ATTR_BRIGHTNESS in kwargs:
+            if kwargs[ATTR_BRIGHTNESS] > 128:
+                result = await self.async_send_ir_command('brightness_up')
+            elif kwargs[ATTR_BRIGHTNESS] < 128:
+                result = await self.async_send_ir_command('brightness_down')
+            else:
+                return
+        else:
+            result = await self.async_send_ir_command('turn_on')
+        if result:
+            self._state = True
+            self.async_write_ha_state()
+
+    async def async_turn_off(self, **kwargs):
+        result = await self.async_send_ir_command('turn_off')
+        if result:
+            self._state = False
+            self.async_write_ha_state()

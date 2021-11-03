@@ -43,7 +43,13 @@ from miio.exceptions import DeviceException
 from .deps.miio_new import MiotDevice
 
 import copy
-from . import GenericMiotDevice, ToggleableMiotDevice, dev_info, async_generic_setup_platform
+from .basic_dev_class import (
+    GenericMiotDevice,
+    ToggleableMiotDevice,
+    MiotSubDevice,
+    MiotSubToggleableDevice
+)
+from . import async_generic_setup_platform
 from .deps.const import (
     DOMAIN,
     CONF_UPDATE_INSTANT,
@@ -106,6 +112,7 @@ class MiotVacuum(GenericMiotDevice, StateVacuumEntity):
         self._battery_level = None
         self._status = ""
         self._fan_speed = None
+        hass.async_add_job(self.create_sub_entities)
 
     @property
     def supported_features(self):
@@ -119,10 +126,14 @@ class MiotVacuum(GenericMiotDevice, StateVacuumEntity):
             s |= SUPPORT_STOP
         if self._did_prefix + 'mode' in self._mapping:
             s |= SUPPORT_FAN_SPEED
-        if 'battery_battery_level' in self._mapping:
+        if self._did_prefix + 'battery_level' in self._mapping or \
+            'battery_battery_level' in self._mapping:
             s |= SUPPORT_BATTERY
         if 'a_l_battery_start_charge' in self._mapping:
             s |= SUPPORT_RETURN_HOME
+        if 'a_l_voice_find_device' in self._mapping or \
+            'a_l_identify_identify' in self._mapping:
+            s |= SUPPORT_LOCATE
         return s
 
     @property
@@ -195,9 +206,21 @@ class MiotVacuum(GenericMiotDevice, StateVacuumEntity):
         if self.supported_features & SUPPORT_FAN_SPEED == 0:
             return
 
-        result = await self.set_property_new(self._did_prefix + "mode", self._ctrl_params['mode'][fan_mode])
+        result = await self.set_property_new(self._did_prefix + "mode", self._ctrl_params['mode'][fan_speed])
         if result:
             self._fan_speed = fan_speed
+            self.schedule_update_ha_state()
+
+    async def async_locate(self, **kwargs):
+        """Locate the vacuum (usually by playing a song)."""
+        if 'a_l_voice_find_device' in self._mapping:
+            result = await self.call_action_new(*(self._mapping['a_l_voice_find_device'].values()))
+        elif 'a_l_identify_identify' in self._mapping:
+            result = await self.call_action_new(*(self._mapping['a_l_identify_identify'].values()))
+        else:
+            return
+
+        if result:
             self.schedule_update_ha_state()
 
     def _handle_platform_specific_attrs(self):
@@ -208,3 +231,12 @@ class MiotVacuum(GenericMiotDevice, StateVacuumEntity):
                     self._state = k
         except:
             pass
+        try:
+            self._battery_level = self._state_attrs.get(self._did_prefix + 'battery_level') or \
+                self._state_attrs.get('battery_battery_level')
+        except:
+            pass
+        try:
+            self._fan_speed = self.get_key_by_value(self._ctrl_params['mode'],self._state_attrs.get(self._did_prefix + 'mode'))
+        except KeyError:
+            self._fan_speed = None

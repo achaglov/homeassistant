@@ -1,5 +1,5 @@
 # Задымление в спальне сообщение1
-- alias: Water_leak_message1
+- alias: Smoke_message
   initial_state: true
   trigger:
     - platform: state

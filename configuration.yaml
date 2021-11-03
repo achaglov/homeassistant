@@ -16,7 +16,10 @@ lovelace:
       type: module
     - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
       type: module
-
+    - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js?v=1.12.1
+      type: module
+    - url: /hacsfiles/mini-humidifier/mini-humidifier-bundle.js?v=2.5.4
+      type: module
 # Text to speech
 tts:
   - platform: google_translate
@@ -25,6 +28,23 @@ sonoff:
   username: !secret username_sonoff
   password: !secret password_sonoff
   
+#Лампа Гайвера
+input_number:
+  speed:
+    name: Speed
+    initial: 30
+    min: 0
+    max: 255
+    step: 1
+
+  scale:
+    name: Scale
+    initial: 30
+    min: 1
+    max: 100
+    step: 1
+
+
 #Telegram
 telegram_bot:
   - platform: polling

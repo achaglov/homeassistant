@@ -20,7 +20,14 @@ from miio.exceptions import DeviceException
 from .deps.miio_new import MiotDevice
 
 import copy
-from . import GenericMiotDevice, ToggleableMiotDevice, dev_info, async_generic_setup_platform
+from .basic_dev_class import (
+    GenericMiotDevice,
+    MiotIRDevice,
+    ToggleableMiotDevice,
+    MiotSubDevice,
+    MiotSubToggleableDevice
+)
+from . import async_generic_setup_platform
 from .deps.const import (
     DOMAIN,
     CONF_UPDATE_INSTANT,
@@ -70,13 +77,18 @@ SCAN_INTERVAL = timedelta(seconds=10)
 # pylint: disable=unused-argument
 @asyncio.coroutine
 async def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
+    hass.data[DOMAIN]['add_handler'].setdefault(TYPE, {})
+    if 'config_entry' in config:
+        id = config['config_entry'].entry_id
+        hass.data[DOMAIN]['add_handler'][TYPE].setdefault(id, async_add_devices)
+
     await async_generic_setup_platform(
         hass,
         config,
         async_add_devices,
         discovery_info,
         TYPE,
-        {'default': MiotClimate},
+        {'default': MiotClimate, '_ir_aircon': MiotIRClimate},
     )
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
@@ -257,8 +269,11 @@ class MiotClimate(ToggleableMiotDevice, ClimateEntity):
 
     async def async_set_humidity(self, humidity):
         """Set new humidity level."""
-        self._target_humidity = humidity
-        self.async_write_ha_state()
+        if humidity is not None:
+            result = await self.set_property_new(self._did_prefix + "target_humidity", humidity)
+            if result:
+                self._target_humidity = humidity
+                self.async_write_ha_state()
 
     async def async_set_swing_mode(self, swing_mode):
         """Set new swing mode."""
@@ -387,3 +402,100 @@ class MiotClimate(ToggleableMiotDevice, ClimateEntity):
             ver = self._state_attrs.get(self._did_prefix + 'vertical_swing') or 0
             hor = self._state_attrs.get(self._did_prefix + 'horizontal_swing') or 0
             self._current_swing_mode = SWING_MAPPING[hor << 1 | ver]
+
+class MiotIRClimate(MiotIRDevice, ClimateEntity):
+    def __init__(self, config, hass, did_prefix):
+        super().__init__(config, hass, did_prefix)
+        self._speed = None
+        self._target_temperature = 26
+        self._unit_of_measurement = TEMP_CELSIUS
+        self._preset = None
+        self._preset_modes = None
+        self._current_temperature = None
+        self._current_fan_mode = None
+        self._hvac_action = None
+        self._hvac_mode = HVAC_MODE_OFF
+        self._aux = None
+        self._current_swing_mode = None
+        self._fan_modes = []
+        self._hvac_modes = None
+        self._swing_modes = []
+
+    @property
+    def supported_features(self):
+        s = 0
+        if self._did_prefix + 'ir_temperature' in self._mapping:
+            s |= SUPPORT_TARGET_TEMPERATURE
+        if self._did_prefix + 'fan_speed_up' in self._mapping:
+            s |= SUPPORT_FAN_MODE
+        return s
+
+    @property
+    def temperature_unit(self):
+        """Return the unit of measurement."""
+        return self._unit_of_measurement
+
+    @property
+    def current_temperature(self):
+        """Return the current temperature."""
+        return self._current_temperature
+
+    @property
+    def target_temperature(self):
+        """Return the temperature we try to reach."""
+        return self._target_temperature
+
+    @property
+    def target_temperature_step(self):
+        """Return the temperature we try to reach."""
+        return 1
+
+    @property
+    def target_temperature_high(self):
+        """Return the highbound target temperature we try to reach."""
+        return 30
+
+    @property
+    def target_temperature_low(self):
+        """Return the lowbound target temperature we try to reach."""
+        return 16
+
+    @property
+    def hvac_mode(self):
+        """Return hvac target hvac state."""
+        return self._hvac_mode
+
+    @property
+    def hvac_modes(self):
+        """Return the list of available operation modes."""
+        try:
+            return [next(a[0] for a in HVAC_MAPPING.items() if b in a[1]) for b in self._ctrl_params['ir_aircondition_control']['ir_mode']['value_list']] + [HVAC_MODE_OFF]
+        except:
+            _LOGGER.error(f"Modes {self._ctrl_params['ir_aircondition_control']['ir_mode']['value_list']} contains unsupported ones. Please report this message to the developer.")
+
+    async def async_set_hvac_mode(self, hvac_mode):
+        if hvac_mode == HVAC_MODE_OFF:
+            result = await self.async_send_ir_command('turn_off')
+            if result:
+                self._hvac_mode = HVAC_MODE_OFF
+                self.async_write_ha_state()
+        else:
+            result = await self.set_property_new(
+                self._did_prefix + 'ir_mode',
+                self._ctrl_params['ir_aircondition_control']['ir_mode']
+            )
+            if not result:
+                result = await self.async_send_ir_command('turn_on')
+            if result:
+                self._hvac_mode = hvac_mode
+                self.async_write_ha_state()
+
+    async def async_set_temperature(self, **kwargs):
+        if kwargs.get(ATTR_TEMPERATURE) is not None:
+            result = await self.set_property_new(
+                self._did_prefix + 'ir_temperature',
+                kwargs.get(ATTR_TEMPERATURE)
+            )
+            if result:
+                self._target_temperature = kwargs.get(ATTR_TEMPERATURE)
+                self.async_write_ha_state()

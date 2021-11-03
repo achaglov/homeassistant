@@ -1,2 +1,0 @@
-error 2021-08-02 19:55:14: Adapter disconnected, stopping
-error 2021-08-02 19:55:14: Failed to stop Zigbee2MQTT

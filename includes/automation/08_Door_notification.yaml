@@ -34,7 +34,7 @@
   action:
     - service: notify.telegram
       data:
-        message: "Внимание. К нам кто-то пришел в: {{ states('sensor.time') }}"
+        message: "К нам кто-то пришел в: {{ states('sensor.time') }}"
         
         
 - alias: Door_open_message_10_min 

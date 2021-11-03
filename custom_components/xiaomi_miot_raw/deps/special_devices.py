@@ -16,7 +16,7 @@ SPECIAL_DEVICES={
     },
     "lumi.motion.bmgl01": {
         "device_type":['sensor'],
-        "mapping":{"motion":{"key":"device_log","type":"prop"}},
+        "mapping":{"motion":{"key":15, "type":"event"}},
         "params":{"event_based":True}
     },
     "lumi.sensor_motion.aq2": {
@@ -25,9 +25,14 @@ SPECIAL_DEVICES={
         "params":{"event_based":True}
     },
     "cuco.plug.cp2":{
-        "device_type": ['switch'],
-        "mapping": {"switch": {"switch_status": {"siid": 2, "piid": 1}}},
-        "params": {"switch": {"switch_status": {"power_on": True, "power_off": False}, "main": True}}
+        "device_type": ['switch','sensor'],
+        "mapping": {"switch":{"switch_status":{"siid":2,"piid":1}},"power_consumption":{"power_consumption":{"siid":2,"piid":2},"voltage":{"siid":2,"piid":3},"electric_current":{"siid":2,"piid":4},"countdown_time":{"siid":2,"piid":5}}},
+        "params": {"switch":{"switch_status":{"power_on":True,"power_off":False},"main":True},"power_consumption":{"power_consumption":{"access":5,"format":"uint16","unit":"kWh","value_range":[0,65535,1],"value_ratio": 0.01},"voltage":{"access":5,"format":"uint16","unit":"V","value_range":[0,3000,1],"value_ratio": 0.1},"electric_current":{"access":1,"format":"uint16","unit":"A","value_range":[0,65535,1],"value_ratio": 0.001},"countdown_time":{"access":7,"format":"uint16","unit":"minutes","value_range":[0,1440,1]}}, 'max_properties': 1}
+    },
+    "cuco.plug.cp1m":{
+        "device_type": ['switch','sensor'],
+        "mapping": {"switch":{"switch_status":{"siid":2,"piid":1}},"power_consumption":{"power_consumption":{"siid":2,"piid":2},"voltage":{"siid":2,"piid":3},"electric_current":{"siid":2,"piid":4}}},
+        "params": {"switch":{"switch_status":{"power_on":True,"power_off":False},"main":True},"power_consumption":{"power_consumption":{"access":5,"format":"uint16","unit":"kWh","value_range":[0,65535,1],"value_ratio": 0.01},"voltage":{"access":5,"format":"uint16","unit":"V","value_range":[0,3000,1],"value_ratio": 0.1},"electric_current":{"access":1,"format":"uint16","unit":"A","value_range":[0,65535,1],"value_ratio": 0.001}}, 'max_properties': 1}
     },
     "degree.lunar.smh013": {
         "device_type": ['switch', 'sensor'],
@@ -74,11 +79,14 @@ SPECIAL_DEVICES={
         "mapping": {"environment": {"relative_humidity": {"siid": 3, "piid": 1}, "pm2_5_density": {"siid": 3, "piid": 4}, "pm10_density": {"siid": 3, "piid": 5}, "temperature": {"siid": 3, "piid": 7}, "co2_density": {"siid": 3, "piid": 8}}, "settings": {"start_time": {"siid": 9, "piid": 2}, "end_time": {"siid": 9, "piid": 3}, "monitoring_frequency": {"siid": 9, "piid": 4}, "screen_off": {"siid": 9, "piid": 5}, "device_off": {"siid": 9, "piid": 6}, "tempature_unit": {"siid": 9, "piid": 7}}, "a_l": {"settings_set_start_time": {"siid": 9, "aiid": 2}, "settings_set_end_time": {"siid": 9, "aiid": 3}, "settings_set_frequency": {"siid": 9, "aiid": 4}, "settings_set_screen_off": {"siid": 9, "aiid": 5}, "settings_set_device_off": {"siid": 9, "aiid": 6}, "settings_set_temp_unit": {"siid": 9, "aiid": 7}}},
         "params": {"environment": {"relative_humidity": {"access": 5, "format": "uint8", "unit": "percentage", "value_range": [0, 100, 1]}, "pm2_5_density": {"access": 5, "format": "uint16", "unit": "\u03bcg/m3", "value_range": [0, 1000, 1]}, "pm10_density": {"access": 5, "format": "uint16", "unit": "\u03bcg/m3", "value_range": [0, 1000, 1]}, "temperature": {"access": 5, "format": "float", "unit": "celsius", "value_range": [-30, 100, 1e-05]}, "co2_density": {"access": 5, "format": "uint16", "unit": "ppm", "value_range": [0, 9999, 1]}, "main": True}, "settings": {"start_time": {"access": 7, "format": "int32", "value_range": [0, 2147483647, 1]}, "end_time": {"access": 7, "format": "int32", "value_range": [0, 2147483647, 1]}, "monitoring_frequency": {"access": 7, "format": "uint16", "unit": "seconds", "value_list": {"Second": 600, "Null": 0}}, "screen_off": {"access": 7, "format": "uint16", "unit": "seconds", "value_list": {"Second": 300, "Null": 0}}, "device_off": {"access": 7, "format": "int8", "unit": "minutes", "value_list": {"Minute": 60, "Null": 0}}, "tempature_unit": {"access": 7, "format": "string"}}, 'max_properties': 8}
     },
-}
-
-
-LOCK_PRM = {
-    "device_type": ['sensor'],
-    "mapping":'{"door":{"key":7,"type":"event"},"lock":{"key":11,"type":"event"}}',
-    "params":'{"event_based":true}'
+    "yeelink.remote.remote": {
+        "device_type":['sensor'],
+        "mapping":{"button":{"key":4097,"type":"event"}},
+        "params":{"event_based":True}
+    },
+    "ateai.mosq.dakuo": {
+        "device_type": ["sensor", "fan"],
+        "mapping": {"mosquito_dispeller": {"switch_status": {"siid": 6, "piid": 1},"mode":{"siid": 6, "piid": 2}}, "repellent_liquid": {"liquid_left": {"siid": 5, "piid": 1}}, "a_l": {"repellent_liquid_reset_liquid": {"siid": 5, "aiid": 1}}},
+        "params": {"mosquito_dispeller":{"switch_status":{"power_on":1,"power_off":0},"main":True,"mode":{"Strong":0,"Baby":1}},"repellent_liquid":{"liquid_left":{"access":5,"format":"uint8","unit":"percentage","value_range":[0,100,1]}}}
+    },
 }

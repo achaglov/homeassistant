@@ -24,7 +24,7 @@
       entity_id: binary_sensor.motion_sensor_158d0003cc2d64
       to: 'off'
       for:
-        minutes: 1
+        minutes: 3
   condition:
     - condition: state
       entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34

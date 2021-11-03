@@ -15,7 +15,13 @@ from homeassistant.util import color
 from miio.exceptions import DeviceException
 from .deps.miio_new import MiotDevice
 
-from . import GenericMiotDevice, ToggleableMiotDevice, MiotSubDevice, dev_info
+from .basic_dev_class import (
+    GenericMiotDevice,
+    ToggleableMiotDevice,
+    MiotSubDevice,
+    MiotSubToggleableDevice
+)
+from . import async_generic_setup_platform
 from .deps.const import (
     DOMAIN,
     CONF_UPDATE_INSTANT,
@@ -76,7 +82,7 @@ async def async_setup_platform(hass, config, async_add_devices, discovery_info=N
     if other_mi_type:
         retry_time = 1
         while True:
-            if parent_device := hass.data[DOMAIN]['miot_main_entity'].get(f'{host}-{config.get(CONF_NAME)}'):
+            if parent_device := hass.data[DOMAIN]['miot_main_entity'].get(config['config_entry'].entry_id):
                 break
             else:
                 retry_time *= 2

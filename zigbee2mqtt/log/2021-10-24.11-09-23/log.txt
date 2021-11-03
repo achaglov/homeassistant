@@ -1,0 +1,8 @@
+error 2021-10-30 19:49:58: Not connected to MQTT server!
+error 2021-10-30 19:50:08: Not connected to MQTT server!
+error 2021-10-30 19:50:18: Not connected to MQTT server!
+error 2021-10-30 19:50:28: Not connected to MQTT server!
+error 2021-10-30 19:50:38: Not connected to MQTT server!
+error 2021-10-30 19:50:48: Not connected to MQTT server!
+error 2021-10-30 19:50:58: Not connected to MQTT server!
+error 2021-10-30 19:51:08: Not connected to MQTT server!

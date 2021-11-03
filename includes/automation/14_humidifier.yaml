@@ -1,0 +1,74 @@
+# ВКЛ увлажнитель 
+- alias: 'humidifier_on'
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '19:00'
+  condition:
+  - condition: state
+    entity_id: humidifier.zhimi_humidifier_ca1
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.zhimi_humidifier_ca1_water_tank
+    state: 'on'
+  action: 
+    - service: humidifier.turn_on
+      entity_id: humidifier.zhimi_humidifier_ca1
+      
+# Скорость вентилятора авто 
+- alias: 'humidifier_on_auto'
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '22:00'
+  condition:
+  - condition: state
+    entity_id: humidifier.zhimi_humidifier_ca1
+    state: 'on'
+  action: 
+    - service: humidifier.set_mode
+      entity_id: humidifier.zhimi_humidifier_ca1
+      data:
+        speed: 'Auto'
+
+
+      
+# ВЫКЛ увлажнитель в рабочий день
+- alias: 'humidifier_off_workday'
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '07:15'
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - condition: state
+    entity_id: humidifier.zhimi_humidifier_ca1
+    state: 'on'
+  action: 
+    - service: humidifier.turn_off
+      entity_id: humidifier.zhimi_humidifier_ca1
+      
+      
+# ВЫКЛ увлажнитель в выходной день
+- alias: 'humidifier_off_holiday'
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '10:15'
+  condition:
+  - condition: time
+    weekday:
+    - sat
+    - sun
+  - condition: state
+    entity_id: humidifier.zhimi_humidifier_ca1
+    state: 'on'
+  action: 
+    - service: humidifier.turn_off
+      entity_id: humidifier.zhimi_humidifier_ca1

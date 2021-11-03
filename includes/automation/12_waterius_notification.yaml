@@ -1,6 +1,6 @@
 # Заменить батарейки в Waterius
 - alias: Waterius_low_Voltage
-  initial_state: true
+  initial_state: false
   trigger:
     - platform: numeric_state
       entity_id: sensor.waterius_voltage_low

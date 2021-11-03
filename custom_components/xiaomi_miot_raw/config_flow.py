@@ -1,6 +1,9 @@
 import json
 import re
 
+import asyncio
+from types import coroutine
+from typing import OrderedDict
 import async_timeout
 import homeassistant.helpers.config_validation as cv
 import requests
@@ -34,7 +37,7 @@ from .deps.const import (
     MAP,
 )
 from .deps.miot_device_adapter import MiotAdapter
-from .deps.special_devices import SPECIAL_DEVICES, LOCK_PRM
+from .deps.special_devices import SPECIAL_DEVICES
 from .deps.xiaomi_cloud_new import MiCloud
 
 SERVERS = {
@@ -44,6 +47,12 @@ SERVERS = {
     'ru': "Russia",
     'sg': "Singapore",
     'us': "United States"
+}
+
+LOCK_PRM = {
+    "device_type": ['sensor'],
+    "mapping":'{"door":{"key":7,"type":"event"},"lock":{"key":11,"type":"event"}}',
+    "params":'{"event_based":true}'
 }
 
 class URN:
@@ -110,21 +119,6 @@ class URN:
         return c >= 0
 
 
-async def async_get_mp_from_net(hass, model):
-    cs = aiohttp_client.async_get_clientsession(hass)
-    url = "https://raw.githubusercontent.com/ha0y/miot-params/master/main.json"
-    with async_timeout.timeout(10):
-        try:
-            a = await cs.get(url)
-        except Exception:
-            a = None
-    if a:
-        data = await a.json(content_type=None)
-        for item in data:
-            if item['device_model'] == model:
-                return item
-    return None
-
 async def guess_mp_from_model(hass,model):
     if m := SPECIAL_DEVICES.get(model):
         return {
@@ -155,40 +149,53 @@ async def guess_mp_from_model(hass,model):
             if model == item['model']:
                 result.append(item)
         urnlist = [URN(r['type']) for r in result]
-        urnlist.sort()
-        params = {'type': str(urnlist[0])}
-        with async_timeout.timeout(10):
-            try:
-                s = await cs.get(url_spec, params=params)
-            except Exception:
-                s = None
-        if s:
-            spec = await s.json()
-            ad = MiotAdapter(spec)
+        if urnlist:
+            urnlist.sort()
+            params = {'type': str(urnlist[0])}
+            with async_timeout.timeout(10):
+                try:
+                    s = await cs.get(url_spec, params=params)
+                except Exception:
+                    s = None
+            if s:
+                spec = await s.json()
+                ad = MiotAdapter(spec)
 
-            mp = ad.get_all_mapping()
-            prm = ad.get_all_params()
-            dt = ad.get_all_devtype() # 这一行必须在下面
-            return {
-                'device_type': dt or ['switch'],
-                'mapping': json.dumps(mp,separators=(',', ':')),
-                'params': json.dumps(prm,separators=(',', ':'))
-            }
-    else:
-        return {
-            'device_type': [],
-            'mapping': "{}",
-            'params': "{}"
-        }
+                mp = ad.get_all_mapping()
+                prm = ad.get_all_params()
+                dt = ad.get_all_devtype() # 这一行必须在下面
+
+                if str(model).startswith('miir.'):
+                    dt = []
+                    if str(model).startswith('miir.light'):
+                        dt.append('light')
+                    elif str(model).startswith('miir.tv'):
+                        dt.append('media_player')
+                    elif str(model).startswith('miir.aircondition'):
+                        dt.append('climate')
+                    prm.update({'ir': True})
+
+                return {
+                    'device_type': dt or ['switch'],
+                    'mapping': json.dumps(mp,separators=(',', ':')),
+                    'params': json.dumps(prm,separators=(',', ':'))
+                }
+    return {
+        'device_type': [],
+        'mapping': "{}",
+        'params': "{}"
+    }
     # TODO
 
 def data_masking(s: str, n: int) -> str:
     return re.sub(f"(?<=.{{{n}}}).(?=.{{{n}}})", "*", str(s))
 
 def get_conn_type(device: dict):
-    #0 for wifi, 1 for zigbee, 2 for BLE, 3 for Mesh, -1 for Unknown
+    #0 for wifi, 1 for zigbee, 2 for BLE, 3 for Mesh, 4 for IR, -1 for Unknown
     if 'blt' in device['did']:
         return 2
+    if str(device.get('model')).startswith('miir'):
+        return 4
     if device.get('parent_id'):
         return 1
     if device.get('localip'):
@@ -214,8 +221,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._model = None
         self._did = None
         self._cloud_device = None
-        self._input2 = {}
-        self._input2.update({"ett_id_migrated": True}) # 新的实体ID格式，相对稳定，为避免已有ID变化，灰度选项
+        self._all_config = {}
+        self._all_config.update({"ett_id_migrated": True}) # 新的实体ID格式，相对稳定，为避免已有ID变化，灰度选项
         self._actions = {
             'xiaomi_account': "登录小米账号",
             'localinfo': "通过 IP/token 添加设备"
@@ -223,10 +230,16 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._non_interactive = False
 
     async def async_step_user(self, user_input=None, non_interactive=False):   # 1. 选择操作
+        self.hass.data.setdefault(DOMAIN, {})
+        self.hass.data[DOMAIN].setdefault('micloud_devices', [])
         self._non_interactive = non_interactive
         if user_input is not None:
             if user_input['action'] == 'xiaomi_account':
-                return await self.async_step_xiaomi_account()
+                if 'username' in user_input:
+                    self._non_interactive = True
+                    return await self.async_step_xiaomi_account(user_input)
+                else:
+                    return await self.async_step_xiaomi_account()
             elif user_input['action'] == 'localinfo':
                 return await self.async_step_localinfo()
             else:
@@ -253,7 +266,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 if device['did'] not in self._actions:
                     dt = get_conn_type(device)
                     dt = "WiFi" if dt == 0 else "ZigBee" if dt == 1 else "BLE" if dt == 2 \
-                                           else "BLE Mesh" if dt == 3 else "Unknown"
+                                        else "BLE Mesh" if dt == 3 else "InfraRed" if dt == 4 else "Unknown"
                     name = f"添加 {device['name']} ({dt}{', '+device['localip'] if (dt == '''WiFi''') else ''})"
                     self._actions[device['did']] = name
             self._actions.pop('xiaomi_account')
@@ -280,7 +293,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if user_input[CONF_TOKEN] == '0':
                 user_input[CONF_TOKEN] = '0'*32
             self._token = user_input[CONF_TOKEN]
-            self._input2 = {**self._input2, **user_input}
+            self._all_config = {**self._all_config, **user_input}
 
             device = MiioDevice(self._host, self._token)
             try:
@@ -373,40 +386,43 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         local_failed = False
         if user_input is not None:
             self._devtype = user_input['devtype']
-            self._input2['devtype'] = self._devtype
-            self._input2[CONF_MAPPING] = user_input[CONF_MAPPING]
-            self._input2[CONF_CONTROL_PARAMS] = user_input[CONF_CONTROL_PARAMS]
-            self._input2['cloud_write'] = user_input.get('cloud_write')
+            self._all_config['devtype'] = self._devtype
+            self._all_config[CONF_MAPPING] = user_input[CONF_MAPPING]
+            self._all_config[CONF_CONTROL_PARAMS] = user_input[CONF_CONTROL_PARAMS]
+            self._all_config['cloud_write'] = user_input.get('cloud_write')
 
             try:
                 # print(result)
                 if not user_input.get('cloud_read') and not user_input.get('cloud_write'):
-                    device = MiotDevice(ip=self._input2[CONF_HOST], token=self._input2[CONF_TOKEN], mapping=list(json.loads(self._input2[CONF_MAPPING]).values())[0])
+                    device = MiotDevice(ip=self._all_config[CONF_HOST], token=self._all_config[CONF_TOKEN], mapping=list(json.loads(self._all_config[CONF_MAPPING]).values())[0])
                     result = device.get_properties_for_mapping()
                     return self.async_create_entry(
-                        title=self._input2[CONF_NAME],
-                        data=self._input2,
+                        title=self._all_config[CONF_NAME],
+                        data=self._all_config,
                     )
                 else:
-                    for item in self.hass.data[DOMAIN]['cloud_instance_list']:
-                        if item['username']:
-                            cloud = item['cloud_instance']
+                    if DOMAIN not in self.hass.data:
+                        cloud = None
+                    else:
+                        for item in self.hass.data[DOMAIN]['cloud_instance_list']:
+                            if item['username']:
+                                cloud = item['cloud_instance']
                     if cloud:
                         if not self._did:
                             for dev in self.hass.data[DOMAIN]['micloud_devices']:
-                                if dev.get('localip') == self._input2[CONF_HOST]:
+                                if dev.get('localip') == self._all_config[CONF_HOST]:
                                     self._did = dev['did']
                         if self._did:
-                            self._input2['update_from_cloud'] = {
+                            self._all_config['update_from_cloud'] = {
                                 'did': self._did,
                                 'userId': cloud.auth['user_id'],
                                 'serviceToken': cloud.auth['service_token'],
                                 'ssecurity': cloud.auth['ssecurity'],
                             }
                             if s := cloud.svr:
-                                self._input2['update_from_cloud']['server_location'] = s
+                                self._all_config['update_from_cloud']['server_location'] = s
                             if self._cloud_device:
-                                self._input2['cloud_device_info'] = {
+                                self._all_config['cloud_device_info'] = {
                                     'name': self._cloud_device.get('name'),
                                     'mac': self._cloud_device.get('mac'),
                                     'did': self._cloud_device.get('did'),
@@ -415,24 +431,24 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                                 }
                             else:
                                 # 3rd party device and Manually added device doesn't have one
-                                self._input2['cloud_device_info'] = {
-                                    'name': self._input2[CONF_NAME],
+                                self._all_config['cloud_device_info'] = {
+                                    'name': self._all_config[CONF_NAME],
                                     'mac': "",
                                     'did': self._did,
-                                    'model': self._input2[CONF_MODEL],
+                                    'model': self._all_config[CONF_MODEL],
                                     'fw_version': "",
                                 }
                             return self.async_create_entry(
-                                title=self._input2[CONF_NAME],
-                                data=self._input2,
+                                title=self._all_config[CONF_NAME],
+                                data=self._all_config,
                             )
                         else:
                             # 3rd party device and Manually added device doesn't have one
-                            self._input2['cloud_device_info'] = {
-                                'name': self._input2[CONF_NAME],
+                            self._all_config['cloud_device_info'] = {
+                                'name': self._all_config[CONF_NAME],
                                 'mac': "",
                                 'did': self._did,
-                                'model': self._input2[CONF_MODEL],
+                                'model': self._all_config[CONF_MODEL],
                                 'fw_version': "",
                             }
                             return self.async_show_form(
@@ -482,59 +498,74 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_cloudinfo(self, user_input=None):  # 4. 云端通信信息
         errors = {}
         if user_input is not None:
-            self._input2['update_from_cloud'] = {}
-            self._input2['update_from_cloud']['did'] = user_input['did']
-            self._input2['update_from_cloud']['userId'] = user_input['userId']
-            self._input2['update_from_cloud']['serviceToken'] = user_input['serviceToken']
-            self._input2['update_from_cloud']['ssecurity'] = user_input['ssecurity']
+            self._all_config['update_from_cloud'] = {}
+            self._all_config['update_from_cloud']['did'] = user_input['did']
+            self._all_config['update_from_cloud']['userId'] = user_input['userId']
+            self._all_config['update_from_cloud']['serviceToken'] = user_input['serviceToken']
+            self._all_config['update_from_cloud']['ssecurity'] = user_input['ssecurity']
             cloud = None
             for item in self.hass.data[DOMAIN]['cloud_instance_list']:
                 if item['username']:
                     cloud = item['cloud_instance']
             if cloud:
                 if s := cloud.svr:
-                    self._input2['update_from_cloud']['server_location'] = s
+                    self._all_config['update_from_cloud']['server_location'] = s
 
             return self.async_create_entry(
-                title=self._input2[CONF_NAME],
-                data=self._input2,
+                title=self._all_config[CONF_NAME],
+                data=self._all_config,
             )
 
     async def async_step_import(self, user_input):
         """Import a config flow from configuration."""
         return True
 
-    async def async_step_xiaomi_account(self, user_input=None, error=None): # 登录小米账号
+    async def async_step_xiaomi_account(self, user_input=None, error=None, hint=""): # 登录小米账号
         if user_input:
-            # if not user_input['servers']:
-                # return await self.async_step_xiaomi_account(error='no_servers')
+            if 'username' in user_input:
+                # if not user_input['servers']:
+                    # return await self.async_step_xiaomi_account(error='no_servers')
 
-            session = aiohttp_client.async_create_clientsession(self.hass)
-            cloud = MiCloud(session)
-            if await cloud.login(user_input['username'],
-                                 user_input['password']):
-                user_input.update(cloud.auth)
-                return self.async_create_entry(title=data_masking(user_input['username'], 4),
-                                               data=user_input)
+                session = aiohttp_client.async_create_clientsession(self.hass)
+                cloud = MiCloud(session)
+                resp = await cloud.login(user_input['username'],
+                                    user_input['password'])
+                if resp == (0, None):
+                    user_input.update(cloud.auth)
+                    self._all_config = user_input
+                    if not self._non_interactive:
+                        self.hass.async_add_job(self.hass.config_entries.flow.async_init(
+                            DOMAIN, context={"source": "user"}, data={'action': 'xiaomi_account', 'username': user_input['username'],'password': user_input['password'],'server_location': user_input['server_location']}
+                        ))
+                        return await self.async_step_select_devices()
+                    else:
+                        return self.async_create_entry(title=data_masking(user_input['username'], 4),
+                                data=user_input)
+                elif resp[0] == -2:
+                    return await self.async_step_xiaomi_account(error='connection_failed',hint=f"{resp[1]}\n")
+                else:
+                    if resp[1] is None:
+                        return await self.async_step_xiaomi_account(error='wrong_pwd')
+                    else:
+                        return await self.async_step_xiaomi_account(error='need_auth',hint=f"[{str(resp[1])[:100]+'...'}]({resp[1]})\n")
 
-            else:
-                return await self.async_step_xiaomi_account(error='cant_login')
 
         return self.async_show_form(
             step_id='xiaomi_account',
             data_schema=vol.Schema({
-                vol.Required('username'): str,
+                vol.Required('username', default=self._all_config.get('username')): str,
                 vol.Required('password'): str,
-                # vol.Required('servers', default=['cn']):
+                vol.Required('server_location', default=self._all_config.get('server_location') or 'cn'): vol.In(SERVERS),
                     # cv.multi_select(SERVERS)
             }),
-            errors={'base': error} if error else {'base': 'account_tips'}
+            description_placeholders={"hint": hint},
+            errors={'base': error}
         )
 
     async def async_step_xiaoai(self, user_input=None, error=None): # 本地发现不了设备，需要手动输入model，输入后再修改mapping，params
         errors = {}
         if user_input is not None:
-            self._input2 = {**self._input2, **user_input}
+            self._all_config = {**self._all_config, **user_input}
             self._model = user_input[CONF_MODEL]
             # Line 240-270
             self._info = await guess_mp_from_model(self.hass, self._model)
@@ -588,6 +619,34 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             'action': info['did']
         }, True)
 
+    async def async_step_select_devices(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            for device in user_input['devices']:
+                self.hass.async_add_job(self.hass.config_entries.flow.async_init(
+                    DOMAIN, context={"source": "batch_add"}, data={'did': device}
+                ))
+            return self.async_abort(reason="success")
+
+        devlist = {}
+        while not self.hass.data[DOMAIN]['micloud_devices']:
+            await asyncio.sleep(1)
+        for device in self.hass.data[DOMAIN]['micloud_devices']:
+            if device['did'] not in devlist:
+                dt = get_conn_type(device)
+                dt = "WiFi" if dt == 0 else "ZigBee" if dt == 1 else "BLE" if dt == 2 \
+                                        else "BLE Mesh" if dt == 3 else "InfraRed" if dt == 4 else "Unknown"
+                name = f"{device['name']} ({dt}{', '+device['localip'] if (dt == '''WiFi''') else ''})"
+                devlist[device['did']] = name
+        return self.async_show_form(
+            step_id='select_devices',
+            data_schema=vol.Schema({
+                vol.Required('devices', default=[]): cv.multi_select(devlist),
+            }),
+            description_placeholders={"dev_count": str(len(devlist))},
+            errors=errors,
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
@@ -601,45 +660,99 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry: config_entries.ConfigEntry):
         """Initialize options flow."""
         self.config_entry = config_entry
-        self._input2 = config_entry.data.copy()
+        self._all_config = config_entry.data.copy()
         self._steps = []
-        self._prm = {}
-        if 'password' not in self._input2:
-            self._prm = json.loads(self._input2[CONF_CONTROL_PARAMS])
+        self._prm = {}  # Note that params is independent, not in all_config
+        if 'password' not in self._all_config:
+            self._prm = json.loads(self._all_config[CONF_CONTROL_PARAMS])
 
     async def async_step_init(self, user_input=None):
         """Handle options flow."""
-        if 'password' in self._input2:
-            self._steps.append(self.async_step_account())
-        else:
-            if 'indicator_light' in self._prm or 'physical_controls_locked' in self._prm:
+        if user_input:
+            # Not knowing why getattr does not work here,
+            # we do it manually
+            if user_input.get('async_step_update_xiaomi_account', False):
+                self._steps.append(self.async_step_update_xiaomi_account())
+            if user_input.get('async_step_select_devices', False):
+                self._steps.append(self.async_step_select_devices())
+            if user_input.get('async_step_light_and_lock', False):
                 self._steps.append(self.async_step_light_and_lock())
-            if 'climate' in self._input2['devtype']:
+            if user_input.get('async_step_climate', False):
                 self._steps.append(self.async_step_climate())
-            if 'cover' in self._input2['devtype']:
+            if user_input.get('async_step_cover', False):
                 self._steps.append(self.async_step_cover())
+            if user_input.get('async_step_re_adapt', False):
+                self._steps.append(self.async_step_re_adapt())
+            if user_input.get('async_step_edit_mpprm', False):
+                self._steps.append(self.async_step_edit_mpprm())
+            if user_input.get('async_step_edit_iptoken', False):
+                self._steps.append(self.async_step_edit_iptoken())
 
-        if self._steps:
-            self._steps.append(self.async_finish())
-            return await self._steps[0]
+            if self._steps:
+                self._steps.append(self.async_finish())
+                return await self._steps[0]
+            else:
+                return self.async_abort(reason="no_configurable_options")
+
+        fields = OrderedDict()
+        if 'password' in self._all_config:
+            fields[vol.Optional("async_step_update_xiaomi_account")] = bool
+            fields[vol.Optional("async_step_select_devices")] = bool
         else:
+            fields[vol.Optional("async_step_re_adapt")] = bool
+            fields[vol.Optional("async_step_edit_mpprm")] = bool
+            if self._all_config.get(CONF_HOST) != DUMMY_IP and \
+                self._all_config.get(CONF_TOKEN) != DUMMY_TOKEN:
+                fields[vol.Optional("async_step_edit_iptoken")] = bool
+
+            if 'indicator_light' in self._prm or 'physical_controls_locked' in self._prm:
+                fields[vol.Optional("async_step_light_and_lock")] = bool
+            if 'climate' in self._all_config['devtype']:
+                fields[vol.Optional("async_step_climate")] = bool
+            if 'cover' in self._all_config['devtype']:
+                fields[vol.Optional("async_step_cover")] = bool
+        if not fields:
             return self.async_abort(reason="no_configurable_options")
 
-    async def async_step_account(self, user_input=None):
-        if user_input is not None:
-            if user_input['batch_add']:
-                return await self.async_step_batch_agreement()
-            self._input2.update(user_input)
-            self._steps.pop(0)
-            return await self._steps[0]
 
         return self.async_show_form(
-            step_id='account',
-            data_schema=vol.Schema({
-                vol.Required('server_location', default=self._input2.get('server_location') or 'cn'): vol.In(SERVERS),
-                vol.Optional('batch_add', default=False): bool,
-            })
+            step_id='init',
+            data_schema=vol.Schema(fields)
         )
+
+    async def async_step_update_xiaomi_account(self, user_input=None, error=None, hint=""): # 登录小米账号
+        if user_input:
+            user_input['username'] = self._all_config.get('username')
+            if 'username' in user_input:
+                session = aiohttp_client.async_create_clientsession(self.hass)
+                cloud = MiCloud(session)
+                resp = await cloud.login(user_input['username'],
+                                    user_input['password'])
+                if resp == (0, None):
+                    self._all_config.update(user_input)
+                    self._all_config.update(cloud.auth)
+                    self._steps.pop(0)
+                    return await self._steps[0]
+                elif resp[0] == -2:
+                    return await self.async_step_update_xiaomi_account(error='connection_failed',hint=f"{resp[1]}\n")
+                else:
+                    if resp[1] is None:
+                        return await self.async_step_update_xiaomi_account(error='wrong_pwd')
+                    else:
+                        return await self.async_step_update_xiaomi_account(error='need_auth',hint=f"[{str(resp[1])[:100]+'...'}]({resp[1]})\n")
+
+        return self.async_show_form(
+            step_id='update_xiaomi_account',
+            data_schema=vol.Schema({
+                # vol.Required('username', default=self._all_config.get('username')): str,
+                vol.Required('password'): str,
+                vol.Required('server_location', default=self._all_config.get('server_location') or 'cn'): vol.In(SERVERS),
+                    # cv.multi_select(SERVERS)
+            }),
+            description_placeholders={"hint": hint, "username": self._all_config.get('username')},
+            errors={'base': error}
+        )
+
 
     async def async_step_light_and_lock(self, user_input=None):
         if user_input is not None:
@@ -710,7 +823,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             if device['did'] not in devlist:
                 dt = get_conn_type(device)
                 dt = "WiFi" if dt == 0 else "ZigBee" if dt == 1 else "BLE" if dt == 2 \
-                                        else "BLE Mesh" if dt == 3 else "Unknown"
+                                        else "BLE Mesh" if dt == 3 else "InfraRed" if dt == 4 else "Unknown"
                 name = f"{device['name']} ({dt}{', '+device['localip'] if (dt == '''WiFi''') else ''})"
                 devlist[device['did']] = name
         return self.async_show_form(
@@ -721,29 +834,70 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             errors=errors,
         )
 
-    async def async_step_batch_agreement(self, user_input=None):
+    async def async_step_re_adapt(self, user_input=None):
+        model = self._all_config.get('model')
+        info = await guess_mp_from_model(self.hass, model)
+        if info and info.get('mapping') != "{}":
+            self._all_config.update(info)
+            self._prm = json.loads(info.get('params'))
+
+            self._steps.pop(0)
+            return await self._steps[0]
+        else:
+            return self.async_abort(reason="dev_readapt_failed")
+
+    async def async_step_edit_mpprm(self, user_input=None):
         errors = {}
         if user_input is not None:
-            if not user_input['iagree']:
-                errors['base'] = 'plz_agree'
-            else:
-                return await self.async_step_select_devices()
+            try:
+                json.loads(user_input['mapping'])
+            except json.decoder.JSONDecodeError:
+                errors['mapping'] = 'invalid_json'
+            try:
+                json.loads(user_input['params'])
+            except json.decoder.JSONDecodeError:
+                errors['params'] = 'invalid_json'
+            if not errors:
+                self._all_config.update(user_input)
+                self._prm = json.loads(user_input['params'])
+
+                self._steps.pop(0)
+                return await self._steps[0]
+
         return self.async_show_form(
-            step_id='batch_agreement',
+            step_id='edit_mpprm',
             data_schema=vol.Schema({
-                vol.Optional('iagree', default=False): bool,
+                vol.Required(CONF_MAPPING, default=self._all_config.get(CONF_MAPPING)): str,
+                vol.Required(CONF_CONTROL_PARAMS, default=self._all_config.get(CONF_CONTROL_PARAMS)): str,
+            }),
+            errors=errors,
+        )
+
+    async def async_step_edit_iptoken(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            self._all_config.update(user_input)
+
+            self._steps.pop(0)
+            return await self._steps[0]
+
+        return self.async_show_form(
+            step_id='edit_iptoken',
+            data_schema=vol.Schema({
+                vol.Required(CONF_HOST, default=self._all_config.get(CONF_HOST)): str,
+                vol.Required(CONF_TOKEN, default=self._all_config.get(CONF_TOKEN)): str,
             }),
             errors=errors,
         )
 
     async def async_finish(self, reload=True):
         if self._prm:
-            self._input2[CONF_CONTROL_PARAMS] = json.dumps(self._prm,separators=(',', ':'))
+            self._all_config[CONF_CONTROL_PARAMS] = json.dumps(self._prm,separators=(',', ':'))
         self.hass.config_entries.async_update_entry(
-            self.config_entry, data=self._input2
+            self.config_entry, data=self._all_config
         )
         if reload:
             await self.hass.config_entries.async_reload(
                 self.config_entry.entry_id
             )
-        return self.async_create_entry(title="", data=None)
+        return self.async_create_entry(title="5565", data=None)

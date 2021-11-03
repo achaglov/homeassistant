@@ -1,0 +1,21 @@
+- alias: Gyver Speed
+  trigger:
+    platform: state
+    entity_id: input_number.speed
+    
+  action:
+    - service: mqtt.publish
+      data_template:
+        topic: homeassistant/light/ESP-c09fc7/effect/speed/set
+        payload_template: "{{ trigger.to_state.state | int }}"
+    
+- alias: Gyver Scale
+  trigger:
+    platform: state
+    entity_id: input_number.scale
+    
+  action:
+    - service: mqtt.publish
+      data_template:
+        topic: homeassistant/light/ESP-c09fc7/effect/scale/set
+        payload_template: "{{ trigger.to_state.state | int }}"

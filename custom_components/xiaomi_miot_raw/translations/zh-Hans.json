@@ -1,7 +1,8 @@
 {
     "config": {
         "abort": {
-            "already_configured": "已经配置过这个设备了"
+            "already_configured": "已经配置过这个设备了",
+            "success": "登录成功！稍等片刻刷新页面，即可看到添加的设备。\n后续如果想添加更多设备，可以点击账号下的`选项`，**或者**点击`添加集成`，选择`Xiaomi MIoT`。"
         },
         "create_entry": {
             "default": ""
@@ -9,11 +10,13 @@
         "error": {
             "unexpected_error": "发生错误，请查看日志",
             "cannot_connect": "无法连接",
+            "connection_failed": "网络连接失败",
             "value_error": "输入错误",
             "bad_params": "参数有误",
             "no_local_access": "该设备不支持本地接入，已启用云端接入。请再次点击“提交”",
             "no_connect_warning": "连接设备失败。如果您添加的是小爱音箱，这是正常现象；否则，请检查信息是否有误。请在下方输入小爱音箱的 model。",
-            "cant_login": "登录失败",
+            "wrong_pwd": "密码错误",
+            "need_auth": "本次登录要输验证码。请打开上面的链接，按照页面提示操作。提示 ok 后，重新登录。",
             "account_tips": "登录账号是为了方便您添加设备，而不会自动添加所有设备。\n登录后再次添加此集成，即可选择要添加的设备。"
         },
         "step": {
@@ -23,15 +26,16 @@
                     "host": "IP",
                     "token": "token"
                 },
-                "description": "登录小米账号以后，可以更快捷地添加设备。\n并非所有列表中的设备都支持。",
+                "description": "登录小米账号以后，可以更快捷地添加设备。",
                 "title": "选择操作"
             },
             "xiaomi_account": {
 				"title": "小米账号登录",
-				"description": "",
+				"description": "{hint}请输入小米账号和密码。",
 				"data": {
-					"username": "邮箱/小米 ID",
-					"password": "密码"
+					"username": "邮箱/小米 ID/手机号",
+					"password": "密码",
+                    "server_location": "设备所在服务器"
 				}
 			},
             "localinfo": {
@@ -64,6 +68,13 @@
                     "ssecurity": "ssecurity"
                 },
                 "description": "云端通信需要获取以下信息"
+            },
+            "select_devices": {
+                "data": {
+                    "devices": "设备列表"
+                },
+                "description": "你有 {dev_count} 个设备！在下面选择要添加的设备吧！\n一次选不完没关系，之后还可以继续添加。",
+                "title": "选择要添加的设备"
             }
         },
         "title": "MIoT"
@@ -79,21 +90,41 @@
     },
     "options": {
         "abort": {
-            "no_configurable_options": "没有可配置的选项",
-            "no_configurable_account": "小米账号没有可配置的选项。\n如需退出登录，删除此配置项即可。删除后不影响已添加的设备。\n如需刷新设备列表，请点击“重载”。"
+            "no_configurable_options": "没有可配置的选项"
         },
         "error": {
-            "plz_agree": "请阅读说明"
+            "plz_agree": "请阅读说明",
+            "cannot_connect": "无法连接",
+            "connection_failed": "网络连接失败",
+            "wrong_pwd": "密码错误",
+            "need_auth": "本次登录要输验证码。请打开上面的链接，按照页面提示操作。提示 ok 后，重新登录。",
+            "dev_readapt_failed": "设备适配失败，参数未作改动。",
+            "invalid_json": "JSON 格式错误"
         },
         "step": {
-            "account": {
+            "init": {
                 "data": {
-                    "server_location": "设备所在服务器",
-                    "batch_add": "批量添加设备"
+                    "async_step_update_xiaomi_account": "更新小米账号的密码和服务器地区",
+                    "async_step_select_devices": "批量添加设备（不要和上一项一起选中）",
+                    "async_step_light_and_lock": "显示/隐藏指示灯或童锁开关",
+                    "async_step_climate": "为空调绑定外部温度传感器",
+                    "async_step_cover": "反转卷帘上下位置",
+                    "async_step_re_adapt": "重新适配设备",
+                    "async_step_edit_mpprm": "修改 mapping 和配置参数",
+                    "async_step_edit_iptoken": "更新设备 IP 和 token"
                 },
-                "description": "可以在此选择设备所在的服务器。\n如需退出登录，请点击“删除”。删除后不影响已添加的设备。\n如需刷新设备列表，请点击“重载”。\n**如需添加 WiFi 设备，请点击“添加集成”-“Xiaomi MIoT”，勿使用“批量添加设备”**。",
-                "title": "账号设置"
+                "description": "",
+                "title": "您想要……"
             },
+            "update_xiaomi_account": {
+				"title": "更新小米账号信息",
+				"description": "{hint}为小米账号“{username}”更新密码和服务器地区。",
+				"data": {
+					"username": "邮箱/小米 ID/手机号",
+					"password": "密码",
+                    "server_location": "设备所在服务器"
+				}
+			},
             "sensor": {
                 "data": {
                 },
@@ -129,12 +160,20 @@
                 "description": "请选择要添加的设备。\n\n点击完成后，设备将在后台添加，请刷新页面查看已添加的设备。",
                 "title": "批量添加"
             },
-            "batch_agreement": {
+            "edit_mpprm": {
                 "data": {
-                    "iagree": "我已阅读并理解"
+                    "mapping": "mapping",
+                    "params": "配置参数"
                 },
-                "description": "接下来，您可以选择多个要添加的设备，一次性将它们添加到 Home Assistant。\n点击提交后，设备会在后台添加，请等待一分钟。刷新页面可以实时看到已添加成功的设备。\n如果添加的某个设备不能正常工作，请将其删除，然后通过“添加集成”的方式手动添加。\n通过此方式添加设备，都是**云端接入**，需要互联网连接才能工作。\n如果设备支持本地接入，请不要通过此方法添加，请通过“添加集成”的方式手动添加。",
-                "title": "请认真阅读以下说明"
+                "description": "如果您不了解以下参数，请保持默认即可。\n如果刚刚进行过“重新适配”，那么下面显示的是最新的适配结果。",
+                "title": "编辑 Mapping 和参数"
+            },
+            "edit_iptoken": {
+                "data": {
+                    "host": "IP",
+                    "token": "token"
+                },
+                "title": "更新设备 IP 和 token"
             }
         }
     }

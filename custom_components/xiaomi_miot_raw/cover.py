@@ -24,7 +24,13 @@ from miio.exceptions import DeviceException
 from .deps.miio_new import MiotDevice
 
 import copy
-from . import GenericMiotDevice, dev_info, async_generic_setup_platform
+from .basic_dev_class import (
+    GenericMiotDevice,
+    ToggleableMiotDevice,
+    MiotSubDevice,
+    MiotSubToggleableDevice
+)
+from . import async_generic_setup_platform
 from .deps.const import (
     DOMAIN,
     CONF_UPDATE_INSTANT,
@@ -56,6 +62,11 @@ SCAN_INTERVAL = timedelta(seconds=2)
 
 @asyncio.coroutine
 async def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
+    hass.data[DOMAIN]['add_handler'].setdefault(TYPE, {})
+    if 'config_entry' in config:
+        id = config['config_entry'].entry_id
+        hass.data[DOMAIN]['add_handler'][TYPE].setdefault(id, async_add_devices)
+
     await async_generic_setup_platform(
         hass,
         config,
@@ -107,11 +118,10 @@ class MiotCover(GenericMiotDevice, CoverEntity):
 
     @property
     def is_closed(self):
-        """Return if the cover is closed, same as position 0."""
-        try:
-            return self._current_position / self._ctrl_params['current_position']['value_range'][1] <= 0.03
-        except Exception:
-            return self._current_position == 0
+        """ Most of Xiaomi covers does not report position as 0 when they are fully closed.
+            It can be 0, 1, 2... So we consider it closed when it is <= 3. The _current_position
+            has been converted so it is always percentage. (#227) """
+        return self.current_cover_position <= 3
 
     @property
     def is_closing(self):
@@ -148,7 +158,7 @@ class MiotCover(GenericMiotDevice, CoverEntity):
             try:
                 self._action = self._ctrl_params['motor_status']['open']
             except KeyError as ex:
-                _LOGGER.error(ex)
+                pass
             self.async_write_ha_state()
             self.async_update = self._throttle1
             self.schedule_update_ha_state(force_refresh=True)
@@ -173,7 +183,10 @@ class MiotCover(GenericMiotDevice, CoverEntity):
 
     async def async_set_cover_position(self, **kwargs):
         """Set the cover."""
-        result = await self.set_property_new(self._did_prefix + "target_position",kwargs['position'])
+        if 'value_range' in self._ctrl_params['target_position']:
+            result = await self.set_property_new(self._did_prefix + "target_position",self.convert_value(kwargs['position'],"current_position",True,self._ctrl_params['target_position']['value_range']))
+        else:
+            result = await self.set_property_new(self._did_prefix + "target_position",kwargs['position'])
 
         if result:
             self._skip_update = True
@@ -181,6 +194,9 @@ class MiotCover(GenericMiotDevice, CoverEntity):
     def _handle_platform_specific_attrs(self):
         super()._handle_platform_specific_attrs()
         self._current_position = self._state_attrs.get(self._did_prefix + 'current_position')
+        if 'current_position' in self._ctrl_params:
+            if 'value_range' in self._ctrl_params['current_position'] and self._current_position is not None:
+                self._current_position = self.convert_value(self._current_position,"current_position",False,self._ctrl_params['current_position']['value_range'])
         if self.is_closing or self.is_opening:
             self.async_update = self._throttle1
         else:

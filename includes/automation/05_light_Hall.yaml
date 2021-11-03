@@ -1,37 +1,3 @@
-# ----- Включение света по одинарному клику ----- #
-- alias: Hall Switch Click Light Off
-  trigger:
-    - platform: event
-      event_type: xiaomi_aqara.click
-      event_data:
-        entity_id: switch.wall_switch_158d0003d31289
-        click_type: single
-  condition:
-    - condition: state
-      entity_id: switch.wall_switch_158d0003d31289
-      state: 'off'
-  action:
-    - service: switch.turn_on
-      entity_id:
-        - switch.wall_switch_158d0003d31289
-
-# ----- Выключение света по одинарному клику ----- #
-- alias: Hall Switch Click Light Off
-  trigger:
-    - platform: event
-      event_type: xiaomi_aqara.click
-      event_data:
-        entity_id: switch.wall_switch_158d0003d31289
-        click_type: single
-  condition:
-    - condition: state
-      entity_id: switch.wall_switch_158d0003d31289
-      state: 'on'
-  action:
-    - service: switch.turn_off
-      entity_id:
-        - switch.wall_switch_158d0003d31289
-
 
 
 # Включить свет в прихожей по движению
@@ -39,7 +5,10 @@
   initial_state: true
   trigger:
   - platform: state
-    entity_id: binary_sensor.motion_sensor_158d000421a109
+#    entity_id: binary_sensor.motion_sensor_158d000421a109
+    entity_id:
+    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.motion_sensor_158d0003d12974
     to: 'on'
   condition:
   - condition: time
@@ -67,15 +36,15 @@
   initial_state: true
   trigger:
   - platform: state
-    entity_id: binary_sensor.motion_sensor_158d000421a109
+#    entity_id: binary_sensor.motion_sensor_158d000421a109
+    entity_id:
+    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.motion_sensor_158d0003d12974
     to: 'on'
   condition:
   - condition: time
     after: "20:01"
     before: "07:29"
-  - condition: numeric_state
-    entity_id: sensor.illumination_158d000421a109
-    below: 5
   - condition: state
     entity_id: switch.plug_158d0003c73db6
     state: "off"      
@@ -90,7 +59,10 @@
   initial_state: true
   trigger:
   - platform: state
-    entity_id: binary_sensor.motion_sensor_158d000421a109
+#    entity_id: binary_sensor.motion_sensor_158d000421a109
+    entity_id:
+    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.motion_sensor_158d0003d12974
     to: 'off'
     for:
       minutes: 1
@@ -107,7 +79,10 @@
   initial_state: true
   trigger:
   - platform: state
-    entity_id: binary_sensor.motion_sensor_158d000421a109
+#    entity_id: binary_sensor.motion_sensor_158d000421a109
+    entity_id:
+    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.motion_sensor_158d0003d12974
     to: 'off'
     for:
       minutes: 1
