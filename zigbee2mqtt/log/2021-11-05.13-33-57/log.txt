@@ -1165,3 +1165,4 @@ info  2021-11-07 09:16:45: MQTT publish: topic 'zigbee2mqtt/0x00158d000421a109',
 info  2021-11-07 09:16:50: MQTT publish: topic 'zigbee2mqtt/0x00158d000421a109', payload '{"battery":100,"illuminance":48,"illuminance_lux":48,"linkquality":47,"occupancy":false,"temperature":28,"voltage":3055}'
 info  2021-11-07 09:56:29: MQTT publish: topic 'zigbee2mqtt/0x00158d0003f1c963', payload '{"battery":100,"illuminance":5,"illuminance_lux":5,"linkquality":39,"occupancy":false,"temperature":28,"voltage":3055}'
 info  2021-11-07 10:51:30: MQTT publish: topic 'zigbee2mqtt/0x00158d0003f1c963', payload '{"battery":100,"illuminance":19,"illuminance_lux":19,"linkquality":39,"occupancy":false,"temperature":28,"voltage":3055}'
+info  2021-11-07 10:59:30: MQTT publish: topic 'zigbee2mqtt/0x00158d000421a109', payload '{"battery":100,"illuminance":0,"illuminance_lux":0,"linkquality":57,"occupancy":false,"temperature":28,"voltage":3055}'
