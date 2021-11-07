@@ -1,4 +1,4 @@
-# Включение вентиляции
+# Включение вентиляции в ванной
 - alias: Bathroom Fan Turn ON
   initial_state: true
   trigger:

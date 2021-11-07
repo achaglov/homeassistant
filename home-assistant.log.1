@@ -1,26 +1,76 @@
-2021-11-03 06:35:33 WARNING (SyncWorker_1) [homeassistant.loader] We found a custom integration sonoff which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
-2021-11-03 06:35:33 WARNING (SyncWorker_2) [homeassistant.loader] We found a custom integration yandex_station which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
-2021-11-03 06:35:33 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration hacs which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
-2021-11-03 06:35:33 WARNING (SyncWorker_3) [homeassistant.loader] We found a custom integration xiaomi_miot_raw which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
-2021-11-03 06:35:35 WARNING (Recorder) [homeassistant.components.recorder.util] Ended unfinished session (id=183 from 2021-11-02 16:33:47)
-2021-11-03 06:35:47 WARNING (MainThread) [homeassistant.components.webhook] Received message for unregistered webhook f908508bb080000e4205e03b47b19d915262833665697d0d10c4fb4649471626 from 192.168.1.150
-2021-11-03 06:35:47 ERROR (MainThread) [homeassistant.components.vacuum] xiaomi_miot_raw: Error on device update!
+2021-11-06 19:54:05 WARNING (SyncWorker_1) [homeassistant.loader] We found a custom integration hacs which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2021-11-06 19:54:05 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration sonoff which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2021-11-06 19:54:05 WARNING (SyncWorker_2) [homeassistant.loader] We found a custom integration yandex_station which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2021-11-06 19:54:05 WARNING (SyncWorker_3) [homeassistant.loader] We found a custom integration xiaomi_miot_raw which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2021-11-06 19:54:17 ERROR (MainThread) [homeassistant.components.vacuum] xiaomi_miot_raw: Error on device update!
 Traceback (most recent call last):
   File "/usr/src/homeassistant/homeassistant/helpers/entity_platform.py", line 431, in _async_add_entity
     await entity.async_device_update(warning=False)
-  File "/usr/src/homeassistant/homeassistant/helpers/entity.py", line 618, in async_device_update
+  File "/usr/src/homeassistant/homeassistant/helpers/entity.py", line 651, in async_device_update
     await task
   File "/config/custom_components/xiaomi_miot_raw/basic_dev_class.py", line 438, in async_update
     if r['code'] == 0:
 TypeError: string indices must be integers
-2021-11-03 06:35:47 ERROR (SyncWorker_4) [xiaomi_gateway] The device with sid 158d0006d49f34 isn't supported of the used gateway firmware. Please update the gateway firmware if possible! This is the only way the issue can be solved.
-2021-11-03 06:35:48 WARNING (MainThread) [homeassistant.components.webhook] Received message for unregistered webhook f908508bb080000e4205e03b47b19d915262833665697d0d10c4fb4649471626 from 192.168.1.150
-2021-11-03 06:35:48 WARNING (MainThread) [homeassistant.components.webhook] Received message for unregistered webhook f908508bb080000e4205e03b47b19d915262833665697d0d10c4fb4649471626 from 192.168.1.150
-2021-11-03 06:35:48 WARNING (MainThread) [homeassistant.components.webhook] Received message for unregistered webhook f908508bb080000e4205e03b47b19d915262833665697d0d10c4fb4649471626 from 192.168.1.150
-2021-11-03 06:35:55 WARNING (MainThread) [homeassistant.components.vacuum] Setup of vacuum platform xiaomi_miio is taking over 10 seconds.
-2021-11-03 06:35:57 WARNING (MainThread) [homeassistant.helpers.template] Template warning: 'float' got invalid input 'unknown' when rendering template '{{ (states('sensor.pressure_158d0001dc32b4')|float * 0.75 + 4)|round(1) }}' but no default was specified. Currently 'float' will return '0', however this template will fail to render in Home Assistant core 2021.12
-2021-11-03 06:35:57 WARNING (MainThread) [homeassistant.helpers.template] Template warning: 'float' got invalid input 'unknown' when rendering template '{{ (states('sensor.pressure_158d0001dc32b4')|float * 0.75 + 4)|round(1) }}' but no default was specified. Currently 'float' will return '0', however this template will fail to render in Home Assistant core 2021.12
-2021-11-03 15:14:33 ERROR (Thread-5) [root] Uncaught thread exception
+2021-11-06 19:54:22 WARNING (MainThread) [homeassistant.config_entries] Config entry 'lumi.gateway.v3' for xiaomi_miio integration not ready yet: DeviceException during setup of xiaomi gateway with host {self._host}; Retrying in background
+2021-11-06 19:54:27 ERROR (SyncWorker_1) [xiaomi_gateway] Cannot connect to Gateway
+2021-11-06 19:54:37 ERROR (SyncWorker_1) [xiaomi_gateway] Cannot connect to Gateway
+2021-11-06 19:54:47 ERROR (SyncWorker_1) [xiaomi_gateway] Cannot connect to Gateway
+2021-11-06 19:54:57 ERROR (SyncWorker_1) [xiaomi_gateway] Cannot connect to Gateway
+2021-11-06 19:55:07 ERROR (SyncWorker_1) [xiaomi_gateway] Cannot connect to Gateway
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template warning: 'float' got invalid input 'unavailable' when rendering template '{{ (states('sensor.pressure_158d0001dc32b4')|float * 0.75 + 4)|round(1) }}' but no default was specified. Currently 'float' will return '0', however this template will fail to render in Home Assistant core 2022.1
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template warning: 'float' got invalid input 'unavailable' when rendering template '{{ (states('sensor.pressure_158d0001dc32b4')|float * 0.75 + 4)|round(1) }}' but no default was specified. Currently 'float' will return '0', however this template will fail to render in Home Assistant core 2022.1
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'cleaned_area' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaned_area }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'cleaned_area' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaned_area }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'cleaning_time' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaning_time }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'cleaning_time' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaning_time }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'main_brush_left' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.main_brush_left }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'main_brush_left' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.main_brush_left }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'side_brush_left' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.side_brush_left }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'side_brush_left' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.side_brush_left }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'filter_left' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.filter_left }}'
+2021-11-06 19:55:08 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'mappingproxy object' has no attribute 'filter_left' when rendering '{{ states.vacuum.xiaomi_vacuum_cleaner.attributes.filter_left }}'
+2021-11-06 21:04:09 ERROR (MainThread) [homeassistant.components.xiaomi_miio] Unexpected error fetching lumi.gateway.v3 data: not enough arguments for format string
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/miio/miioprotocol.py", line 193, in send
+    data, addr = s.recvfrom(4096)
+socket.timeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/miio/gateway/devices/subdevice.py", line 176, in get_property_exp
+    response = self._gw.send(
+  File "/usr/local/lib/python3.9/site-packages/miio/device.py", line 97, in send
+    return self._protocol.send(
+  File "/usr/local/lib/python3.9/site-packages/miio/miioprotocol.py", line 233, in send
+    return self.send(
+  File "/usr/local/lib/python3.9/site-packages/miio/miioprotocol.py", line 161, in send
+    self.send_handshake()
+  File "/usr/local/lib/python3.9/site-packages/miio/miioprotocol.py", line 74, in send_handshake
+    raise DeviceException("Unable to discover the device %s" % self.ip)
+miio.exceptions.DeviceException: Unable to discover the device 192.168.1.210
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/src/homeassistant/homeassistant/helpers/update_coordinator.py", line 187, in _async_refresh
+    self.data = await self._async_update_data()
+  File "/usr/src/homeassistant/homeassistant/helpers/update_coordinator.py", line 147, in _async_update_data
+    return await self.update_method()
+  File "/usr/src/homeassistant/homeassistant/components/xiaomi_miio/__init__.py", line 406, in async_update_data
+    return await hass.async_add_executor_job(update_data)
+  File "/usr/local/lib/python3.9/concurrent/futures/thread.py", line 52, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/usr/src/homeassistant/homeassistant/components/xiaomi_miio/__init__.py", line 396, in update_data
+    sub_device.update()
+  File "/usr/local/lib/python3.9/site-packages/miio/gateway/devices/subdevice.py", line 118, in update
+    values = self.get_property_exp(list(self.get_prop_exp_dict.keys()))
+  File "/usr/local/lib/python3.9/site-packages/miio/gateway/devices/subdevice.py", line 181, in get_property_exp
+    "Got an exception while fetching properties %s: %s" % (properties)
+TypeError: not enough arguments for format string
+2021-11-06 21:04:15 ERROR (MainThread) [homeassistant.components.xiaomi_miio.sensor] Got exception while fetching the gateway illuminance state: Got an exception while getting gateway illumination
+2021-11-06 21:04:15 ERROR (MainThread) [homeassistant.components.xiaomi_miio.alarm_control_panel] Got exception while fetching the state: Unable to discover the device 192.168.1.210
+2021-11-06 21:05:32 ERROR (Thread-6) [root] Uncaught thread exception
 Traceback (most recent call last):
   File "/usr/local/lib/python3.9/threading.py", line 973, in _bootstrap_inner
     self.run()
@@ -29,4 +79,4 @@ Traceback (most recent call last):
   File "/usr/local/lib/python3.9/site-packages/xiaomi_gateway/__init__.py", line 180, in _listen_to_msg
     data, (ip_add, _) = self._mcastsocket.recvfrom(SOCKET_BUFSIZE)
 OSError: [Errno 9] Bad file descriptor
-2021-11-03 15:14:34 ERROR (MainThread) [homeassistant.components.hassio.handler] Client error on /homeassistant/restart request Server disconnected
+2021-11-06 21:05:33 ERROR (MainThread) [homeassistant.components.hassio.handler] Client error on /homeassistant/restart request Server disconnected

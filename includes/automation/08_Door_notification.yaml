@@ -22,12 +22,12 @@
     for:
       minutes: 10
   - condition: state
-    entity_id: binary_sensor.motion_sensor_158d0003f1c963
+    entity_id: binary_sensor.0x00158d0003f1c963_occupancy
     state: 'off'
     for:
       minutes: 10
   - condition: state
-    entity_id: binary_sensor.motion_sensor_158d000421a109
+    entity_id: binary_sensor.0x00158d000421a109_occupancy
     state: 'off'
     for:
       minutes: 10

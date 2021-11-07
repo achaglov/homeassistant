@@ -240,11 +240,12 @@ views:
 #              name: Выключатель в спальне
             - entity: sensor.battery_158d0003cc2d64
 #              name: Движение в ванной
-            - entity: sensor.battery_158d0003f1c963
+#            - entity: sensor.battery_158d0003f1c963
+            - entity: sensor.0x00158d0003f1c963_battery
 #              name: Движение на кухне
             - entity: sensor.battery_158d0003021440
 #              name: Движение в спальне
-            - entity: sensor.battery_158d000421a109
+            - entity: sensor.0x00158d000421a109_battery
 #              name: Движение в прихожей
             - entity: sensor.battery_158d0003d12974
 #              name: Движение в гостиной
@@ -291,9 +292,9 @@ views:
 #              name: Датчик освещенности шлюз
             - entity: sensor.illumination_158d0003021440
 #              name: Датчик освещенности в спальне
-            - entity: sensor.illumination_158d0003f1c963
+            - entity: sensor.0x00158d0003f1c963_illuminance_lux
 #              name: Датчик освещенности на кухне
-            - entity: sensor.illumination_158d000421a109
+            - entity: sensor.0x00158d000421a109_illuminance_lux
 #              name: Датчик освещенности в прихожей
 
 
@@ -307,11 +308,12 @@ views:
 
             - entity: binary_sensor.motion_sensor_158d0003cc2d64
 #              name: Движение в ванной
-            - entity: binary_sensor.motion_sensor_158d0003f1c963
+#            - entity: binary_sensor.motion_sensor_158d0003f1c963
+            - entity: binary_sensor.0x00158d0003f1c963_occupancy
 #              name: Движение на кухне
             - entity: binary_sensor.motion_sensor_158d0003021440
 #              name: Движение в спальне
-            - entity: binary_sensor.motion_sensor_158d000421a109
+            - entity: binary_sensor.0x00158d000421a109_occupancy
 #              name: Движение в прихожей
             - entity: binary_sensor.motion_sensor_158d0003d12974
 #              name: Движение в гостиной
@@ -435,14 +437,20 @@ views:
 
   - title: Уборка помещений
     icon: mdi:broom
-    
+
     cards:
       - type: 'custom:vacuum-card'
         entity: vacuum.xiaomi_vacuum_cleaner
         style: |
-          ha-card .preview {
-           background-color: var(--secondary-background-color);
-          }
+#          ha-card .preview {
+#           background-color: var(--secondary-background-color);
+#          }
+#        actions:
+#          start:
+#            service: xiaomi_miio.vacuum_clean_segment
+#            service_data:
+#              entity_id: vacuum.xiaomi_vacuum_cleaner
+#              segments: [16, 20]
         stats:
           default:
             - attribute: filter_left
@@ -464,7 +472,7 @@ views:
             - attribute: cleaning_time
               unit: минут
               subtitle: Время уборки
-        actions:
+        shortcuts:
           - name: Уборка в гостиной
             service: script.clean_living_room
             icon: 'mdi:sofa'
@@ -497,8 +505,6 @@ views:
           url: http://192.168.1.110/cam.php
           aspect_ratio: 75%
           style:
-            #top: 90%
-            #left: 3%
             margin-left: 1000px
             margin-right: 1000px
             heght: 100%

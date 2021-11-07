@@ -1,3 +1,4 @@
+# Свет в ванной
 ### Включение света в Ванной при наличии движения
 - alias: Bathroom_Turn_ON_light_(motion on)
   initial_state: true

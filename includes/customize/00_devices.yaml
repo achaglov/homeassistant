@@ -119,12 +119,12 @@
     friendly_name: Датчик освещенности шлюз
     device_class: illuminance
   sensor.illumination_158d0003021440:
-    friendly_name: Датчик освещенности на кухне_1 бывший в спальне
+    friendly_name: Датчик освещенности на кухне_1m
     device_class: illuminance
-  sensor.illumination_158d0003f1c963:
+  sensor.0x00158d0003f1c963_illuminance_lux:
     friendly_name: Датчик освещенности на кухне
     device_class: illuminance
-  sensor.illumination_158d000421a109:
+  sensor.0x00158d000421a109_illuminance_lux:
     friendly_name: Датчик освещенности в прихожей
     device_class: illuminance
     
@@ -137,7 +137,7 @@
     friendly_name: Батарейка датчика входной двери
     device_class: battery
   sensor.battery_158d0003021440:
-    friendly_name: Батарейка датчика движения на кухне_1 бывшей в спальне
+    friendly_name: Батарейка датчика движения на кухне_1m
     device_class: battery
   sensor.battery_158d0003559ebf:
     friendly_name: Батарейка выключателя на кухне
@@ -149,12 +149,12 @@
     friendly_name: Батарейка датчика движения в ванной
     device_class: battery
   sensor.battery_158d0003d12974:
-    friendly_name: Батарейка датчика движения в прихожей_1 бывший в гостиной
+    friendly_name: Батарейка датчика движения в прихожей_1m
     device_class: battery
-  sensor.battery_158d0003f1c963:
+  sensor.0x00158d0003f1c963_battery:
     friendly_name: Батарейка датчика движения на кухне
     device_class: battery
-  sensor.battery_158d000421a109:
+  sensor.0x00158d000421a109_battery:
     friendly_name: Батарейка датчика движения в прихожей
     device_class: battery
   sensor.battery_158d00042d6278:
@@ -176,14 +176,14 @@
     
 ## Датчик движения
   binary_sensor.motion_sensor_158d0003021440:
-    friendly_name: Кухня_1 бывшая спальня, движение
+    friendly_name: Кухня_1m, движение
   binary_sensor.motion_sensor_158d0003cc2d64:
     friendly_name: Ванная, движение
   binary_sensor.motion_sensor_158d0003d12974:
-    friendly_name: Прихожая_1 бывшая гостинная, движение
-  binary_sensor.motion_sensor_158d0003f1c963:
+    friendly_name: Прихожая_1m, движение
+  binary_sensor.0x00158d0003f1c963_occupancy:
     friendly_name: Кухня, движение
-  binary_sensor.motion_sensor_158d000421a109:
+  binary_sensor.0x00158d000421a109_occupancy:
     friendly_name: Прихожая, движение
 
 ## Датчики утечки

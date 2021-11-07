@@ -5,9 +5,8 @@
   initial_state: true
   trigger:
   - platform: state
-#    entity_id: binary_sensor.motion_sensor_158d000421a109
     entity_id:
-    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
     to: 'on'
   condition:
@@ -17,7 +16,7 @@
   - condition: and
     conditions:
     - condition: numeric_state
-      entity_id: sensor.illumination_158d000421a109
+      entity_id: sensor.0x00158d000421a109_illuminance_lux
       below: 5
     - condition: and
       conditions:
@@ -36,9 +35,8 @@
   initial_state: true
   trigger:
   - platform: state
-#    entity_id: binary_sensor.motion_sensor_158d000421a109
     entity_id:
-    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
     to: 'on'
   condition:
@@ -59,13 +57,12 @@
   initial_state: true
   trigger:
   - platform: state
-#    entity_id: binary_sensor.motion_sensor_158d000421a109
     entity_id:
-    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
     to: 'off'
     for:
-      minutes: 1
+      minutes: 2
   condition:
     - condition: state
       entity_id: switch.wall_switch_158d0003d31289
@@ -79,9 +76,8 @@
   initial_state: true
   trigger:
   - platform: state
-#    entity_id: binary_sensor.motion_sensor_158d000421a109
     entity_id:
-    - binary_sensor.motion_sensor_158d000421a109
+    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
     to: 'off'
     for:

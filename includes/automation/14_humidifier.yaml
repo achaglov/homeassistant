@@ -17,7 +17,7 @@
       
 # Скорость вентилятора авто 
 - alias: 'humidifier_on_auto'
-  initial_state: 'on'
+  initial_state: 'off'
   trigger:
     platform: time
     at: '22:00'

@@ -23,7 +23,7 @@
     
     
 - alias: Light - Sunrise -OFF
-  initial_state: true
+  initial_state: false
   trigger:
   - platform: event
     event_type: timer.finished

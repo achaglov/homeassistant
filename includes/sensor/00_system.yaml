@@ -17,7 +17,7 @@
       pressure_mmhg_158d0001dc32b4:
         friendly_name: "Давление"
         unit_of_measurement: 'мм рт. ст.'
-        value_template: "{{ (states('sensor.pressure_158d0001dc32b4')|float * 0.75 + 4)|round(1) }}"
+        value_template: "{{ (states('sensor.pressure_158d0001dc32b4')|float(default) * 0.75 + 4)|round(1) }}"
 
 
 
