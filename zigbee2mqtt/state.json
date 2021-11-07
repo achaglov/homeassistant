@@ -1,16 +1,16 @@
 {
     "0x00158d000421a109": {
         "occupancy": false,
-        "illuminance": 0,
-        "illuminance_lux": 0,
+        "illuminance": 47,
+        "illuminance_lux": 47,
         "voltage": 3055,
         "battery": 100,
         "temperature": 28
     },
     "0x00158d0003f1c963": {
         "occupancy": false,
-        "illuminance": 19,
-        "illuminance_lux": 19,
+        "illuminance": 13,
+        "illuminance_lux": 13,
         "voltage": 3055,
         "battery": 100,
         "temperature": 28
