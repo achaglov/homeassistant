@@ -1,6 +1,6 @@
 # Пылесос
 - alias: 'Vacuum Time Clean'
-  initial_state: 'on'
+  initial_state: true
   trigger:
     platform: time
     at: '11:00'
@@ -16,12 +16,13 @@
           - fri
   action: 
     - service: vacuum.start
-      entity_id: vacuum.xiaomi_vacuum_cleaner
+      entity_id: vacuum.robot_pylesos
 
 - alias: 'Vacuum Cleaning'
+  initial_state: true
   trigger:
     platform: state
-    entity_id: vacuum.xiaomi_vacuum_cleaner
+    entity_id: vacuum.robot_pylesos
     to: 'cleaning'
   action:
     - service: notify.telegram
@@ -29,9 +30,10 @@
         message: 'Пылесос начал уборку'
 
 - alias: 'Vacuum Returning'
+  initial_state: true
   trigger:
     platform: state
-    entity_id: vacuum.xiaomi_vacuum_cleaner
+    entity_id: vacuum.robot_pylesos
     to: 'returning'
   action:
     - service: notify.telegram
@@ -48,6 +50,7 @@
 #         message: 'Пылесос прибыл на станцию и заряжается'
 
 - alias: 'Vacuum Cleaner Error'
+  initial_state: true
   trigger:
     - platform: state
       entity_id: sensor.vacuum_cleaner_status_sensor
@@ -69,6 +72,7 @@
           {% endif %}
 
 - alias: Vacuum Cleaner Error Solved
+  initial_state: true
   trigger:
     - platform: state
       entity_id: sensor.vacuum_cleaner_error_sensor

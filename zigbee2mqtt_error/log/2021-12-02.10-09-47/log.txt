@@ -1,0 +1,1 @@
+error 2021-12-02 10:09:51: Configuration is not consistent with adapter state/backup!

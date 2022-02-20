@@ -2,6 +2,7 @@
 
 # ----- Включение выключение света по одинарному клику ----- #
 - alias: Bedroom Switch Click Light On
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -21,6 +22,7 @@
 
 # ----- Выключение света по одинарному клику ----- #
 - alias: Bedroom Switch Click Light Off
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -38,6 +40,7 @@
 
 # ----- Включение 25% яркости по двойному клику ----- #
 - alias: Bedroom Switch Doble Click Light_25
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -54,6 +57,7 @@
 
 # ----- Включение 4500К по длинному нажатию ----- #
 - alias: Bedroom Switch Long Click Light Max
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click

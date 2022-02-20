@@ -1,6 +1,6 @@
 # ВКЛ увлажнитель 
 - alias: 'humidifier_on'
-  initial_state: 'on'
+  initial_state: true
   trigger:
     platform: time
     at: '19:00'
@@ -17,7 +17,7 @@
       
 # Скорость вентилятора авто 
 - alias: 'humidifier_on_auto'
-  initial_state: 'off'
+  initial_state: true
   trigger:
     platform: time
     at: '22:00'
@@ -29,13 +29,12 @@
     - service: humidifier.set_mode
       entity_id: humidifier.zhimi_humidifier_ca1
       data:
-        speed: 'Auto'
-
-
+        mode: 'Auto'
+    
       
 # ВЫКЛ увлажнитель в рабочий день
 - alias: 'humidifier_off_workday'
-  initial_state: 'on'
+  initial_state: true
   trigger:
     platform: time
     at: '07:15'
@@ -57,7 +56,7 @@
       
 # ВЫКЛ увлажнитель в выходной день
 - alias: 'humidifier_off_holiday'
-  initial_state: 'on'
+  initial_state: true
   trigger:
     platform: time
     at: '10:15'

@@ -3,7 +3,7 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.water_leak_sensor_158d00042d6278
+      entity_id: binary_sensor.utechka_na_kukhne_water_leak
       to: 'on'
   action:
     - service: notify.telegram
@@ -15,7 +15,7 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.water_leak_sensor_158d00042d6314
+      entity_id: binary_sensor.utechka_v_vannoi_water_leak
       to: 'on'
   action:
     - service: notify.telegram
@@ -27,7 +27,7 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.water_leak_sensor_158d00045abebb
+      entity_id: binary_sensor.utechka_v_tualete_water_leak
       to: 'on'
   action:
     - service: notify.telegram
@@ -40,24 +40,24 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.water_leak_sensor_158d00042d6278
+      entity_id: binary_sensor.utechka_na_kukhne_water_leak
       to: 'on'
     - platform: state
-      entity_id: binary_sensor.water_leak_sensor_158d00042d6314
+      entity_id: binary_sensor.utechka_v_vannoi_water_leak
       to: 'on'
     - platform: state
-      entity_id: binary_sensor.water_leak_sensor_158d00045abebb
+      entity_id: binary_sensor.utechka_v_tualete_water_leak
       to: 'on'
   condition:
   - condition: state
-    entity_id: switch.plug_158d0003c779c9
+    entity_id: switch.0x00158d0003c779c9
     state: 'off'
   action:
     - service: switch.turn_on
-      entity_id: switch.plug_158d0003c779c9
+      entity_id: switch.0x00158d0003c779c9
     - delay: 00:00:05
     - service: switch.turn_off
-      entity_id: switch.plug_158d0003c779c9
+      entity_id: switch.0x00158d0003c779c9
     - service: notify.telegram
       data:
         message: "Вода перекрыта в: {{ states('sensor.time') }}"

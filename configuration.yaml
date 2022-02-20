@@ -27,22 +27,31 @@ tts:
 sonoff:
   username: !secret username_sonoff
   password: !secret password_sonoff
-  
+ 
+#device_tracker:
+#  - platform: padavan_tracker
+#    consider_home: 10
+#    interval_seconds: 3
+#    url: http://192.168.1.1/ # web interface url (don't forget about `/` in the end)
+#    username: !secret username_padavan
+#    password: !secret password_padavan
+    
+    
 #Лампа Гайвера
-input_number:
-  speed:
-    name: Speed
-    initial: 30
-    min: 0
-    max: 255
-    step: 1
+#input_number:
+#  speed:
+#    name: Speed
+#    initial: 30
+#    min: 0
+#    max: 255
+#    step: 1
 
-  scale:
-    name: Scale
-    initial: 30
-    min: 1
-    max: 100
-    step: 1
+#  scale:
+#    name: Scale
+#    initial: 30
+#    min: 1
+#    max: 100
+#    step: 1
 
 
 #Telegram

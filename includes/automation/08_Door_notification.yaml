@@ -3,16 +3,27 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.door_window_sensor_158d0002e2c1c7
+      entity_id: binary_sensor.0x00158d0000c2f824_contact
+      from: 'off'
       to: 'on'
   condition:
   - condition: state
-    entity_id: binary_sensor.motion_sensor_158d0003021440
+    entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
     state: 'off'
     for:
       minutes: 10
   - condition: state
-    entity_id: binary_sensor.motion_sensor_158d0003cc2d64
+    entity_id: binary_sensor.0x00158d000421a109_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.dvizhenie_na_kukhne_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003021440
     state: 'off'
     for:
       minutes: 10
@@ -22,15 +33,16 @@
     for:
       minutes: 10
   - condition: state
-    entity_id: binary_sensor.0x00158d0003f1c963_occupancy
+    entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
     state: 'off'
     for:
       minutes: 10
   - condition: state
-    entity_id: binary_sensor.0x00158d000421a109_occupancy
+    entity_id: binary_sensor.0x00158d0007274a75_occupancy
     state: 'off'
     for:
-      minutes: 10
+      minutes: 10      
+      
   action:
     - service: notify.telegram
       data:
@@ -41,7 +53,8 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.door_window_sensor_158d0002e2c1c7
+      entity_id: binary_sensor.0x00158d0000c2f824_contact
+      from: 'off'
       to: 'on'
       for:
         minutes: 10

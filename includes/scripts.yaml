@@ -3,7 +3,7 @@ clean_living_room:
         sequence:
           - service: vacuum.send_command
             data:
-              entity_id: vacuum.xiaomi_vacuum_cleaner
+              entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
               params: [[24312,28988,30262,32188,1]]
 clean_badroom_room:
@@ -11,7 +11,7 @@ clean_badroom_room:
         sequence:
           - service: vacuum.send_command
             data:
-              entity_id: vacuum.xiaomi_vacuum_cleaner
+              entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
               params: [[24475,23410,29925,26010,1]]
 clean_kitchen_room:
@@ -19,7 +19,7 @@ clean_kitchen_room:
         sequence:
           - service: vacuum.send_command
             data:
-              entity_id: vacuum.xiaomi_vacuum_cleaner
+              entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
               params: [[24541,26046,27191,27996,1]]
 
@@ -28,7 +28,7 @@ clean_corridor_room:
         sequence:
           - service: vacuum.send_command
             data:
-              entity_id: vacuum.xiaomi_vacuum_cleaner
+              entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
               params: [[27382,26089,30432,28889,1]]
 
@@ -37,7 +37,7 @@ clean_carpet_corridor:
         sequence:
           - service: vacuum.send_command
             data:
-              entity_id: vacuum.xiaomi_vacuum_cleaner
+              entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
               params: [[29110,26052,30410,27402,2]]
 

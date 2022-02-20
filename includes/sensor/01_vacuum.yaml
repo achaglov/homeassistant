@@ -4,8 +4,8 @@
       vacuum_cleaner_error_sensor:
         friendly_name: Vacuum Cleaner Error Sensor
         value_template: >-
-          {% if states.vacuum.xiaomi_vacuum_cleaner.attributes.error is defined %}
-            {{states.vacuum.xiaomi_vacuum_cleaner.attributes.error}}
+          {% if states.vacuum.robot_pylesos.attributes.error is defined %}
+            {{states.vacuum.robot_pylesos.attributes.error}}
           {% else %}
             No Error
           {% endif %}
@@ -15,61 +15,69 @@
       vacuum_cleaner_status_sensor:
         friendly_name: Vacuum Cleaner Status Sensor
         value_template: >-
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.status }}
+          {{ states.vacuum.robot_pylesos.attributes.status }}
 
   - platform: template
     sensors:
       vacuum_cleaner_battery_level:
         value_template: >
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.battery_level }}
+          {{ states.vacuum.robot_pylesos.attributes.battery_level }}
         friendly_name: Battery Level
         unit_of_measurement: '%'
 
       vacuum_cleaner_cleaned_area:
         value_template: >
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaned_area }}
+          {{ (states('sensor.robot_pylesos_last_clean_area')|float(0))|round(1) }}
         friendly_name: Cleaned Area
         unit_of_measurement: 'm²'
 
       vacuum_cleaner_status:
         value_template: >
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.status }}
+          {{ states.vacuum.robot_pylesos.attributes.status }}
         friendly_name: Status
 
       vacuum_cleaner_cleaning_time:
         value_template: >
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.cleaning_time }}
+          {{ (states('sensor.robot_pylesos_last_clean_duration')|float(0) / 60)|round(0) }}
         friendly_name: Cleaning Time
         unit_of_measurement: 'min'
 
       vacuum_cleaner_main_brush_left:
         value_template: >
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.main_brush_left }}
+          {{ (states('sensor.robot_pylesos_main_brush_left')|float(0) / 3600)|round(0) }}
         friendly_name: Main Brush Left
         unit_of_measurement: 'Hrs'
 
       vacuum_cleaner_side_brush_left:
         value_template: >
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.side_brush_left }}
+          {{ (states('sensor.robot_pylesos_side_brush_left')|float(default=0) / 3600)|round(0) }}
         friendly_name: Side Brush Left
         unit_of_measurement: 'Hrs'
 
       vacuum_cleaner_filter_left:
         value_template: >
-          {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.filter_left }}
+          {{ (states('sensor.robot_pylesos_filter_left')|float(0) / 3600)|round(0) }}
         friendly_name: Filter Left
         unit_of_measurement: 'Hrs'
+        
+  - platform: template
+    sensors:
+      vacuum_dirty_left:
+        friendly_name: "Датчики"
+        unit_of_measurement: 'часов'
+        value_template: "{{ (states('sensor.robot_pylesos_sensor_dirty_left')|float(0) / 3600)|round(0) }}"
+          
 
   - platform: template
     sensors:
       vacuum_status:
         friendly_name: "Vacuum - Status"
-        value_template: "Status: {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.status }}"
+        value_template: "Status: {{ states.vacuum.robot_pylesos.attributes.status }}"
 
   - platform: template
     sensors:
       vacuum_battery:
         friendly_name: "Vacuum - Battery"
-        value_template: "Battery: {{ states.vacuum.xiaomi_vacuum_cleaner.attributes.battery_level }}"
+        value_template: "Battery: {{ states.vacuum.robot_pylesos.attributes.battery_level }}"
         device_class: battery
         unit_of_measurement: '%'

@@ -1,6 +1,7 @@
 # Свет на кухне
 # -----Включение света по одинарному клику ----- #
 - alias: Kitchen Switch Click Light ON
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -18,6 +19,7 @@
 
 # -----Выключение света по одинарному клику ----- #
 - alias: Kitchen Switch Click Light Off
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -35,6 +37,7 @@
 
 # ----- Включение 25% яркости по двойному клику ----- #
 - alias: Kitchen Switch Doble Click Light_25
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -51,6 +54,7 @@
 
 # ----- Включение 4500К по длинному нажатию ----- #
 - alias: Kitchen Switch Long Click Light Max
+  initial_state: true
   trigger:
     - platform: event
       event_type: xiaomi_aqara.click
@@ -75,8 +79,8 @@
   trigger:
     - platform: state
       entity_id:
-      - binary_sensor.0x00158d0003f1c963_occupancy
-      - binary_sensor.motion_sensor_158d0003021440
+      - binary_sensor.dvizhenie_na_kukhne_occupancy
+#      - binary_sensor.motion_sensor_158d0003021440
       to: 'on'
   condition:
   - condition: time
@@ -99,14 +103,18 @@
   trigger:
     - platform: state
       entity_id:
-      - binary_sensor.0x00158d0003f1c963_occupancy
-      - binary_sensor.motion_sensor_158d0003021440
+      - binary_sensor.dvizhenie_na_kukhne_occupancy
+#      - binary_sensor.motion_sensor_158d0003021440
+      from: 'on'
       to: 'off'
       for:
         minutes: 3
   condition:
     - condition: state
       entity_id: light.yeelight_ceiling5_0x0000000007f0e59f
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.0x00158d0002e2c1c7_contact
       state: 'on'
   action:
     - service: light.turn_off
@@ -119,8 +127,8 @@
   trigger:
     - platform: state
       entity_id:
-      - binary_sensor.0x00158d0003f1c963_occupancy
-      - binary_sensor.motion_sensor_158d0003021440
+      - binary_sensor.dvizhenie_na_kukhne_occupancy
+#      - binary_sensor.motion_sensor_158d0003021440
       to: 'on'
   condition:
   - condition: time
@@ -136,8 +144,7 @@
     - service: light.turn_on
       entity_id:
         - light.lumi_gateway_v3_light
-      data_template:
-        brightness: 255
+
 
 
 ### Выключение ночника на кухне при отсутствии движения в течении 3 минут
@@ -146,8 +153,9 @@
   trigger:
     - platform: state
       entity_id:
-      - binary_sensor.0x00158d0003f1c963_occupancy
-      - binary_sensor.motion_sensor_158d0003021440
+      - binary_sensor.dvizhenie_na_kukhne_occupancy
+#      - binary_sensor.motion_sensor_158d0003021440
+      from: 'on'
       to: 'off'
       for:
         minutes: 3
@@ -155,6 +163,11 @@
     - condition: state
       entity_id: light.lumi_gateway_v3_light
       state: 'on'
+    - condition: state
+      entity_id: binary_sensor.0x00158d0002e2c1c7_contact
+      state: 'on'
   action:
     - service: light.turn_off
       entity_id: light.lumi_gateway_v3_light
+    - service: light.turn_off
+      entity_id: light.gateway_light_04cf8c8f8501

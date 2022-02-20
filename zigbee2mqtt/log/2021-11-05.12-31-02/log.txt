@@ -1,8 +1,0 @@
-warn  2021-11-05 12:31:06: Using experimental new availability feature
-error 2021-11-05 13:09:38: Not connected to MQTT server!
-error 2021-11-05 13:09:48: Not connected to MQTT server!
-error 2021-11-05 13:09:58: Not connected to MQTT server!
-error 2021-11-05 13:10:05: Not connected to MQTT server!
-error 2021-11-05 13:10:05: Cannot send message: topic: 'zigbee2mqtt/0x00158d0003f1c963', payload: '{"battery":100,"illuminance":21,"illuminance_lux":21,"linkquality":39,"occupancy":false,"temperature":28,"voltage":3055}
-error 2021-11-05 13:31:04: Not connected to MQTT server!
-error 2021-11-05 13:31:04: Cannot send message: topic: 'zigbee2mqtt/bridge/state', payload: 'offline

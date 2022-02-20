@@ -1,0 +1,33 @@
+# На стул сели
+- alias: Stool use
+  initial_state: true
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.0x00158d0003121c47_contact
+    from: 'on'
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: switch.sonoff_1000f261e0
+    state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.sonoff_1000f261e0
+
+# На стуле никто не сидит
+- alias: Stool no_use
+  initial_state: true
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.0x00158d0003121c47_contact
+    from: 'off'
+    to: 'on'
+    for:
+      minutes: 1
+  condition:
+  - condition: state
+    entity_id: switch.sonoff_1000f261e0
+    state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.sonoff_1000f261e0

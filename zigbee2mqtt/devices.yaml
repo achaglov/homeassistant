@@ -1,6 +1,36 @@
-'0x00158d000421a109':
-  friendly_name: '0x00158d000421a109'
-  occupancy_timeout: 5
 '0x00158d0003f1c963':
-  friendly_name: '0x00158d0003f1c963'
+  friendly_name: движение на кухне
   occupancy_timeout: 5
+'0x00158d0003d31289':
+  friendly_name: свет в прихожей
+'0x00158d0001dc32b4':
+  friendly_name: климат в ванной
+  optimistic: true
+  retain: true
+'0x00158d00042d6314':
+  friendly_name: утечка в ванной
+'0x00158d00045abebb':
+  friendly_name: утечка в туалете
+'0x00158d00042d6278':
+  friendly_name: утечка на кухне
+'0x00158d0006d49f34':
+  friendly_name: свет и вентиляция в ванной
+'0x00158d0003cc2d64':
+  friendly_name: движение в ванной
+'0xa4c138316bba8173':
+  friendly_name: гирлянда
+'0x00158d0003121c47':
+  friendly_name: офисное кресло
+'0x00158d0003c73db6':
+  friendly_name: подсветка в прихожей
+'0x00158d0003c779c9':
+  friendly_name: вода
+'0x00158d000421a109':
+  friendly_name: движение в прихожей
+  occupancy_timeout: 5
+'0x00158d0000c2f824':
+  friendly_name: входная дверь
+'0x00158d0002e2c1c7':
+  friendly_name: табурет
+'0x00158d0007274a75':
+  friendly_name: движение в гостиной

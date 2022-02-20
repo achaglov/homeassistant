@@ -21,11 +21,11 @@
     - condition: and
       conditions:
       - condition: state
-        entity_id: switch.wall_switch_158d0003d31289
+        entity_id: switch.svet_v_prikhozhei
         state: "off"
   action:
     - service: switch.turn_on
-      entity_id: switch.wall_switch_158d0003d31289
+      entity_id: switch.svet_v_prikhozhei
 
 
 
@@ -44,11 +44,11 @@
     after: "20:01"
     before: "07:29"
   - condition: state
-    entity_id: switch.plug_158d0003c73db6
+    entity_id: switch.0x00158d0003c73db6
     state: "off"      
   action:
     - service: switch.turn_on
-      entity_id: switch.plug_158d0003c73db6
+      entity_id: switch.0x00158d0003c73db6
 
    
 
@@ -65,11 +65,11 @@
       minutes: 2
   condition:
     - condition: state
-      entity_id: switch.wall_switch_158d0003d31289
+      entity_id: switch.svet_v_prikhozhei
       state: "on"
   action:
     - service: switch.turn_off
-      entity_id: switch.wall_switch_158d0003d31289
+      entity_id: switch.svet_v_prikhozhei
 
 # Выключить ночник в прихожей по движению
 - alias: Hall_Turn_OFF_light_(motion on)_night
@@ -84,9 +84,9 @@
       minutes: 1
   condition:
     - condition: state
-      entity_id: switch.plug_158d0003c73db6
+      entity_id: switch.0x00158d0003c73db6
       state: "on"
   action:
     - service: switch.turn_off
-      entity_id: switch.plug_158d0003c73db6
+      entity_id: switch.0x00158d0003c73db6
 

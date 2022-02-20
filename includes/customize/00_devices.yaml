@@ -1,11 +1,23 @@
 #Бинарные сенсоры
-  binary_sensor.door_window_sensor_158d0002e2c1c7:
+  alarm_control_panel.lumi_gateway_v3_alarm:
+    friendly_name: Панель охраны
+  binary_sensor.vkhodnaia_dver_contact:
     friendly_name: Входная дверь
     icon: mdi:door
+  binary_sensor.yeelight_ceiling20_0x000000001588e1a5_nightlight:
+    friendly_name: Ночной свет в гостиной
+  binary_sensor.yeelight_ceiling3_0x0000000007d1efa6_nightlight:
+    friendly_name: Ночной свет в спальне
+  binary_sensor.yeelight_ceiling5_0x0000000007f0e59f_nightlight:
+    friendly_name: Ночной свет на кухне
   binary_sensor.smoke_sensor_158d00045f1f2d:
     friendly_name: Датчик задымления
     icon: mdi:smoking-off
-
+  binary_sensor.ofisnoe_kreslo_contact:
+    friendly_name: Офисное кресло
+    icon: mdi:stool
+  binary_sensor.switch_158d0005cfcaf1:
+    friendly_name: Кнопка
 
 #Счетчики
   sensor.cold_day:
@@ -20,12 +32,19 @@
     friendly_name: Показания счетчика электроэнергии
 
 #Климат
-  sensor.humidity_158d0001dc32b4:
+  sensor.dk1_cloud_d85400_temperature:
+    friendly_name: Температура в спальне
+  sensor.dk1_cloud_d85400_humidity:
+    friendly_name: Влажность в спальне
+  sensor.t2_cloud_a0sk00_temperature:
+    friendly_name: Температура на кухне
+  sensor.t2_cloud_a0sk00_humidity:
+    friendly_name: Влажность на кухне
+  sensor.klimat_v_vannoi_humidity:
     friendly_name: Влажность в ванной
   sensor.pressure_mmhg_158d0001dc32b4:
     friendly_name: Давление
-    icon: mdi:gauge
-  sensor.temperature_158d0001dc32b4:
+  sensor.klimat_v_vannoi_temperature:
     friendly_name: Температура в ванной
   sensor.zhimi_humidifier_ca1_temperature:
     friendly_name: Температура в спальне (увлажнитель)
@@ -36,46 +55,43 @@
   light.yeelight_ceiling5_0x0000000007f0e59f:
     friendly_name: Свет на кухне
     icon: mdi:ceiling-light
-  binary_sensor.yeelight_ceiling5_0x0000000007f0e59f_nightlight:
-    friendly_name: Ночной свет на кухне
   light.yeelight_ceiling3_0x0000000007d1efa6:
     friendly_name: Свет в спальне
     icon: mdi:ceiling-light
-  binary_sensor.yeelight_ceiling3_0x0000000007d1efa6_nightlight:
-    friendly_name: Ночной свет в спальне
   light.yeelight_ceiling20_0x000000001588e1a5_ambilight:
     friendly_name: Свет амбилайт в гостиной
     icon: mdi:ceiling-light
   light.yeelight_ceiling20_0x000000001588e1a5:
     friendly_name: Свет в гостиной
     icon: mdi:ceiling-light
-  binary_sensor.yeelight_ceiling20_0x000000001588e1a5_nightlight:
-    friendly_name: Ночной свет в гостиной
   light.gyver_lamp_esp_c09fc7:
     friendly_name: Лампа Гайвера
     icon: mdi:lava-lamp
 
 # Розетки, выключатели 
-  switch.plug_158d0003c73db6:
+  switch.podsvetka_v_prikhozhei:
     friendly_name: Ночник в прихожей
     icon: mdi:wall-sconce-round
-  switch.plug_158d0003c779c9:
+  switch.voda:
     friendly_name: Водоснабжение
     icon: mdi:water-off
-  switch.relay_lumi_158d0006d49f34_ch1_lumi_158d0006d49f34:
+  switch.0x00158d0006d49f34_l2:
     friendly_name: Вентиляция в ванной
     icon: mdi:fan
-  switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34:
+  switch.0x00158d0006d49f34_l1:
     friendly_name: Свет в ванной
     icon: mdi:light-recessed
-  switch.wall_switch_no_neutral_lumi_158d0003d31289_ch0_lumi_158d0003d31289:
+  switch.svet_v_prikhozhei:
     friendly_name: Свет в прихожей
     icon: mdi:light-recessed
+  light.gateway_light_04cf8c8f8501:
+    friendly_name: Ночник на кухне
+    icon: mdi:wall-sconce-round
   light.lumi_gateway_v3_light:
     friendly_name: Ночник на кухне
     icon: mdi:wall-sconce-round
   switch.sonoff_1000f261e0:
-    friendly_name: Подсветка на кухне
+    friendly_name: Светильник рабочего стола
     icon: mdi:wall-sconce-round
   switch.sonoff_1000d8e906:
     friendly_name: Ёлочка
@@ -90,6 +106,8 @@
    friendly_name: Сбербокс
   switch.sonoff02:
    friendly_name: Удлиннитель в спальне
+  switch.0xa4c138316bba8173:
+   friendly_name: Гирлянда на кухне
 
 # Настенные выключатели
   binary_sensor.wall_switch_158d0002b46857:
@@ -121,10 +139,10 @@
   sensor.illumination_158d0003021440:
     friendly_name: Датчик освещенности на кухне_1m
     device_class: illuminance
-  sensor.0x00158d0003f1c963_illuminance_lux:
+  sensor.dvizhenie_na_kukhne_illuminance_lux:
     friendly_name: Датчик освещенности на кухне
     device_class: illuminance
-  sensor.0x00158d000421a109_illuminance_lux:
+  sensor.dvizhenie_v_prikhozhei_illuminance_lux:
     friendly_name: Датчик освещенности в прихожей
     device_class: illuminance
     
@@ -133,11 +151,11 @@
   sensor.battery_158d0002b46857:
     friendly_name: Батарейка выключателя в гостиной
     device_class: battery
-  sensor.battery_158d0002e2c1c7:
+  sensor.vkhodnaia_dver_battery:
     friendly_name: Батарейка датчика входной двери
     device_class: battery
   sensor.battery_158d0003021440:
-    friendly_name: Батарейка датчика движения на кухне_1m
+    friendly_name: Батарейка датчика движения в спальне
     device_class: battery
   sensor.battery_158d0003559ebf:
     friendly_name: Батарейка выключателя на кухне
@@ -145,52 +163,54 @@
   sensor.battery_158d000355fbed:
     friendly_name: Батарейка выключателя в спальне
     device_class: battery
-  sensor.battery_158d0003cc2d64:
+  sensor.0x00158d0003cc2d64_battery:
     friendly_name: Батарейка датчика движения в ванной
     device_class: battery
   sensor.battery_158d0003d12974:
     friendly_name: Батарейка датчика движения в прихожей_1m
     device_class: battery
-  sensor.0x00158d0003f1c963_battery:
+  sensor.dvizhenie_na_kukhne_battery:
     friendly_name: Батарейка датчика движения на кухне
     device_class: battery
-  sensor.0x00158d000421a109_battery:
+  sensor.dvizhenie_v_prikhozhei_battery:
     friendly_name: Батарейка датчика движения в прихожей
     device_class: battery
-  sensor.battery_158d00042d6278:
+  sensor.utechka_na_kukhne_battery:
     friendly_name: Батарейка датчика утечки на кухне
     device_class: battery
-  sensor.battery_158d00042d6314:
+  sensor.utechka_v_vannoi_battery:
     friendly_name: Батарейка датчика утечки в ванной
     device_class: battery
-  sensor.battery_158d00045abebb:
+  sensor.utechka_v_tualete_battery:
     friendly_name: Батарейка датчика утечки в туалете
     device_class: battery
   sensor.battery_158d00045f1f2d:
     friendly_name: Батарейка датчика дыма в спальне
     device_class: battery
-  sensor.battery_158d0001dc32b4:
+  sensor.klimat_v_vannoi_battery:
     friendly_name: Батарейка датчика температуры влажности в ванной 
+    device_class: battery
+  sensor.0x00158d0003121c47_battery:
+    friendly_name: Батарейка офисного кресла 
     device_class: battery
     
     
 ## Датчик движения
   binary_sensor.motion_sensor_158d0003021440:
-    friendly_name: Кухня_1m, движение
-  binary_sensor.motion_sensor_158d0003cc2d64:
+    friendly_name: Спальня, движение
+  binary_sensor.0x00158d0003cc2d64_occupancy:
     friendly_name: Ванная, движение
   binary_sensor.motion_sensor_158d0003d12974:
     friendly_name: Прихожая_1m, движение
-  binary_sensor.0x00158d0003f1c963_occupancy:
+  binary_sensor.dvizhenie_na_kukhne_occupancy:
     friendly_name: Кухня, движение
-  binary_sensor.0x00158d000421a109_occupancy:
+  binary_sensor.dvizhenie_v_prikhozhei_occupancy:
     friendly_name: Прихожая, движение
 
 ## Датчики утечки
-  binary_sensor.water_leak_sensor_158d00042d6278:
+  binary_sensor.utechka_na_kukhne_water_leak:
     friendly_name: Утечка на кухне
-  binary_sensor.water_leak_sensor_158d00042d6314:
+  binary_sensor.utechka_v_vannoi_water_leak:
     friendly_name: Утечка в ванной
-  binary_sensor.water_leak_sensor_158d00045abebb:
+  binary_sensor.utechka_v_tualete_water_leak:
     friendly_name: Утечка в туалете
-    

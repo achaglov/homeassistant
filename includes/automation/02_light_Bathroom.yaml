@@ -4,15 +4,15 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_sensor_158d0003cc2d64
+      entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
       to: 'on'
   condition:
     - condition: state
-      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      entity_id: switch.0x00158d0006d49f34_l1
       state: 'off'
   action:
     - service: switch.turn_on
-      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      entity_id: switch.0x00158d0006d49f34_l1
     - service: timer.start
       entity_id: timer.light_bathroom_30m_off
 
@@ -22,17 +22,17 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.motion_sensor_158d0003cc2d64
+      entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
       to: 'off'
       for:
         minutes: 3
   condition:
     - condition: state
-      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      entity_id: switch.0x00158d0006d49f34_l1
       state: 'on'
   action:
     - service: switch.turn_off
-      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      entity_id: switch.0x00158d0006d49f34_l1
 
 
 ### Выключение света в Ванной в случае поломки датчиков (через 30 минут)
@@ -48,11 +48,11 @@
         entity_id: timer.light_bathroom_30m_off
   condition:
     - condition: state
-      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      entity_id: switch.0x00158d0006d49f34_l1
       state: 'on'
   action:
     - service: switch.turn_off
-      entity_id: switch.relay_lumi_158d0006d49f34_ch0_lumi_158d0006d49f34
+      entity_id: switch.0x00158d0006d49f34_l1
     - service: notify.telegram
       data:
         message: "Внимание. Свет в Ванной не был выключен продолжительное время. Время выключения: {{ states('sensor.time') }}"
