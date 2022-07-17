@@ -12,13 +12,12 @@
 
 
 ### Давление в мм ртутного столба
-  - platform: template
-    sensors:
-      pressure_mmhg_158d0001dc32b4:
-        friendly_name: "Давление"
-        unit_of_measurement: 'мм рт. ст.'
-#        value_template: "{{ (states('sensor.klimat_v_vannoi_pressure')|float(default) * 0.75 + 4)|round(1) }}"
-        value_template: "{{ (states('sensor.klimat_v_vannoi_pressure')|float(default=0) * 0.75 + 4)|round(1) }}"
+#  - platform: template
+#    sensors:
+#      pressure_mmhg_158d0001dc32b4:
+#        friendly_name: "Давление"
+#        unit_of_measurement: 'mm Hg'
+#        value_template: "{{ (states('sensor.klimat_v_vannoi_pressure')|float(default=0) * 0.75 + 4)|round(1) }}"
 
 
 

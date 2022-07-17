@@ -20,6 +20,11 @@ lovelace:
       type: module
     - url: /hacsfiles/mini-humidifier/mini-humidifier-bundle.js?v=2.5.4
       type: module
+    - url: /hacsfiles/purifier-card/purifier-card.js
+      type: module
+    - url: /hacsfiles/lovelace-body-miscale-card/body-miscale-card.js
+      type: module
+      
 # Text to speech
 tts:
   - platform: google_translate
@@ -37,22 +42,6 @@ sonoff:
 #    password: !secret password_padavan
     
     
-#Лампа Гайвера
-#input_number:
-#  speed:
-#    name: Speed
-#    initial: 30
-#    min: 0
-#    max: 255
-#    step: 1
-
-#  scale:
-#    name: Scale
-#    initial: 30
-#    min: 1
-#    max: 100
-#    step: 1
-
 
 #Telegram
 telegram_bot:
@@ -67,6 +56,12 @@ notify:
     platform: telegram
     chat_id: !secret telegram_bot_chat_id
 
+#Narodmon
+narodmon:
+  devices:
+    - name: "Narodmon"
+      sensors:
+        - radiation
 
 #Вынос во внешние файлы
 group: !include includes/groups.yaml
@@ -77,6 +72,7 @@ yeelight: !include includes/yeelight.yaml
 timer: !include includes/timer.yaml
 
 #Вынос во внешние папки
+binary_sensor: !include_dir_merge_list includes/bi-sensor
 sensor: !include_dir_merge_list includes/sensor
 automation: !include_dir_merge_list includes/automation
 

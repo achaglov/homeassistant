@@ -14,10 +14,15 @@
   action: 
     - service: humidifier.turn_on
       entity_id: humidifier.zhimi_humidifier_ca1
+    - service: humidifier.set_mode
+      target:
+        entity_id: humidifier.zhimi_humidifier_ca1
+      data:
+        mode: Auto
       
-# Скорость вентилятора авто 
-- alias: 'humidifier_on_auto'
-  initial_state: true
+# Скорость вентилятора ночь 
+- alias: 'humidifier_on_Silent'
+  initial_state: false
   trigger:
     platform: time
     at: '22:00'
@@ -27,9 +32,10 @@
     state: 'on'
   action: 
     - service: humidifier.set_mode
-      entity_id: humidifier.zhimi_humidifier_ca1
+      target:
+        entity_id: humidifier.zhimi_humidifier_ca1
       data:
-        mode: 'Auto'
+        mode: Silent
     
       
 # ВЫКЛ увлажнитель в рабочий день
@@ -37,15 +43,11 @@
   initial_state: true
   trigger:
     platform: time
-    at: '07:15'
+    at: '07:30'
   condition:
-  - condition: time
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: 'on' 
   - condition: state
     entity_id: humidifier.zhimi_humidifier_ca1
     state: 'on'
@@ -59,12 +61,11 @@
   initial_state: true
   trigger:
     platform: time
-    at: '10:15'
+    at: '10:30'
   condition:
-  - condition: time
-    weekday:
-    - sat
-    - sun
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: 'off' 
   - condition: state
     entity_id: humidifier.zhimi_humidifier_ca1
     state: 'on'

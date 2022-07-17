@@ -1,0 +1,55 @@
+#binary_sensor:
+  - platform: workday
+    country: RU
+    workdays: [mon, tue, wed, thu, fri]
+    excludes: [sat, sun, holiday]
+    add_holidays:
+      - '2022-01-01'
+      - '2022-01-02'
+      - '2022-01-03'
+      - '2022-01-04'
+      - '2022-01-05'
+      - '2022-01-06'
+      - '2022-01-07'
+      - '2022-01-08'
+      - '2022-02-23'
+      - '2022-03-07'
+      - '2022-03-08'
+      - '2022-05-01'
+      - '2022-05-02'
+      - '2022-05-03'
+      - '2022-05-09'
+      - '2022-05-10'
+      - '2022-06-12'
+      - '2022-11-04'
+      - '2023-01-02'
+      - '2023-01-03'
+      - '2023-01-04'
+      - '2023-01-05'
+      - '2023-01-06'
+      - '2023-02-23'
+      - '2023-02-24'
+      - '2023-03-08'
+      - '2023-05-01'
+      - '2023-05-08'
+      - '2023-05-09'
+      - '2023-06-12'
+      - '2023-11-06'
+    # remove_holidays:
+    #   - '2022-03-05' 
+    
+  - platform: command_line
+    name: Workday
+    command: >-
+      curl https://isdayoff.ru/{{ now().date().strftime("%Y%m%d") }}
+    scan_interval: 600
+    payload_on: '0'
+    payload_off: '1'
+
+  - platform: command_line
+    name: Workday Tomorrow
+    command: >-
+      curl https://isdayoff.ru/{{ (now().date() + timedelta(days=1)).strftime("%Y%m%d") }}
+    scan_interval: 600
+    payload_on: '0'
+    payload_off: '1'

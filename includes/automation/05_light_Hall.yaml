@@ -13,16 +13,12 @@
   - condition: time
     after: "07:30"
     before: "20:00"
-  - condition: and
-    conditions:
-    - condition: numeric_state
-      entity_id: sensor.0x00158d000421a109_illuminance_lux
-      below: 5
-    - condition: and
-      conditions:
-      - condition: state
-        entity_id: switch.svet_v_prikhozhei
-        state: "off"
+  - condition: numeric_state
+    entity_id: sensor.0x54ef4410000ebe51_illuminance_lux
+    below: 6
+  - condition: state
+    entity_id: switch.svet_v_prikhozhei
+    state: "off"
   action:
     - service: switch.turn_on
       entity_id: switch.svet_v_prikhozhei

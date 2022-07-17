@@ -1,0 +1,66 @@
+# Увлажнитель воздуха
+
+    binary_sensor:
+    
+    # Режим увлажнения  
+      - platform: mqtt
+        name: humidity_mode
+        state_topic: "humidity/mode"
+        payload_on: "ON"
+        payload_off: "OFF"
+
+    # Время увлажнения  
+      - platform: tod
+        name: humidity_time
+        after: '19:00'
+        before: '07:00'
+        
+      - platform: template
+        sensors:
+
+          humidity:
+            friendly_name: "Увлажнение"
+            value_template: >-
+              {{ is_state('binary_sensor.humidity_mode', 'on')  
+                 and is_state('binary_sensor.humidity_time', 'on') }}
+            icon_template: >-
+              {% if is_state("binary_sensor.humidity", "on") %}
+              mdi:water-percent
+              {% else %}
+              mdi:air-humidifier
+              {% endif %}
+
+    input_number:
+
+          humidity_level:
+            name: Установка уровня влажности
+            initial: 50
+            min: 30
+            max: 70
+            step: 1
+
+    switch:
+    
+      - platform: template
+        switches:
+          humidity_mode:
+            friendly_name: "Режим увлажнения воздуха"
+            value_template: "{{  is_state('binary_sensor.humidity_mode', 'on') }}"
+            turn_on:
+              service: mqtt.publish
+              data_template:
+                topic: "humidity/mode"
+                payload_template: 'ON'
+                retain: true 
+            turn_off:
+              service: mqtt.publish
+              data_template:
+                topic: "humidity/mode"
+                payload_template: 'OFF'
+                retain: true 
+            icon_template: >-
+              {% if is_state("switch.humidity_mode", "on") %}
+              mdi:air-humidifier
+              {% else %}
+              mdi:air-humidifier-off
+              {% endif %}

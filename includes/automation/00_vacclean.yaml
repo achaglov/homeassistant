@@ -5,15 +5,9 @@
     platform: time
     at: '11:00'
   condition:
-    condition: and
-    conditions:
-      - condition: time
-        weekday:
-          - mon
-          - tue
-          - wed
-          - thu
-          - fri
+    condition: state
+    entity_id: binary_sensor.workday
+    state: 'on'
   action: 
     - service: vacuum.start
       entity_id: vacuum.robot_pylesos

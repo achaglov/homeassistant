@@ -1,0 +1,71 @@
+# ВКЛ очиститель воздуха
+- alias: 'purifier_on'
+  initial_state: true
+  trigger:
+    platform: time
+    at: '19:00'
+  condition:
+  - condition: state
+    entity_id: fan.mb4_5448e6bcd77d
+    state: 'off'
+  action: 
+    - service: fan.turn_on
+      entity_id: fan.mb4_5448e6bcd77d
+    - service: fan.set_preset_mode
+      target:
+        entity_id: fan.mb4_5448e6bcd77d
+      data:
+        preset_mode: Auto     
+
+# Ночной режим 
+- alias: 'purifier_on_Sleep'
+  initial_state: true
+  trigger:
+    platform: time
+    at: '22:00'
+  condition:
+  - condition: state
+    entity_id: fan.mb4_5448e6bcd77d
+    state: 'on'
+  action: 
+    - service: fan.set_preset_mode
+      target:
+        entity_id: fan.mb4_5448e6bcd77d
+      data:
+        preset_mode: Sleep
+    
+      
+# ВЫКЛ очиститель в рабочий день
+- alias: 'purifier_off_workday'
+  initial_state: true
+  trigger:
+    platform: time
+    at: '07:30'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: 'on' 
+  - condition: state
+    entity_id: fan.mb4_5448e6bcd77d
+    state: 'on'
+  action: 
+    - service: fan.turn_off
+      entity_id: fan.mb4_5448e6bcd77d
+      
+      
+# ВЫКЛ очиститель в выходной день
+- alias: 'purifier_off_holiday'
+  initial_state: true
+  trigger:
+    platform: time
+    at: '10:30'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday
+    state: 'off' 
+  - condition: state
+    entity_id: fan.mb4_5448e6bcd77d
+    state: 'on'
+  action: 
+    - service: fan.turn_off
+      entity_id: fan.mb4_5448e6bcd77d

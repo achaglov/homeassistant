@@ -35,3 +35,14 @@
     value_template: "{{ value }}"
     unit_of_measurement: ""
     icon: mdi:battery-off-outline
+    
+    # Создаём сенсор счётчик прошедшего времени с момента последнего обновления данных Ватериусом
+    # Используем время последнего обновления показаний холодной воды, так как этот сенсор обновляется
+    # чаще, чем все остальные
+  - platform: template
+    sensors:
+      waterius_last_seen:
+        friendly_name: 'Ватериус вне сети'
+        value_template: >
+          {{(as_timestamp(now())-as_timestamp(states.sensor.cold_water.last_updated))|int}}
+        unit_of_measurement: "сек."

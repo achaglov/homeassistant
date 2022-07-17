@@ -7,6 +7,8 @@
   friendly_name: климат в ванной
   optimistic: true
   retain: true
+  temperature_precision: 1
+  humidity_precision: 1
 '0x00158d00042d6314':
   friendly_name: утечка в ванной
 '0x00158d00045abebb':
@@ -34,3 +36,5 @@
   friendly_name: табурет
 '0x00158d0007274a75':
   friendly_name: движение в гостиной
+'0x54ef4410000ebe51':
+  friendly_name: Освещенность

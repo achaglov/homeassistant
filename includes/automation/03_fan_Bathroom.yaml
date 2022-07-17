@@ -54,6 +54,6 @@
   action:
     - service: switch.turn_off
       entity_id: switch.0x00158d0006d49f34_l2
-    - service: notify.telegram
-      data:
-        message: "Внимание. Вентилятор в ванной не был выключен продолжительное время. Время выключения: {{ states('sensor.time') }}"
+#    - service: notify.telegram
+#      data:
+#        message: "Внимание. Вентилятор в ванной не был выключен продолжительное время. Время выключения: {{ states('sensor.time') }}"

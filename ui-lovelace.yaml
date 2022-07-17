@@ -82,8 +82,7 @@ views:
           line_color: blue
           line_width: 4
           font_size: 75
-                
-              
+
   - title: Погода
     icon: mdi:weather-partly-snowy-rainy
     cards:
@@ -94,29 +93,76 @@ views:
 
         - type: custom:mini-graph-card
           entities:
-            - sensor.pressure_mmhg_158d0001dc32b4
+            - sensor.klimat_v_vannoi_pressure
           name: Давление
           line_color: blue
           line_width: 4
           font_size: 75
 
-        - type: markdown
-          content: >
-             **Температура дома**
+        - type: gauge
+          name: Уровень радиации
+          unit: 'μR/h'
+          entity: sensor.narodmon_radiation
+          severity:
+            green: 0
+            yellow: 20
+            red: 50
+
+
+
+  - title: Климат дома
+    icon: mdi:home-thermometer
+    cards:
+      - type: vertical-stack    
+        cards:
+#        - type: markdown
+#          content: >
+#             **Климат дома**
 
         - type: entities
           show_header_toggle: false
           entities:
-            - entity: sensor.dk1_cloud_d85400_temperature
-#            - entity: sensor.dk1_cloud_d85400_humidity
-            - entity: sensor.t2_cloud_a0sk00_temperature
-#            - entity: sensor.t2_cloud_a0sk00_humidity
+            - entity: sensor.cgdk2_temperature
+#            - entity: sensor.zhimi_humidifier_ca1_temperature            
+            - entity: sensor.lywsd03mmc_temperature
             - entity: sensor.klimat_v_vannoi_temperature
-#            - entity: sensor.klimat_v_vannoi_humidity
+            
+        - type: 'custom:mini-humidifier'
+          entity: humidifier.zhimi_humidifier_ca1
 
-
-
-          
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.cgdk2_humidity
+            - entity: sensor.lywsd03mmc_humidity
+            - entity: sensor.klimat_v_vannoi_humidity
+            
+        - type: 'custom:purifier-card'
+          entity: fan.mi_air_purifier_3c
+          stats:
+#            default:
+            - entity_id: sensor.mi_air_purifier_3c_pm2_5
+              unit: 'µg/m³'
+              subtitle: Качество воздуха
+            - entity_id: sensor.mi_air_purifier_3c_filter_life_remaining
+              unit: '%'
+              subtitle: Фильтр
+          shortcuts:
+            - name: Silent
+              icon: 'mdi:weather-night'
+              preset_mode: Silent
+            - name: Auto
+              icon: 'mdi:brightness-auto'
+              preset_mode: Auto
+            - name: Favorite
+              icon: 'mdi:heart'
+              preset_mode: Favorite
+          show_name: true
+          show_state: true
+          show_toolbar: true
+          compact_view: true
+                
+              
   - title: Освещение
     icon: mdi:lightbulb-group
     
@@ -270,7 +316,8 @@ views:
 #              name: Офисное кресло
             - entity: sensor.0x00158d0002e2c1c7_battery
 #              name: Табурет
-
+            - entity: sensor.0x54ef4410000ebe51_battery
+#              name: Датчик освещенности
               
       - type: vertical-stack
         cards:
@@ -305,10 +352,11 @@ views:
             - entity: sensor.illumination_04cf8c8f8501
 #              name: Датчик освещенности шлюз
             - entity: sensor.illumination_158d0003021440
-#              name: Датчик освещенности на кухне
+#              name: Датчик движения освещенности на кухне
             - entity: sensor.0x00158d000421a109_illuminance_lux
+#              name: Датчик движения освещенности в прихожей
+            - entity: sensor.0x54ef4410000ebe51_illuminance_lux
 #              name: Датчик освещенности в прихожей
-
 
         - type: markdown
           content: >
@@ -427,32 +475,6 @@ views:
             #  name: Низкий заряд
               
 
-  - title: Увлажнение в спальне
-    icon: mdi:water-percent
-    cards:
-      - type: vertical-stack    
-        cards:
-        - type: 'custom:mini-humidifier'
-          entity: humidifier.zhimi_humidifier_ca1
-        - type: custom:mini-graph-card
-          entities:
-            - sensor.dk1_cloud_d85400_humidity
-          name: Влажность в спальне
-          line_color: blue
-          line_width: 4
-          font_size: 150
-
-#        - type: markdown
-#          content: >
-#             **Влажность в квартире**
-
-        - type: entities
-          show_header_toggle: false
-          entities:
-            - entity: sensor.t2_cloud_a0sk00_humidity
-            - entity: sensor.klimat_v_vannoi_humidity
-
-
   - title: Уборка помещений
     icon: mdi:broom
 
@@ -463,23 +485,23 @@ views:
 
         stats:
           default:
-            - entity_id: sensor.vacuum_cleaner_filter_left
+            - entity_id: sensor.vacuum_filter_left
               unit: часов
               subtitle: Фильтр
-            - entity_id: sensor.vacuum_cleaner_side_brush_left
+            - entity_id: sensor.vacuum_side_brush_left
               unit: часов
               subtitle: Боковая щетка
-            - entity_id: sensor.vacuum_cleaner_main_brush_left
+            - entity_id: sensor.vacuum_main_brush_left
               unit: часов
               subtitle: Основная щетка
             - entity_id: sensor.vacuum_dirty_left
               unit: часов
               subtitle: Датчики
           cleaning:
-            - entity_id: sensor.vacuum_cleaner_cleaned_area
+            - entity_id: sensor.vacuum_last_clean_area
               unit: m2
               subtitle: Убрано в кв.м.
-            - entity_id: sensor.vacuum_cleaner_cleaning_time
+            - entity_id: sensor.vacuum_last_clean_duration
               unit: минут
               subtitle: Время уборки
         shortcuts:
@@ -602,3 +624,17 @@ views:
               runtime: false
             tts:
               platform: yandex_station
+              
+  - title: Здоровье
+    icon: mdi:human-male-height
+    cards:
+      - type: custom:body-miscale-card
+        image: /local/floorplan/miscale2.jpg
+        entity: bodymiscale.alex
+        model: true
+        show_name: true
+        show_states: true
+        show_attributes: true
+        show_toolbar: true
+        show_body: true
+        show_buttons: true

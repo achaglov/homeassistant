@@ -47,7 +47,14 @@
     - service: notify.telegram
       data:
         message: "К нам кто-то пришел в: {{ states('sensor.time') }}"
-        
+    - delay: 00:00:05
+    - service: telegram_bot.send_photo
+      data:
+        url: http://192.168.1.100/cam.php        
+    - delay: 00:00:04
+    - service: telegram_bot.send_photo
+      data:
+        url: http://192.168.1.100/cam.php    
         
 - alias: Door_open_message_10_min 
   initial_state: true

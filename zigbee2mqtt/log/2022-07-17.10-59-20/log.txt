@@ -1,0 +1,28 @@
+error 2022-07-17 10:59:38: Failed to configure 'Освещенность', attempt 1 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2022-07-17 10:59:53: Failed to configure 'Освещенность', attempt 2 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2022-07-17 11:00:08: Failed to configure 'Освещенность', attempt 3 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2022-07-17 11:05:34: Nothing to unbind from 'Освещенность' to 'Coordinator'
+error 2022-07-17 11:05:34: Nothing to unbind
+error 2022-07-17 11:05:37: Nothing to unbind from 'Освещенность' to 'Coordinator'
+error 2022-07-17 11:05:37: Nothing to unbind
+error 2022-07-17 11:05:41: Error: Cannot read properties of null (reading 'ID')
+error 2022-07-17 11:06:02: Error: Cannot read properties of null (reading 'ID')
+error 2022-07-17 11:06:04: Nothing to unbind from 'Освещенность' to 'Coordinator'
+error 2022-07-17 11:06:04: Nothing to unbind
+error 2022-07-17 11:06:33: Failed to configure 'Освещенность', attempt 4 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2022-07-17 11:08:25: Failed to check if update available for 'свет и вентиляция в ванной' (Failed to find endpoint which support OTA cluster)
+error 2022-07-17 11:08:46: Request 'zigbee2mqtt/bridge/request/touchlink/scan' failed with error: 'Touchlink operation already in progress'
+error 2022-07-17 11:08:51: Request 'zigbee2mqtt/bridge/request/touchlink/scan' failed with error: 'Touchlink operation already in progress'
+error 2022-07-17 11:09:37: Failed to execute LQI for 'гирлянда'
