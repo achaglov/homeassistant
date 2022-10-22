@@ -6,14 +6,14 @@
     at: '19:00'
   condition:
   - condition: state
-    entity_id: fan.mb4_5448e6bcd77d
+    entity_id: fan.mi_air_purifier_3c
     state: 'off'
   action: 
     - service: fan.turn_on
-      entity_id: fan.mb4_5448e6bcd77d
+      entity_id: fan.mi_air_purifier_3c
     - service: fan.set_preset_mode
       target:
-        entity_id: fan.mb4_5448e6bcd77d
+        entity_id: fan.mi_air_purifier_3c
       data:
         preset_mode: Auto     
 
@@ -25,14 +25,14 @@
     at: '22:00'
   condition:
   - condition: state
-    entity_id: fan.mb4_5448e6bcd77d
+    entity_id: fan.mi_air_purifier_3c
     state: 'on'
   action: 
     - service: fan.set_preset_mode
       target:
-        entity_id: fan.mb4_5448e6bcd77d
+        entity_id: fan.mi_air_purifier_3c
       data:
-        preset_mode: Sleep
+        preset_mode: Silent
     
       
 # ВЫКЛ очиститель в рабочий день
@@ -43,14 +43,14 @@
     at: '07:30'
   condition:
   - condition: state
-    entity_id: binary_sensor.workday
+    entity_id: binary_sensor.workday_sensor
     state: 'on' 
   - condition: state
-    entity_id: fan.mb4_5448e6bcd77d
+    entity_id: fan.mi_air_purifier_3c
     state: 'on'
   action: 
     - service: fan.turn_off
-      entity_id: fan.mb4_5448e6bcd77d
+      entity_id: fan.mi_air_purifier_3c
       
       
 # ВЫКЛ очиститель в выходной день
@@ -61,11 +61,11 @@
     at: '10:30'
   condition:
   - condition: state
-    entity_id: binary_sensor.workday
+    entity_id: binary_sensor.workday_sensor
     state: 'off' 
   - condition: state
-    entity_id: fan.mb4_5448e6bcd77d
+    entity_id: fan.mi_air_purifier_3c
     state: 'on'
   action: 
     - service: fan.turn_off
-      entity_id: fan.mb4_5448e6bcd77d
+      entity_id: fan.mi_air_purifier_3c

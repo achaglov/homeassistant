@@ -10,16 +10,17 @@
       - 'time_utc'
       - 'beat'
 
-
-### Давление в мм ртутного столба
-#  - platform: template
-#    sensors:
-#      pressure_mmhg_158d0001dc32b4:
-#        friendly_name: "Давление"
-#        unit_of_measurement: 'mm Hg'
-#        value_template: "{{ (states('sensor.klimat_v_vannoi_pressure')|float(default=0) * 0.75 + 4)|round(1) }}"
-
-
+###Средняя влажность
+  - platform: template
+    sensors:
+      average_humidity:
+        friendly_name: "Средняя влажность"
+        unit_of_measurement: "%"
+        value_template: >
+          {% set bedroom = states('sensor.cgdk2_humidity') | float(default=0) %}
+          {% set kitchen = states('sensor.atc_humidity') | float(default=0) %}
+          {% set vannoi = states('sensor.klimat_v_vannoi_humidity') | float(default=0) %}
+          {{ ((bedroom + kitchen) / 1.8) | round(0) }}
 
 #Ресурсы
   - platform: systemmonitor
@@ -32,14 +33,6 @@
     - type: disk_free
       arg: /
 
-#СУБД      
-  - platform: sql
-    db_url: mysql://hass:hass@core-mariadb/homeassistant?charset=utf8
-    queries:
-      - name: Maria DB size
-        query: 'SELECT table_schema "database", Round(Sum(data_length + index_length) / 1048576, 2) "value" FROM information_schema.tables WHERE table_schema="homeassistant" GROUP BY table_schema;'
-        column: 'value'
-        unit_of_measurement: MB 
 
 #Температура CPU        
   - platform: command_line
@@ -51,3 +44,13 @@
     unit_of_measurement: "°C"
     value_template: '{{ value | multiply(0.001) | round(2) }}'
         
+# Создаём сенсор счётчик прошедшего времени с момента последнего обновления данных Ватериусом
+# Используем время последнего обновления показаний холодной воды, так как этот сенсор обновляется
+# чаще, чем все остальные
+  - platform: template
+    sensors:
+      waterius_last_seen:
+        friendly_name: 'Ватериус вне сети'
+        value_template: >
+          {{(as_timestamp(now())-as_timestamp(states.sensor.cold_water.last_updated))|int}}
+        unit_of_measurement: "сек."

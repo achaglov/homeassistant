@@ -1,1 +1,0 @@
-"""The Padavan Tracker component."""

@@ -63,6 +63,50 @@ narodmon:
       sensors:
         - radiation
 
+mqtt: 
+  sensor:
+    - name: "Cold Water"
+      unique_id: wateriuskcwm
+      state_topic: "waterius/9772083/ch1"
+      value_template: "{{ value }}"
+      unit_of_measurement: "м3"
+      icon: mdi:water
+    - name: "Hot Water"
+      unique_id: wateriuskhwm
+      state_topic: "waterius/9772083/ch0"
+      value_template: "{{ value }}"
+      unit_of_measurement: "м3"
+      icon: mdi:water
+    - name: "Cold Day"
+      unique_id: wateriuskcwd
+      state_topic: "waterius/9772083/delta1"
+      value_template: "{{ value }}"
+      unit_of_measurement: "литр"
+      icon: mdi:delta
+    - name: "Hot Day"
+      unique_id: wateriuskhwd
+      state_topic: "waterius/9772083/delta0"
+      value_template: "{{ value }}"
+      unit_of_measurement: "литр"
+      icon: mdi:delta
+    - name: "Waterius Voltage"
+      unique_id: wateriuskv
+      state_topic: "waterius/9772083/voltage"
+      value_template: "{{ value }}"
+      unit_of_measurement: "V"
+      icon: mdi:battery
+# Создаём сенсор низкого напряжения питания Ватериуса, для последующего использования в автоматизациях
+    - name: 'Waterius Voltage Low'
+      unique_id: wateriuskvlow
+      state_topic: 'waterius/9772083/voltage_low'
+      value_template: > 
+        {%if value == 1 %}
+           'Низкое напряжение'
+        {% else %}
+           'Напряжение в порядке'
+        {% endif %}
+
+
 #Вынос во внешние файлы
 group: !include includes/groups.yaml
 script: !include includes/scripts.yaml
@@ -75,4 +119,3 @@ timer: !include includes/timer.yaml
 binary_sensor: !include_dir_merge_list includes/bi-sensor
 sensor: !include_dir_merge_list includes/sensor
 automation: !include_dir_merge_list includes/automation
-

@@ -41,20 +41,19 @@ clean_carpet_corridor:
               command: app_zoned_clean
               params: [[29110,26052,30410,27402,2]]
 
-
-
-
-sunrise_effect:
-  alias: "Sunrise Effect"
-
-  sequence:
-    - repeat:
-        count: 60
+clean_vacuum_cleaner:
+        alias: "Vacuum cleaner clean"
         sequence:
-          - service: yeelight.set_color_scene
+          - service: vacuum.send_command
             data:
-              entity_id:
-              - light.yeelight_ceiling3_0x0000000007d1efa6
+              entity_id: vacuum.robot_pylesos
+              command: app_goto_target
+              params: [26500,27100]
 
-              brightness: "{{ 200 / (60-1) * (repeat.index-1) + 1 }}"
-          - delay:  00:00:30
+cover_position_curtains_open:
+  alias: "Sunrise Curtians open"
+  sequence:
+     - service: cover.set_cover_position
+       data:
+         entity_id: cover.0xa4c138345beaa3fc
+         position: "{{ state_attr('cover.0xa4c138345beaa3fc', 'current_position')|int + 10|int}}"

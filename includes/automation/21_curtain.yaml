@@ -1,0 +1,147 @@
+# Закрытие штор при включении света
+- alias: Curtian_close_for_light_on
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+      from: 'off'
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: cover.0xa4c138345beaa3fc
+      state: 'open'
+  action:
+    - service: cover.close_cover
+      entity_id:
+        - cover.0xa4c138345beaa3fc
+        
+# Закрытие штор за 10 минут до заката
+- alias: Curtain_sunset 
+  initial_state: true
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "-00:10:00"
+  condition:
+    - condition: state
+      entity_id: cover.0xa4c138345beaa3fc
+      state: 'open'
+  action:
+    - service: cover.close_cover
+      entity_id: cover.0xa4c138345beaa3fc
+
+# Открытие за 30 минут до будильника в рабочий день
+# выполняется скрипт cover_position_curtains_open
+- alias: Curtain_workday_sunrise
+  initial_state: true
+  trigger:
+  - platform: time
+    at: 06:30:00
+  condition:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
+    - condition: numeric_state
+      entity_id: sensor.0x54ef4410000eca07_illuminance_lux
+      above: 200
+    - condition: state
+      entity_id: cover.0xa4c138345beaa3fc
+      state: 'closed'      
+  action:
+    - repeat:
+       sequence:
+        - service: script.turn_on
+          entity_id: script.cover_position_curtains_open
+        - delay: "00:03:00"
+       until: 
+         - condition: template
+           value_template: "{{ state_attr('cover.0xa4c138345beaa3fc', 'current_position') == 100 }}"
+  mode: single
+  
+# Открытие за 30 минут до будильника в выходной день
+# выполняется скрипт cover_position_curtains_open
+- alias: Curtain_holiday_sunrise
+  initial_state: true
+  trigger:
+  - platform: time
+    at: 09:30:00
+  condition:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'off'
+    - condition: numeric_state
+      entity_id: sensor.0x54ef4410000eca07_illuminance_lux
+      above: 200
+    - condition: state
+      entity_id: cover.0xa4c138345beaa3fc
+      state: 'closed'      
+  action:
+    - repeat:
+       sequence:
+        - service: script.turn_on
+          entity_id: script.cover_position_curtains_open
+        - delay: "00:03:00"
+       until: 
+         - condition: template
+           value_template: "{{ state_attr('cover.0xa4c138345beaa3fc', 'current_position') == 100 }}"
+  mode: single
+  
+# Открытие в 8 утра в рабочий день если никого нет дома
+- alias: Open cover 8_AM 
+  initial_state: true
+  trigger:
+    platform: time
+    at: '08:10'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  - condition: state
+    entity_id: binary_sensor.amazfit_gtr_lite
+    state: 'off'
+  - condition: state
+#Ванная, движение     
+    entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Прихожая, движение
+    entity_id: binary_sensor.0x00158d000421a109_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Кухня, движение 
+    entity_id: binary_sensor.dvizhenie_na_kukhne_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003021440
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003d12974
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Ванная, движение
+    entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Гостиная, движение 
+    entity_id: binary_sensor.0x00158d0007274a75_occupancy
+    state: 'off'
+    for:
+      minutes: 10      
+  - condition: state
+    entity_id: cover.0xa4c138345beaa3fc
+    state: 'closed'      
+  action:
+    - service: cover.open_cover
+      entity_id: cover.0xa4c138345beaa3fc

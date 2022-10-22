@@ -37,4 +37,13 @@
 '0x00158d0007274a75':
   friendly_name: движение в гостиной
 '0x54ef4410000ebe51':
-  friendly_name: Освещенность
+  friendly_name: освещенность в прихожей
+'0x54ef4410000eca07':
+  friendly_name: освещенность на улице
+'0xa4c138345beaa3fc':
+  friendly_name: шторы в спальне
+  invert_cover: true
+'0xa4c1382f021b16a1':
+  friendly_name: климат на улице
+  temperature_precision: 1
+  humidity_precision: 1

@@ -4,13 +4,14 @@
   trigger:
   - platform: state
     entity_id: switch.0x00158d0006d49f34_l1
+    from: 'on'
     to: 'off'
     for:
       minutes: 1
   condition:
-  - condition: numeric_state
-    entity_id: sensor.klimat_v_vannoi_humidity
-    above: 60
+  - condition: template
+    value_template: >-
+      {{ (states('sensor.klimat_v_vannoi_humidity')) > (states('sensor.average_humidity')) }}
   - condition: state
     entity_id: switch.0x00158d0006d49f34_l2
     state: 'off'
@@ -24,9 +25,10 @@
 - alias: Bathroom Fan Turn OFF
   initial_state: true
   trigger:
-  - platform: numeric_state
-    entity_id: sensor.klimat_v_vannoi_humidity
-    below: 55
+  - platform: template
+    value_template: >-
+      {{ (states('sensor.klimat_v_vannoi_humidity')) < (states('sensor.average_humidity')) }}
+# берем значение сенсора средняя влажность
   - platform: state
     entity_id: switch.0x00158d0006d49f34_l1
     to: 'on'

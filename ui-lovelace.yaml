@@ -1,87 +1,6 @@
-title: Home Assistant - сервер
+title: Home Assistant
+
 views:
-
-  - title: Главная
-    icon: mdi:home-assistant
-    
-    cards:
-
-      - type: vertical-stack
-        cards:
-        
-        - type: markdown
-          content: >
-             **Текущее состояние**
-             
-        - type: entities
-          show_header_toggle: false
-          entities:
-            - entity: sensor.time
-              name: Текущее время
-              icon: mdi:clock-outline
-            - entity: sensor.date
-              name: Дата
-              icon: mdi:calendar-check-outline
-              
-
-
-      - type: vertical-stack
-        cards:
-        - type: markdown
-          content: >
-             **Графики** 
-
-        - type: horizontal-stack
-          cards:
-
-
-           - type: gauge
-             name: Загрузка CPU
-             unit: '%'
-             entity: sensor.processor_use_percent
-             severity:
-                green: 0
-                yellow: 60
-                red: 85
-             
-           - type: gauge
-             name: Загрузка ОЗУ
-             unit: '%'
-             entity: sensor.memory_use_percent
-             severity:
-                green: 0
-                yellow: 60
-                red: 85
-                
-        - type: horizontal-stack
-          cards:
-
-           - type: gauge
-             name: Диск заполнен
-             unit: '%'
-             entity: sensor.disk_use_percent
-             severity:
-                green: 0
-                yellow: 60
-                red: 85    
-                
-           - type: gauge
-             name: Температура CPU
-             unit: 'C°'
-             entity: sensor.cpu_temperature
-             severity:
-               green: 0
-               yellow: 60
-               red: 75
-
-        - type: custom:mini-graph-card
-          entities:
-            - sensor.maria_db_size
-          name: Объем БД
-          icon: mdi:database
-          line_color: blue
-          line_width: 4
-          font_size: 75
 
   - title: Погода
     icon: mdi:weather-partly-snowy-rainy
@@ -90,6 +9,12 @@ views:
         cards:
         - type: weather-forecast
           entity: weather.home_assistant
+          
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.0xa4c1382f021b16a1_temperature
+            - entity: sensor.0xa4c1382f021b16a1_humidity
 
         - type: custom:mini-graph-card
           entities:
@@ -101,7 +26,7 @@ views:
 
         - type: gauge
           name: Уровень радиации
-          unit: 'μR/h'
+          unit: 'µR/h'
           entity: sensor.narodmon_radiation
           severity:
             green: 0
@@ -124,18 +49,28 @@ views:
           entities:
             - entity: sensor.cgdk2_temperature
 #            - entity: sensor.zhimi_humidifier_ca1_temperature            
-            - entity: sensor.lywsd03mmc_temperature
+            - entity: sensor.atc_temperature
             - entity: sensor.klimat_v_vannoi_temperature
             
         - type: 'custom:mini-humidifier'
           entity: humidifier.zhimi_humidifier_ca1
+        - type: custom:mini-graph-card
+          entities:
+            - sensor.cgdk2_humidity
+          name: Влажность в спальне
+          line_color: blue
+          line_width: 4
+          font_size: 150
 
         - type: entities
           show_header_toggle: false
           entities:
-            - entity: sensor.cgdk2_humidity
-            - entity: sensor.lywsd03mmc_humidity
+#            - entity: sensor.cgdk2_humidity
+            - entity: sensor.atc_humidity
             - entity: sensor.klimat_v_vannoi_humidity
+            - entity: sensor.average_humidity
+              name: 'Порог отключения вентиляции'
+#              icon: 'mdi:water-percent'
             
         - type: 'custom:purifier-card'
           entity: fan.mi_air_purifier_3c
@@ -151,6 +86,18 @@ views:
             - name: Silent
               icon: 'mdi:weather-night'
               preset_mode: Silent
+#            - name: 25%
+#              icon: 'mdi:circle-slice-2'
+#              percentage: 25
+#            - name: 50%
+#              icon: 'mdi:circle-slice-4'
+#              percentage: 50
+#            - name: 75%
+#              icon: 'mdi:circle-slice-6'
+#              percentage: 50
+#            - name: 100%
+#              icon: 'mdi:circle-slice-8'
+#              percentage: 100
             - name: Auto
               icon: 'mdi:brightness-auto'
               preset_mode: Auto
@@ -161,9 +108,9 @@ views:
           show_state: true
           show_toolbar: true
           compact_view: true
-                
-              
-  - title: Освещение
+
+          
+  - title: Выключатели
     icon: mdi:lightbulb-group
     
           
@@ -178,22 +125,34 @@ views:
         - type: entities
           show_header_toggle: false
           entities:          
-            - entity: light.yeelight_ceiling20_0x000000001588e1a5
+            - entity: light.yeelight_ceiling20_0x1588e1a5
               #name: Свет в гостиной
-            - entity: light.yeelight_ceiling20_0x000000001588e1a5_ambilight
+            - entity: light.yeelight_ceiling20_0x1588e1a5_ambilight
               #name: Свет в гостиной амбилайт
             - entity: switch.sonoff_100061d346
               #name: Бра в гостиной
             - entity: switch.sonoff_1000f261e0
               #name: Светильник рабочего стола
+            - entity: switch.sonoff_100001f1ea
+              #name: Сбербокс
+            - entity: switch.sonoff_1000d8e906
+              #name: Ёлочка
+            - entity: light.gyver_lamp_esp_c09fc7
+              #name: Лампа Гайвера
             - entity: light.yeelight_ceiling3_0x0000000007d1efa6
               #name: Свет в спальне
+            - entity: light.yeelight_ceiling3_0x7d1efa6_nightlight
+              #name: Ночник в спальне
             - entity: switch.sonoff_100061cac1
               #name: Подсветка в спальне
-            - entity: light.yeelight_ceiling5_0x0000000007f0e59f           
+            - entity: switch.sonoff02
+              #name: Удлиннитель в спальне 
+            - entity: light.yeelight_ceiling5_0x0000000007f0e59f
               #name: Свет на кухне
             - entity: light.lumi_gateway_v3_light
               #name: Ночник на кухне
+            - entity: switch.0xa4c138316bba8173
+              #name: Гирлянда
             - entity: switch.svet_v_prikhozhei
               #name: Свет в прихожей
             - entity: switch.0x00158d0003c73db6
@@ -202,18 +161,8 @@ views:
               #name: Свет в ванной
             - entity: switch.0x00158d0006d49f34_l2            
               #name: Вентиляция в ванной
-            - entity: switch.sonoff_100001f1ea
-              #name: Сбербокс
-            - entity: switch.sonoff02
-              #name: Удлиннитель в спальне 
-            - entity: switch.sonoff_1000d8e906
-              #name: Ёлочка
-            - entity: light.gyver_lamp_esp_c09fc7
-              #name: Лампа Гайвера
-            - entity: switch.0xa4c138316bba8173
-              #name: Гирлянда на кухне
-              
-              
+            - entity: switch.0x00158d0003c779c9
+              name: Отключение водоснабжения
 
 
       - type: vertical-stack
@@ -225,10 +174,10 @@ views:
         - type: horizontal-stack
           cards:
             - type: light
-              entity: light.yeelight_ceiling20_0x000000001588e1a5
+              entity: light.yeelight_ceiling20_0x1588e1a5
               name: Свет в гостиной
             - type: light
-              entity: light.yeelight_ceiling20_0x000000001588e1a5_ambilight
+              entity: light.yeelight_ceiling20_0x1588e1a5_ambilight
               name: Свет в гостиной амбилайт
             - type: light
               entity: light.yeelight_ceiling3_0x0000000007d1efa6
@@ -236,23 +185,52 @@ views:
             - type: light
               entity: light.yeelight_ceiling5_0x0000000007f0e59f           
               name: Свет на кухне
- 
-  - title: Zigbee
-    icon: mdi:zigbee
-    
-    cards:
+            
+        - type: vertical-stack
+          cards:
+#          - type: markdown
+#            content: >
+#               **Шторы** 
+          - type: entity
+            entity: cover.0xa4c138345beaa3fc
+            name: Шторы состояние
+          - type: entities
+#            show_header_toggle: false
+            entities:
+              - entity: cover.0xa4c138345beaa3fc
 
+ 
+  - title: Сенсоры
+    icon: mdi:zigbee
+    cards:
       - type: vertical-stack
         cards:
-
         - type: alarm-panel
           entity: alarm_control_panel.lumi_gateway_v3_alarm
           name: Охрана
-        
+
         - type: markdown
           content: >
-             **Двери, стулья** 
-             
+             **Датчики освещенности** 
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: sensor.0x54ef4410000eca07_illuminance_lux
+#              name: Датчик освещенности на улице            
+            - entity: sensor.lumi_gateway_v3_illuminance
+#              name: Шлюз освещенность
+            - entity: sensor.illumination_04cf8c8f8501
+#              name: Датчик освещенности шлюз
+            - entity: sensor.illumination_158d0003021440
+#              name: Датчик освещенности на кухне
+            - entity: sensor.0x00158d000421a109_illuminance_lux
+#              name: Датчик движения освещенности в прихожей
+            - entity: sensor.0x54ef4410000ebe51_illuminance_lux
+#              name: Датчик освещенности в прихожей
+
+        - type: markdown
+          content: >
+             **Датчики открытия - занятости** 
         - type: entities
           show_header_toggle: false
           entities:   
@@ -261,8 +239,25 @@ views:
             - entity: binary_sensor.0x00158d0003121c47_contact
 #              name: Офисное кресло
             - entity: binary_sensor.0x00158d0002e2c1c7_contact
-#              табурет
-              
+#              name: Табурет 
+
+      - type: vertical-stack
+        cards:
+
+        - type: markdown
+          content: >
+             **Датчики протечки** 
+             
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: binary_sensor.utechka_na_kukhne_water_leak
+#              name: Утечка на кухне
+            - entity: binary_sensor.utechka_v_vannoi_water_leak
+#              name: Утечка в ванной
+            - entity: binary_sensor.utechka_v_tualete_water_leak
+#              name: Утечка в туалете
+
         - type: markdown
           content: >
              **Датчик дыма** 
@@ -271,96 +266,13 @@ views:
           show_header_toggle: false
           entities:          
             - entity: binary_sensor.smoke_sensor_158d00045f1f2d
-              name: Задымление в спальне
+#              name: Задымление в спальне
 
-            
-        - type: markdown
-          content: >
-             **Уровень заряда** 
-             
-        - type: entities
-          show_header_toggle: false
-          entities:
-            - entity: sensor.0x00158d0007274a75_battery
-#              name: Движение в гостиной
-            - entity: sensor.battery_158d0002b46857
-#              name: Выключатель в гостиной
-            - entity: sensor.0x00158d0000c2f824_battery
-#              name: Входная дверь
-            - entity: sensor.battery_158d0003559ebf
-#              name: Выключатель на кухне
-            - entity: sensor.battery_158d000355fbed
-#              name: Выключатель в спальне
-            - entity: sensor.0x00158d0003cc2d64_battery
-#              name: Движение в ванной
-#            - entity: sensor.battery_158d0003f1c963
-            - entity: sensor.dvizhenie_na_kukhne_battery
-#              name: Движение на кухне
-            - entity: sensor.battery_158d0003021440
-#              name: Движение в на кухне 1.5м
-            - entity: sensor.0x00158d000421a109_battery
-#              name: Движение в прихожей
-            - entity: sensor.battery_158d0003d12974
-#              name: Движение в прихожей 1.5м
-            - entity: sensor.utechka_na_kukhne_battery
-#              name: Утечка на кухне
-            - entity: sensor.utechka_v_vannoi_battery
-#              name: Утечка в ванной
-            - entity: sensor.utechka_v_tualete_battery
-#              name: Утечка в туалете
-            - entity: sensor.battery_158d00045f1f2d
-#              name: Датчик дыма
-            - entity: sensor.klimat_v_vannoi_battery
-#              name: Температура и влажность в ванной
-            - entity: sensor.0x00158d0003121c47_battery
-#              name: Офисное кресло
-            - entity: sensor.0x00158d0002e2c1c7_battery
-#              name: Табурет
-            - entity: sensor.0x54ef4410000ebe51_battery
-#              name: Датчик освещенности
-              
-      - type: vertical-stack
-        cards:
+
 
         - type: markdown
           content: >
-             **Выключатели** 
-             
-        - type: entities
-          show_header_toggle: false
-          entities:          
-            - entity: switch.0x00158d0006d49f34_l2            
-              name: Вентиляция в ванной
-            - entity: switch.0x00158d0006d49f34_l1            
-              name: Свет в ванной
-            - entity: switch.0x00158d0003c73db6
-              name: Ночник в прихожей
-            - entity: light.lumi_gateway_v3_light
-              name: Ночник на кухне
-            - entity: switch.0x00158d0003c779c9
-              name: Отключение водоснабжения
-
-        - type: markdown
-          content: >
-             **Освещенность** 
-             
-        - type: entities
-          show_header_toggle: false
-          entities:          
-            - entity: sensor.lumi_gateway_v3_illuminance
-#              name: Шлюз освещенность
-            - entity: sensor.illumination_04cf8c8f8501
-#              name: Датчик освещенности шлюз
-            - entity: sensor.illumination_158d0003021440
-#              name: Датчик движения освещенности на кухне
-            - entity: sensor.0x00158d000421a109_illuminance_lux
-#              name: Датчик движения освещенности в прихожей
-            - entity: sensor.0x54ef4410000ebe51_illuminance_lux
-#              name: Датчик освещенности в прихожей
-
-        - type: markdown
-          content: >
-             **Движение** 
+             **Датчики движения** 
              
         - type: entities
           show_header_toggle: false
@@ -376,30 +288,15 @@ views:
             - entity: binary_sensor.0x00158d000421a109_occupancy
 #              name: Движение в прихожей
             - entity: binary_sensor.motion_sensor_158d0003d12974
-#              name: Движение прихожей 1.5 мин
+#              name: Движение в гостиной
 
-        - type: markdown
-          content: >
-             **Датчики протечки** 
-             
-        - type: entities
-          show_header_toggle: false
-          entities:          
-            - entity: binary_sensor.utechka_na_kukhne_water_leak
-#              name: Утечка на кухне
-            - entity: binary_sensor.utechka_v_vannoi_water_leak
-#              name: Утечка в ванной
-            - entity: binary_sensor.utechka_v_tualete_water_leak
-#              name: Утечка в туалете
+
               
               
   - title: Счетчики
     icon: mdi:counter
-    
     cards:
-    
       - type: vertical-stack
-        
         cards:
         - type: markdown
           content: >
@@ -469,20 +366,22 @@ views:
               name: Холодная (день)
             - entity: sensor.hot_day
               name: Горячая (день)  
-#            - entity: sensor.waterius_voltage
-#              name: Батарея
-            #- entity: sensor.waterius_voltage_low
-            #  name: Низкий заряд
+            - entity: sensor.waterius_last_seen
+              name: Последнее обновление
+            - entity: sensor.waterius_voltage
+              name: Напряжение батареи
+            - entity: sensor.waterius_voltage_low
+#              name: Заряд батареи 
               
+
+
 
   - title: Уборка помещений
     icon: mdi:broom
-
     cards:
       - type: 'custom:vacuum-card'
         entity: vacuum.robot_pylesos
         style: |
-
         stats:
           default:
             - entity_id: sensor.vacuum_filter_left
@@ -520,6 +419,9 @@ views:
           - name: Коврик в прихожей
             service: script.clean_carpet_corridor
             icon: 'mdi:rug'
+          - name: Очистить пылесос
+            service: script.clean_vacuum_cleaner
+            icon: 'mdi:delete-empty'            
         show_status: true
         show_toolbar: true
         show_name: true
@@ -528,9 +430,7 @@ views:
 
   - title: Камера
     icon: mdi:camera
-    
     cards:
-    
       - type: vertical-stack
         
         cards:
@@ -538,10 +438,7 @@ views:
           content: >
              **Камера**
         - type: iframe
-#          url: http://192.168.1.120:8123/local/cam.php
           url: http://192.168.1.100/cam.php
-#          url: http://admin:w7cdmtq@192.168.1.50:5914/snapshot.cgi
-#          url: http://admin:w7cdmtq@192.168.1.50:5914/videostream.cgi
           aspect_ratio: 75%
           style:
             margin-left: 1000px
@@ -549,7 +446,7 @@ views:
             heght: 100%
             width: 100%
             transform: none
-
+       
   - title: Медиа
     icon: mdi:music
     
@@ -638,3 +535,139 @@ views:
         show_toolbar: true
         show_body: true
         show_buttons: true
+
+
+  - title: Сервер
+    icon: mdi:home-assistant
+    
+    cards:
+
+      - type: vertical-stack
+        cards:
+
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.date
+              name: Дата
+              icon: mdi:calendar-check-outline
+            - entity: sensor.time
+              name: Время
+              icon: mdi:clock-outline
+
+      - type: vertical-stack
+        cards:
+        - type: markdown
+          content: >
+             **Текущее состояние** 
+
+        - type: horizontal-stack
+          cards:
+
+
+           - type: gauge
+             name: Загрузка CPU
+             unit: '%'
+             entity: sensor.processor_use_percent
+             severity:
+                green: 0
+                yellow: 60
+                red: 85
+             
+           - type: gauge
+             name: Загрузка ОЗУ
+             unit: '%'
+             entity: sensor.memory_use_percent
+             severity:
+                green: 0
+                yellow: 60
+                red: 85
+                
+        - type: horizontal-stack
+          cards:
+
+           - type: gauge
+             name: Диск заполнен
+             unit: '%'
+             entity: sensor.disk_use_percent
+             severity:
+                green: 0
+                yellow: 60
+                red: 85    
+                
+           - type: gauge
+             name: Температура CPU
+             unit: 'C°'
+             entity: sensor.cpu_temperature
+             severity:
+               green: 0
+               yellow: 60
+               red: 75
+
+        - type: custom:mini-graph-card
+          entities:
+            - sensor.maria_db_size
+          name: Объем БД
+          icon: mdi:database
+          line_color: blue
+          line_width: 4
+          font_size: 75
+
+        
+  - title: Заряд
+    icon: mdi:battery
+    cards:
+      - type: vertical-stack
+        cards:
+        - type: markdown
+          content: >
+             **Уровень заряда** 
+
+        - type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.0x00158d0007274a75_battery
+#              name: Движение в гостиной
+            - entity: sensor.battery_158d0002b46857
+#              name: Выключатель в гостиной
+            - entity: sensor.0x00158d0000c2f824_battery
+#              name: Входная дверь
+            - entity: sensor.battery_158d0003559ebf
+#              name: Выключатель на кухне
+            - entity: sensor.battery_158d000355fbed
+#              name: Выключатель в спальне
+            - entity: sensor.0x00158d0003cc2d64_battery
+#              name: Движение в ванной
+#            - entity: sensor.battery_158d0003f1c963
+            - entity: sensor.dvizhenie_na_kukhne_battery
+#              name: Движение на кухне
+            - entity: sensor.battery_158d0003021440
+#              name: Движение в на кухне 1.5м
+            - entity: sensor.0x00158d000421a109_battery
+#              name: Движение в прихожей
+            - entity: sensor.battery_158d0003d12974
+#              name: Движение в прихожей 1.5м
+            - entity: sensor.utechka_na_kukhne_battery
+#              name: Утечка на кухне
+            - entity: sensor.utechka_v_vannoi_battery
+#              name: Утечка в ванной
+            - entity: sensor.utechka_v_tualete_battery
+#              name: Утечка в туалете
+            - entity: sensor.battery_158d00045f1f2d
+#              name: Датчик дыма
+            - entity: sensor.atc_battery_level
+#              name: Температура и влажность на кухне
+            - entity: sensor.klimat_v_vannoi_battery
+#              name: Температура и влажность в ванной
+            - entity: sensor.cgdk2_battery_level
+#              name: Температура и влажность в спальне
+            - entity: sensor.0x00158d0003121c47_battery
+#              name: Офисное кресло
+            - entity: sensor.0x00158d0002e2c1c7_battery
+#              name: Табурет
+            - entity: sensor.0x54ef4410000ebe51_battery
+#              name: Батарея датчика освещенности в прихожей
+            - entity: sensor.0x54ef4410000eca07_battery
+#              name: Батарея датчика освещенности на улице
+            - entity: sensor.0xa4c1382f021b16a1_battery
+#              name: Батарея датчика климата на улице            

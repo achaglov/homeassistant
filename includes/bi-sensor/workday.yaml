@@ -21,6 +21,14 @@
       - '2022-05-09'
       - '2022-05-10'
       - '2022-06-12'
+      - '2022-09-07'
+      - '2022-09-08'
+      - '2022-09-09'
+      - '2022-09-12'
+      - '2022-09-13'
+      - '2022-09-14'
+      - '2022-09-15'
+      - '2022-09-16'
       - '2022-11-04'
       - '2023-01-02'
       - '2023-01-03'
@@ -39,7 +47,7 @@
     #   - '2022-03-05' 
     
   - platform: command_line
-    name: Workday
+    name: Workday isdayoff.ru
     command: >-
       curl https://isdayoff.ru/{{ now().date().strftime("%Y%m%d") }}
     scan_interval: 600
@@ -47,7 +55,7 @@
     payload_off: '1'
 
   - platform: command_line
-    name: Workday Tomorrow
+    name: Workday isdayoff.ru Tomorrow
     command: >-
       curl https://isdayoff.ru/{{ (now().date() + timedelta(days=1)).strftime("%Y%m%d") }}
     scan_interval: 600

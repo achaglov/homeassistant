@@ -1,0 +1,11 @@
+error 2022-10-13 21:07:18: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:18: MQTT failed to connect, exiting...
+error 2022-10-13 21:07:19: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:20: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:21: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:22: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:23: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:24: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:25: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:26: MQTT error: getaddrinfo ENOTFOUND core-mosquitto
+error 2022-10-13 21:07:27: MQTT error: getaddrinfo ENOTFOUND core-mosquitto

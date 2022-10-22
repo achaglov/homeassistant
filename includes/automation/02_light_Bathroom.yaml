@@ -50,6 +50,9 @@
     - condition: state
       entity_id: switch.0x00158d0006d49f34_l1
       state: 'on'
+    - condition: state
+      entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
+      state: "off" 
   action:
     - service: switch.turn_off
       entity_id: switch.0x00158d0006d49f34_l1
