@@ -12,3 +12,4 @@ error 2022-10-13 21:47:32: Failed to configure 'освещенность в пр
     at processTimers (node:internal/timers:502:7))
 error 2022-10-17 14:47:07: Failed to check if update available for 'свет и вентиляция в ванной' (Failed to find endpoint which support OTA cluster)
 error 2022-10-21 15:49:13: Failed to check if update available for 'свет и вентиляция в ванной' (Failed to find endpoint which support OTA cluster)
+error 2022-10-31 16:00:28: Failed to check if update available for 'свет и вентиляция в ванной' (Failed to find endpoint which support OTA cluster)

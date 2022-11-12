@@ -1,0 +1,15 @@
+error 2022-11-06 20:01:46: Failed to configure 'освещенность в прихожей', attempt 1 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2022-11-06 20:02:01: Failed to configure 'освещенность в прихожей', attempt 2 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2022-11-06 20:42:22: Failed to configure 'освещенность в прихожей', attempt 3 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2022-11-07 15:31:32: Failed to check if update available for 'свет и вентиляция в ванной' (Failed to find endpoint which support OTA cluster)
+error 2022-11-07 20:22:33: Not connected to MQTT server!
+error 2022-11-07 20:22:33: Cannot send message: topic: 'zigbee2mqtt/bridge/state', payload: 'offline

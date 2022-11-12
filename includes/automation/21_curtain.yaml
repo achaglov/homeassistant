@@ -145,3 +145,18 @@
   action:
     - service: cover.open_cover
       entity_id: cover.0xa4c138345beaa3fc
+      
+  
+# Открытие в 10-30 утра 
+- alias: Open cover 10_30_AM 
+  initial_state: true
+  trigger:
+    platform: time
+    at: '10:30'
+  condition:
+  - condition: state
+    entity_id: cover.0xa4c138345beaa3fc
+    state: 'closed'      
+  action:
+    - service: cover.open_cover
+      entity_id: cover.0xa4c138345beaa3fc

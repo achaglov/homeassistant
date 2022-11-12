@@ -71,6 +71,44 @@
       data_template:
         brightness_pct: 100
         kelvin: 4500
+
+        
+# Сценарий Рассвет за 30 минут до будильника в рабочий день
+- id: '0105'
+  alias: Bedroom_light_workday_sunrise
+  initial_state: true
+  trigger:
+    platform: time
+    at: '06:30'
+  condition:
+    - condition: state  
+      entity_id: binary_sensor.amazfit_gtr_lite
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on' 
+    - condition: numeric_state
+      entity_id: sensor.0x54ef4410000eca07_illuminance_lux
+      below: 200
+    - condition: state
+      entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+      state: 'off'
+  action:
+    - service: light.turn_on
+      data:
+        brightness_pct: 40
+        color_temp: 3400
+        transition: 900
+      target:
+        entity_id: light.yeelight_ceiling3_0x7d1efa6_nightlight
+    - delay: 00:15:30
+    - service: light.turn_on
+      data:
+        brightness_pct: 100
+        color_temp: 6500
+        transition: 900
+      target:
+        entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
         
 
 # Если никого нет дома в 8 утра в рабочий день
@@ -127,3 +165,4 @@
   action:
     - service: light.turn_off
       entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
+      

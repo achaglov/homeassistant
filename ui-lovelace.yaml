@@ -19,7 +19,7 @@ views:
         - type: custom:mini-graph-card
           entities:
             - sensor.klimat_v_vannoi_pressure
-          name: Давление
+          #name: Давление
           line_color: blue
           line_width: 4
           font_size: 75
@@ -135,6 +135,8 @@ views:
               #name: Светильник рабочего стола
             - entity: switch.sonoff_100001f1ea
               #name: Сбербокс
+            - entity: switch.sonoff02
+              #name: Tasmota
             - entity: switch.sonoff_1000d8e906
               #name: Ёлочка
             - entity: light.gyver_lamp_esp_c09fc7
@@ -145,7 +147,7 @@ views:
               #name: Ночник в спальне
             - entity: switch.sonoff_100061cac1
               #name: Подсветка в спальне
-            - entity: switch.sonoff02
+            - entity: switch.0xa4c1380f4bf4cd3e
               #name: Удлиннитель в спальне 
             - entity: light.yeelight_ceiling5_0x0000000007f0e59f
               #name: Свет на кухне

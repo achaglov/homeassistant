@@ -9,3 +9,15 @@
     - service: notify.telegram
       data:
         message: "Замени 2 мизинчиковые батарейки в счетчике воды!"
+        
+# Waterius вне сети
+- alias: Waterius_no_update_message1
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: sensor.waterius_last_seen
+      to: '100000'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Внимание! Ватериус вне сети более 27 часов! Проверь батарейки!"
