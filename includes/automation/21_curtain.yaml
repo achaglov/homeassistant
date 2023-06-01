@@ -33,11 +33,14 @@
 # Открытие за 30 минут до будильника в рабочий день
 # выполняется скрипт cover_position_curtains_open
 - alias: Curtain_workday_sunrise
-  initial_state: true
+  initial_state: false
   trigger:
   - platform: time
-    at: 06:30:00
+    at: "06:30:00"
   condition:
+    - condition: time
+      after: '06:00'
+      before: '08:00'
     - condition: state
       entity_id: binary_sensor.workday_sensor
       state: 'on'
@@ -61,17 +64,23 @@
 # Открытие за 30 минут до будильника в выходной день
 # выполняется скрипт cover_position_curtains_open
 - alias: Curtain_holiday_sunrise
-  initial_state: true
+  initial_state: false 
   trigger:
   - platform: time
-    at: 09:30:00
+    at: '09:30:00'
   condition:
+    - condition: time
+      after: '09:00'
+      before: '11:00'
     - condition: state
       entity_id: binary_sensor.workday_sensor
       state: 'off'
     - condition: numeric_state
       entity_id: sensor.0x54ef4410000eca07_illuminance_lux
       above: 200
+    - condition: state
+      entity_id: binary_sensor.amazfit_gtr_lite
+      state: 'on'
     - condition: state
       entity_id: cover.0xa4c138345beaa3fc
       state: 'closed'      
@@ -134,7 +143,7 @@
     for:
       minutes: 10
   - condition: state
-#Гостиная, движение 
+#Туалет, движение 
     entity_id: binary_sensor.0x00158d0007274a75_occupancy
     state: 'off'
     for:

@@ -19,7 +19,7 @@
 
 # Ночной режим 
 - alias: 'purifier_on_Sleep'
-  initial_state: true
+  initial_state: false
   trigger:
     platform: time
     at: '22:00'

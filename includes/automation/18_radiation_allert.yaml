@@ -9,3 +9,14 @@
     - service: notify.telegram
       data:
         message: "Внимание. Высокий уровень радиации: {{ states('sensor.narodmon_radiation') }} мкР/ч"
+
+- alias: Radiation allert home
+  initial_state: true
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.radiation_r
+      above: '50'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Внимание! В {{ states('sensor.time') }} зафиксирован уровень радиации: {{ states('sensor.radiation_r') }} микрорентген в час!   "

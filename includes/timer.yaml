@@ -10,3 +10,8 @@
   sunrise_bathroom_90m_off:
     name: Отключение рассвета через -
     duration: '01:30:00'
+    
+
+  light_toilet_30m_off:
+    name: Отключение света в ванной через -
+    duration: '00:30:00'

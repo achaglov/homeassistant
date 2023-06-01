@@ -19,9 +19,10 @@ from homeassistant.helpers.typing import StateType
 
 from custom_components.bodymiscale.metrics import BodyScaleMetricsHandler
 from custom_components.bodymiscale.models import Metric
-from custom_components.bodymiscale.util import get_bmi_label, get_ideal_weight
+from custom_components.bodymiscale.util import get_age, get_bmi_label, get_ideal_weight
 
 from .const import (
+    ATTR_AGE,
     ATTR_BMILABEL,
     ATTR_FATMASSTOGAIN,
     ATTR_FATMASSTOLOSE,
@@ -101,7 +102,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     component: EntityComponent = hass.data[DOMAIN][COMPONENT]
     await component.async_add_entities([Bodymiscale(handler)])
 
-    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     # Reload entry when its updated.
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
@@ -214,6 +215,7 @@ class Bodymiscale(BodyScaleBaseEntity):
             CONF_HEIGHT: self._handler.config[CONF_HEIGHT],
             CONF_GENDER: self._handler.config[CONF_GENDER].value,
             ATTR_IDEAL: get_ideal_weight(self._handler.config),
+            ATTR_AGE: get_age(self._handler.config[CONF_BIRTHDAY]),
             **self._available_metrics,
         }
 

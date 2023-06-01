@@ -9,10 +9,8 @@
   action:
     - service: switch.toggle
       entity_id: switch.0xa4c138316bba8173
-#    - service: switch.toggle  
-#      entity_id: switch.0x00158d0006d49f34_l1
-#    - service: timer.start
-#      entity_id: timer.light_bathroom_30m_off
+    - service: timer.start
+      entity_id: timer.light_toilet_30m_off
       
       
 - alias: Radio Button Duble Click ON/OFF Toggle

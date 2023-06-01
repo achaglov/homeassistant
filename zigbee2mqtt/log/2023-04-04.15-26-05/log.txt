@@ -1,0 +1,48 @@
+error 2023-04-04 15:26:38: Failed to configure 'освещенность в прихожей', attempt 1 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2023-04-04 15:26:53: Failed to configure 'освещенность в прихожей', attempt 2 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2023-04-04 15:27:13: Failed to configure 'освещенность в прихожей', attempt 3 (Error: Bind 0x54ef4410000ebe51/1 msIlluminanceMeasurement from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2023-04-04 16:19:31: Failed to configure 'движение на кухне 1', attempt 1 (Error: Bind 0x00124b0029280242/1 genPowerCfg from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2023-04-04 19:35:55: Failed to configure 'движение на кухне 1', attempt 2 (Error: Bind 0x00124b0029280242/1 genPowerCfg from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2023-04-04 19:41:55: Failed to configure 'движение на кухне 1', attempt 3 (Error: Bind 0x00124b0029280242/1 genPowerCfg from '0x00124b001ccc2cae/1' failed (AREQ - ZDO - bindRsp after 10000ms)
+    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
+    at listOnTimeout (node:internal/timers:559:17)
+    at processTimers (node:internal/timers:502:7))
+error 2023-05-05 15:29:51: Failed to check if update available for 'свет и вентиляция в ванной' (Failed to find endpoint which support OTA cluster)
+error 2023-05-05 15:29:51: Failed to check if update available for 'розетка BLE' (Failed to find endpoint which support OTA cluster)
+error 2023-05-15 14:56:06: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:07: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:07: Not connected to MQTT server!
+error 2023-05-15 14:56:08: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:09: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:10: Not connected to MQTT server!
+error 2023-05-15 14:56:10: Cannot send message: topic: 'zigbee2mqtt/климат в ванной', payload: '{"battery":90,"humidity":45.4,"last_seen":"2023-05-15T09:56:10.276Z","linkquality":138,"power_outage_count":2609,"pressure":967.1,"temperature":22.1,"voltage":2985}
+error 2023-05-15 14:56:11: Not connected to MQTT server!
+error 2023-05-15 14:56:11: Cannot send message: topic: 'zigbee2mqtt/подсветка в прихожей', payload: '{"consumption":0.21,"device_temperature":37,"energy":0.21,"last_seen":"2023-05-15T09:56:11.394Z","linkquality":131,"power":0,"power_outage_count":56,"power_outage_memory":false,"state":"OFF","temperature":37,"update":{"installed_version":92,"latest_version":92,"state":"idle"},"update_available":false}
+error 2023-05-15 14:56:13: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:14: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:15: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:16: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:17: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:17: Not connected to MQTT server!
+error 2023-05-15 14:56:17: Cannot send message: topic: 'zigbee2mqtt/свет и вентиляция в ванной', payload: '{"consumption":1.55,"current":0.01,"device_temperature":32,"energy":1.55,"interlock":false,"last_seen":"2023-05-15T09:56:17.475Z","linkquality":116,"power":0.01,"power_outage_count":38,"power_outage_memory":null,"state_l1":"OFF","state_l2":"OFF","temperature":30,"update":{"installed_version":-1,"latest_version":-1,"state":null},"update_available":null,"voltage":233.81}
+error 2023-05-15 14:56:17: Not connected to MQTT server!
+error 2023-05-15 14:56:18: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:19: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:20: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:21: MQTT error: connect ECONNREFUSED 172.30.33.1:1883
+error 2023-05-15 14:56:22: MQTT error: connect ECONNREFUSED 172.30.33.1:1883

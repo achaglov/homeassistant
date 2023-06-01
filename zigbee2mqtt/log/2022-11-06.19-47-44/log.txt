@@ -1,5 +1,0 @@
-error 2022-11-06 19:52:41: Failed to configure 'освещенность в прихожей', attempt 1 (Error: Read 0x54ef4410000ebe51/1 genPowerCfg(["batteryVoltage"], {"sendWhen":"immediate","timeout":10000,"disableResponse":false,"disableRecovery":false,"disableDefaultResponse":true,"direction":0,"srcEndpoint":null,"reservedBits":0,"manufacturerCode":null,"transactionSequenceNumber":null,"writeUndiv":false}) failed (Timeout - 34076 - 1 - 4 - 1 - 1 after 10000ms)
-    at Timeout._onTimeout (/app/node_modules/zigbee-herdsman/src/utils/waitress.ts:64:35)
-    at listOnTimeout (node:internal/timers:559:17)
-    at processTimers (node:internal/timers:502:7))
-error 2022-11-06 19:57:32: MQTT error: read ECONNRESET

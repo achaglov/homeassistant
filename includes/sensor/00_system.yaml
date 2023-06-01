@@ -54,3 +54,33 @@
         value_template: >
           {{(as_timestamp(now())-as_timestamp(states.sensor.cold_water.last_updated))|int}}
         unit_of_measurement: "сек."
+        
+        
+        
+###Сенсор радиации
+  - platform: template
+    sensors:
+      radiation_level_home:
+        friendly_name: "Уровень радиации"
+        unique_id: radioactive
+        unit_of_measurement: "µR/h"
+        value_template: "{{ (states('sensor.radiation')|float(default=0.1) * 100)|round(2) }}"
+        
+  - platform: template
+    sensors:
+      entrance_taburet_status:
+        friendly_name: "Табурет"
+        unique_id: taburet
+        value_template: >
+          {% if is_state('binary_sensor.0x00158d0002e2c1c7_contact', "on") %}Свободно
+          {% elif is_state('binary_sensor.0x00158d0002e2c1c7_contact', "off") %}Занято
+          {% else %}Unavailable
+          {% endif %}
+      entrance_kreslo_status:
+        friendly_name: "Офисное кресло"
+        unique_id: kreslo
+        value_template: >
+          {% if is_state('binary_sensor.0x00158d0003121c47_contact', "on") %}Свободно
+          {% elif is_state('binary_sensor.0x00158d0003121c47_contact', "off") %}Занято
+          {% else %}Unavailable
+          {% endif %}

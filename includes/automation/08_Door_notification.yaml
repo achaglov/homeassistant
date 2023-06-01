@@ -41,7 +41,10 @@
     entity_id: binary_sensor.0x00158d0007274a75_occupancy
     state: 'off'
     for:
-      minutes: 10      
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.amazfit_gtr_lite
+    state: 'off'
       
   action:
     - service: notify.telegram
@@ -69,3 +72,6 @@
     - service: notify.telegram
       data:
         message: "Внимание. Входная дверь открыта 10 минут!"
+        
+        
+        

@@ -13,9 +13,9 @@ views:
         - type: entities
           show_header_toggle: false
           entities:
-            - entity: sensor.0xa4c1382f021b16a1_temperature
-            - entity: sensor.0xa4c1382f021b16a1_humidity
-
+            - entity: sensor.temperature_ulitsa
+            - entity: sensor.humidity_ulitsa
+            - entity: sensor.gdacs_55_126765868060865_59_72066044807435
         - type: custom:mini-graph-card
           entities:
             - sensor.klimat_v_vannoi_pressure
@@ -25,9 +25,18 @@ views:
           font_size: 75
 
         - type: gauge
-          name: Уровень радиации
+          name: Уровень радиации в Миассе
           unit: 'µR/h'
           entity: sensor.narodmon_radiation
+          severity:
+            green: 0
+            yellow: 20
+            red: 50
+
+        - type: gauge
+          name: Уровень радиации дома
+          unit: 'µR/h'
+          entity: sensor.radiation_r
           severity:
             green: 0
             yellow: 20
@@ -48,7 +57,7 @@ views:
           show_header_toggle: false
           entities:
             - entity: sensor.cgdk2_temperature
-#            - entity: sensor.zhimi_humidifier_ca1_temperature            
+            - entity: sensor.0xa4c1382f021b16a1_temperature            
             - entity: sensor.atc_temperature
             - entity: sensor.klimat_v_vannoi_temperature
             
@@ -65,7 +74,7 @@ views:
         - type: entities
           show_header_toggle: false
           entities:
-#            - entity: sensor.cgdk2_humidity
+            - entity: sensor.0xa4c1382f021b16a1_humidity
             - entity: sensor.atc_humidity
             - entity: sensor.klimat_v_vannoi_humidity
             - entity: sensor.average_humidity
@@ -151,10 +160,14 @@ views:
               #name: Удлиннитель в спальне 
             - entity: light.yeelight_ceiling5_0x0000000007f0e59f
               #name: Свет на кухне
+            - entity: switch.0xa4c1386168d4c309_l1
+              #name: Подсветка на кухне
             - entity: light.lumi_gateway_v3_light
               #name: Ночник на кухне
-            - entity: switch.0xa4c138316bba8173
-              #name: Гирлянда
+            - entity: switch.0xa4c1386168d4c309_l2
+              #name: Вытяжка на кухне
+            - entity: switch.0x70b3d52b6001ac57
+              #name: Розетка BLE
             - entity: switch.svet_v_prikhozhei
               #name: Свет в прихожей
             - entity: switch.0x00158d0003c73db6
@@ -163,6 +176,8 @@ views:
               #name: Свет в ванной
             - entity: switch.0x00158d0006d49f34_l2            
               #name: Вентиляция в ванной
+            - entity: switch.0xa4c138316bba8173            
+              #name: Свет в туалете
             - entity: switch.0x00158d0003c779c9
               name: Отключение водоснабжения
 
@@ -238,9 +253,9 @@ views:
           entities:   
             - entity: binary_sensor.0x00158d0000c2f824_contact
 #              name: Входная дверь
-            - entity: binary_sensor.0x00158d0003121c47_contact
+            - entity: sensor.entrance_kreslo_status
 #              name: Офисное кресло
-            - entity: binary_sensor.0x00158d0002e2c1c7_contact
+            - entity: sensor.entrance_taburet_status
 #              name: Табурет 
 
       - type: vertical-stack
@@ -280,11 +295,13 @@ views:
           show_header_toggle: false
           entities:          
             - entity: binary_sensor.0x00158d0007274a75_occupancy
-#              name: Движение в гостиной
+#              name: Движение в туалете
             - entity: binary_sensor.0x00158d0003cc2d64_occupancy
 #              name: Движение в ванной
             - entity: binary_sensor.dvizhenie_na_kukhne_occupancy
 #              name: Движение на кухне
+            - entity: binary_sensor.0x00124b0029280242_occupancy
+#              name: Движение на кухне 1            
             - entity: binary_sensor.motion_sensor_158d0003021440
 #              name: Движение в спальне
             - entity: binary_sensor.0x00158d000421a109_occupancy
@@ -448,6 +465,14 @@ views:
             heght: 100%
             width: 100%
             transform: none
+        - type: picture-entity
+          show_state: true
+          show_name: true
+          camera_view: auto
+          image: https://demo.home-assistant.io/stub_config/bedroom.png
+          entity: camera.ezviz
+          camera_image: camera.ezviz
+          name: Видеоглазок
        
   - title: Медиа
     icon: mdi:music
@@ -630,7 +655,7 @@ views:
           entities:
             - entity: sensor.0x00158d0007274a75_battery
 #              name: Движение в гостиной
-            - entity: sensor.battery_158d0002b46857
+            - entity: sensor.0x00158d0002b46857_battery
 #              name: Выключатель в гостиной
             - entity: sensor.0x00158d0000c2f824_battery
 #              name: Входная дверь
@@ -672,4 +697,65 @@ views:
             - entity: sensor.0x54ef4410000eca07_battery
 #              name: Батарея датчика освещенности на улице
             - entity: sensor.0xa4c1382f021b16a1_battery
-#              name: Батарея датчика климата на улице            
+#              name: Батарея датчика климата в гостиной
+            - entity: sensor.battery_level_ulitsa
+#              name: Батарея датчика климата на улице 
+            - entity: sensor.ezviz_battery_level
+#              name: Батарея видеоглазка
+
+  - title: Датчик присутствия
+    icon: mdi:target-account
+    cards:
+      - type: vertical-stack
+        cards:
+        - type: markdown
+          content: >
+             **Присутствие на кухне** 
+
+        - type: entities
+          entities:
+            - entity: sensor.ld2410k_still_target_distance
+            - entity: sensor.ld2410k_moving_target_distance
+            - entity: sensor.ld2410k_moving_target_energy
+            - entity: sensor.ld2410k_still_target_energy
+            - entity: number.ld2410k_none_duration
+            - entity: number.ld2410k_max_moving_distance_range
+            - entity: number.ld2410k_max_still_distance_range
+            - entity: binary_sensor.ld2410k_has_target
+            - entity: binary_sensor.ld2410k_has_moving_target
+            - entity: binary_sensor.ld2410k_has_still_target
+            - entity: binary_sensor.ld2410k_last_command_success
+            - entity: button.ld2410k_set_baud_rate_to_115200
+            - entity: button.ld2410k_set_baud_rate_to_256000
+            - entity: button.ld2410k_set_baud_rate_to_9600
+            - entity: button.ld2410k_get_config
+            - entity: button.ld2410k_turn_off_config_mode
+            - entity: button.ld2410k_turn_on_config_mode
+            - entity: button.ld2410k_reboot_ld2410
+            
+      - type: vertical-stack
+        cards:
+        - type: markdown
+          content: >
+             **Присутствие в прихожей** 
+
+        - type: entities
+          entities:
+            - entity: sensor.ld2410_still_target_distance
+            - entity: sensor.ld2410_moving_target_distance
+            - entity: sensor.ld2410_moving_target_energy
+            - entity: sensor.ld2410_still_target_energy
+            - entity: number.ld2410_none_duration
+            - entity: number.ld2410_max_moving_distance_range
+            - entity: number.ld2410_max_still_distance_range
+            - entity: binary_sensor.ld2410_has_target
+            - entity: binary_sensor.ld2410_has_moving_target
+            - entity: binary_sensor.ld2410_has_still_target
+            - entity: binary_sensor.ld2410_last_command_success
+            - entity: button.ld2410_set_baud_rate_to_115200
+            - entity: button.ld2410_set_baud_rate_to_256000
+            - entity: button.ld2410_set_baud_rate_to_9600
+            - entity: button.ld2410_get_config
+            - entity: button.ld2410_turn_off_config_mode
+            - entity: button.ld2410_turn_on_config_mode
+            - entity: button.ld2410_reboot_ld2410

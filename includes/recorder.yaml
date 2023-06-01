@@ -1,3 +1,21 @@
-
   db_url: mysql://hass:hass@core-mariadb/homeassistant?charset=utf8
+# создана автоматизация для очистки DB
+  auto_purge: true
   purge_keep_days: 3
+  commit_interval: 30
+  exclude:
+    domains:
+      - updater
+      - automation
+    entity_globs:
+      - binary_sensor.*_tamper
+      - binary_sensor.*_update_available
+    entities:
+      - sensor.date
+      - sensor.date_time
+      - sensor.time
+      - sensor.date_time_iso
+      - sensor.date_time_utc
+  include:
+    entities:
+      - sensor.energometr_energy_total

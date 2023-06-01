@@ -1,49 +1,33 @@
-# -----Включение света по одинарному клику ----- #
-- alias: Livingroom Switch Click Light ON
+# -----Включение выключение света по одинарному клику ----- #
+- alias: Livingroom Switch Click Light ON OFF
   initial_state: true
   trigger:
-    - platform: event
-      event_type: xiaomi_aqara.click
-      event_data:
-        entity_id: binary_sensor.wall_switch_158d0002b46857
-        click_type: single
-  condition:
-    - condition: state
-      entity_id: light.yeelight_ceiling20_0x1588e1a5
-      state: 'off'
+  - platform: device
+    domain: mqtt
+    device_id: 03f22aa078910683a35d1ae0c7104cc9
+    type: action
+    subtype: single
+    discovery_id: 0x00158d0002b46857 action_single
+  condition: []
   action:
-    - service: light.turn_on
-      entity_id:
-        - light.yeelight_ceiling20_0x1588e1a5
+  - type: toggle
+    device_id: af79a51fd2e8d434b936621cdea7be09
+    entity_id: light.yeelight_ceiling20_0x1588e1a5
+    domain: light
         
-        
-# -----Выключение света по одинарному клику ----- #
-- alias: Livingroom Switch Click Light ON
-  initial_state: true
-  trigger:
-    - platform: event
-      event_type: xiaomi_aqara.click
-      event_data:
-        entity_id: binary_sensor.wall_switch_158d0002b46857
-        click_type: single
-  condition:
-    - condition: state
-      entity_id: light.yeelight_ceiling20_0x1588e1a5
-      state: 'on'
-  action:
-    - service: light.turn_off
-      entity_id:
-        - light.yeelight_ceiling20_0x1588e1a5
+
 
 # ----- Включение 25% яркости по двойному клику ----- #
 - alias: Livingroom Switch Doble Click Light_25
   initial_state: true
   trigger:
-    - platform: event
-      event_type: xiaomi_aqara.click
-      event_data:
-        entity_id: binary_sensor.wall_switch_158d0002b46857
-        click_type: double
+  - platform: device
+    domain: mqtt
+    device_id: 03f22aa078910683a35d1ae0c7104cc9
+    type: action
+    subtype: double
+    discovery_id: 0x00158d0002b46857 action_double
+  condition: []
   action:
     - service: light.turn_on
       entity_id:
@@ -56,11 +40,12 @@
 - alias: Livingroom Switch Long Click Light Max
   initial_state: true
   trigger:
-    - platform: event
-      event_type: xiaomi_aqara.click
-      event_data:
-        entity_id: binary_sensor.wall_switch_158d0002b46857
-        click_type: long
+  - platform: device
+    domain: mqtt
+    device_id: 03f22aa078910683a35d1ae0c7104cc9
+    type: action
+    subtype: hold
+    discovery_id: 0x00158d0002b46857 action_hold
   action:
     - service: light.turn_on
       entity_id:

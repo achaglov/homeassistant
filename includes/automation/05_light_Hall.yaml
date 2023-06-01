@@ -8,6 +8,7 @@
     entity_id:
     - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
+    - binary_sensor.ld2410_has_target
     to: 'on'
   condition:
   - condition: time
@@ -15,7 +16,7 @@
     before: "20:00"
   - condition: numeric_state
     entity_id: sensor.0x54ef4410000ebe51_illuminance_lux
-    below: 6
+    below: 8
   - condition: state
     entity_id: switch.svet_v_prikhozhei
     state: "off"
@@ -34,6 +35,7 @@
     entity_id:
     - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
+    - binary_sensor.ld2410_has_target
     to: 'on'
   condition:
   - condition: time
@@ -58,8 +60,11 @@
     - binary_sensor.motion_sensor_158d0003d12974
     to: 'off'
     for:
-      minutes: 2
+      minutes: 1
   condition:
+    - condition: state
+      entity_id: binary_sensor.ld2410_has_target
+      state: "off"
     - condition: state
       entity_id: switch.svet_v_prikhozhei
       state: "on"
@@ -79,6 +84,9 @@
     for:
       minutes: 1
   condition:
+    - condition: state
+      entity_id: binary_sensor.ld2410_has_target
+      state: "off"
     - condition: state
       entity_id: switch.0x00158d0003c73db6
       state: "on"

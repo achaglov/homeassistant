@@ -56,6 +56,21 @@
     - service: switch.turn_on
       entity_id: switch.0x00158d0003c779c9
     - delay: 00:00:05
+    - service: notify.telegram
+      data:
+        message: "Вода перекрыта в: {{ states('sensor.time') }}"
+        
+        
+# Отключить реле после включения
+- alias: Water_relay_off
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: switch.0x00158d0003c779c9
+      from: 'off'
+      to: 'on'
+  action:
+    - delay: 00:00:10
     - service: switch.turn_off
       entity_id: switch.0x00158d0003c779c9
     - service: notify.telegram

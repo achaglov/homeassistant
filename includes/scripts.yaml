@@ -57,3 +57,22 @@ cover_position_curtains_open:
        data:
          entity_id: cover.0xa4c138345beaa3fc
          position: "{{ state_attr('cover.0xa4c138345beaa3fc', 'current_position')|int + 10|int}}"
+ 
+         
+update_shopping_list:
+        alias: "Обновить список покупок"
+        sequence:
+          - service: media_player.play_media
+            entity_id: media_player.yandex_station
+            data:
+              media_content_id: update
+              media_content_type: shopping_list
+              
+good_night_alise:
+        alias: "Сладких снов"
+        sequence:
+          - service: media_player.play_media
+            entity_id: media_player.yandex_station
+            data:
+              media_content_type: text
+              media_content_id: <speaker is_whisper="true">Сладких снов!

@@ -1,0 +1,63 @@
+# Свет в туалете
+### Включение света в Туалете при наличии движения
+- alias: Toilet_Turn_ON_light_(motion on)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0007274a75_occupancy
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: switch.0xa4c138316bba8173
+      state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.0xa4c138316bba8173
+    - service: timer.start
+      entity_id: timer.light_toilet_30m_off
+
+
+
+
+### Выключение света в туалете при отсутствии движения в течении 3 минут
+- alias: Toilet_Turn_OFF_light_above_3_min_(no motion)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0007274a75_occupancy
+      to: 'off'
+      for:
+        minutes: 3
+  condition:
+    - condition: state
+      entity_id: switch.0xa4c138316bba8173
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.0xa4c138316bba8173
+
+
+### Выключение света в Туалете в случае поломки датчиков (через 30 минут)
+# Если не сработали сценарии:
+#  - Toilet Turn OFF light above 1 min (motion)
+
+- alias: Toilet Turn OFF (LT) Timer On
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: timer.finished
+      event_data: 
+        entity_id: timer.light_toilet_30m_off
+  condition:
+    - condition: state
+      entity_id: switch.0xa4c138316bba8173
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.0x00158d0007274a75_occupancy
+      state: "off" 
+  action:
+    - service: switch.turn_off
+      entity_id: switch.0xa4c138316bba8173
+    - service: notify.telegram
+      data:
+        message: "Внимание. Свет в туалете не был выключен продолжительное время. Время выключения: {{ states('sensor.time') }}"

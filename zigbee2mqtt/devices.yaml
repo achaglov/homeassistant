@@ -20,7 +20,7 @@
 '0x00158d0003cc2d64':
   friendly_name: движение в ванной
 '0xa4c138316bba8173':
-  friendly_name: гирлянда
+  friendly_name: свет в туалете
 '0x00158d0003121c47':
   friendly_name: офисное кресло
 '0x00158d0003c73db6':
@@ -35,17 +35,25 @@
 '0x00158d0002e2c1c7':
   friendly_name: табурет
 '0x00158d0007274a75':
-  friendly_name: движение в гостиной
+  friendly_name: движение в туалете
 '0x54ef4410000ebe51':
   friendly_name: освещенность в прихожей
 '0x54ef4410000eca07':
   friendly_name: освещенность на улице
 '0xa4c138345beaa3fc':
   friendly_name: шторы в спальне
-  invert_cover: true
+  invert_cover: false
 '0xa4c1382f021b16a1':
-  friendly_name: климат на улице
+  friendly_name: климат в гостиной
   temperature_precision: 1
   humidity_precision: 1
 '0xa4c1380f4bf4cd3e':
   friendly_name: удлинитель в спальне
+'0x00124b0029280242':
+  friendly_name: движение на кухне 1
+'0x70b3d52b6001ac57':
+  friendly_name: розетка BLE
+'0xa4c1386168d4c309':
+  friendly_name: подсветка и вытяжка на кухне
+'0x00158d0002b46857':
+  friendly_name: выключатель в гостиной

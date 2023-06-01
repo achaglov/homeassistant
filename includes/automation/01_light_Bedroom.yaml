@@ -166,3 +166,47 @@
     - service: light.turn_off
       entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
       
+
+      
+# Включить ночник в спальне
+- alias: Bedroom_Turn_ON_light_(motion on)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.motion_sensor_158d0003021440
+      to: 'on'
+  condition:
+  - condition: time
+    after: '14:00'
+    before: '22:00'
+  - condition: state
+    entity_id: cover.0xa4c138345beaa3fc
+    state: 'closed'
+  - condition: state
+    entity_id: switch.sonoff_100061cac1
+    state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id:
+        - switch.sonoff_100061cac1
+
+
+### Выключение ночника в спальне при отсутствии движения в течении 3 минут
+- alias: Bedroom_Turn_OFF_light_above_3_min_(no motion)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.motion_sensor_158d0003021440
+      to: 'off'
+      for:
+        minutes: 3
+  condition:
+    - condition: state
+      entity_id: switch.sonoff_100061cac1
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.sonoff_100061cac1
+

@@ -80,7 +80,7 @@
     - platform: state
       entity_id:
       - binary_sensor.dvizhenie_na_kukhne_occupancy
-#      - binary_sensor.motion_sensor_158d0003021440
+      - binary_sensor.0x00124b0029280242_occupancy
       to: 'on'
   condition:
   - condition: time
@@ -98,13 +98,13 @@
 
 
 ### Выключение света на кухне при отсутствии движения в течении 3 минут
-- alias: Kitchen_Turn_OFF_light_above_1_min_(no motion)
+- alias: Kitchen_Turn_OFF_light_above_3_min_(no motion)
   initial_state: true
   trigger:
     - platform: state
       entity_id:
       - binary_sensor.dvizhenie_na_kukhne_occupancy
-#      - binary_sensor.motion_sensor_158d0003021440
+#      - binary_sensor.0x00124b0029280242_occupancy
       from: 'on'
       to: 'off'
       for:
@@ -128,7 +128,7 @@
     - platform: state
       entity_id:
       - binary_sensor.dvizhenie_na_kukhne_occupancy
-#      - binary_sensor.motion_sensor_158d0003021440
+      - binary_sensor.0x00124b0029280242_occupancy
       to: 'on'
   condition:
   - condition: time
@@ -148,13 +148,13 @@
 
 
 ### Выключение ночника на кухне при отсутствии движения в течении 3 минут
-- alias: Kitchen_Turn_OFF_light_above_1_min_(no motion)_night
+- alias: Kitchen_Turn_OFF_light_above_3_min_(no motion)_night
   initial_state: true
   trigger:
     - platform: state
       entity_id:
       - binary_sensor.dvizhenie_na_kukhne_occupancy
-#      - binary_sensor.motion_sensor_158d0003021440
+#      - binary_sensor.0x00124b0029280242_occupancy
       from: 'on'
       to: 'off'
       for:
@@ -171,3 +171,47 @@
       entity_id: light.lumi_gateway_v3_light
     - service: light.turn_off
       entity_id: light.gateway_light_04cf8c8f8501
+      
+# Включить подсветку на кухне
+- alias: Kitchen_Turn_ON_light_(target_on)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.ld2410k_has_target
+      from: 'off'
+      to: 'on'
+  condition:
+#  - condition: time
+#    after: '06:00'
+#    before: '22:00'
+#  - condition: numeric_state
+#    entity_id: sensor.lumi_gateway_v3_illuminance
+#    below: 1200
+  - condition: state
+    entity_id: switch.0xa4c1386168d4c309_l1
+    state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id:
+        - switch.0xa4c1386168d4c309_l1
+
+# Выключить подсветку на кухне
+- alias: Kitchen_Turn_OFF_light_(target_off)
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.ld2410k_has_target
+      to: 'off'
+      for:
+        minutes: 1
+  condition:
+  - condition: state
+    entity_id: switch.0xa4c1386168d4c309_l1
+    state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id:
+        - switch.0xa4c1386168d4c309_l1
+
