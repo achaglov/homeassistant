@@ -6,7 +6,7 @@
   trigger:
   - platform: state
     entity_id:
-    - binary_sensor.0x00158d000421a109_occupancy
+#    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
     - binary_sensor.ld2410_has_target
     to: 'on'
@@ -33,7 +33,7 @@
   trigger:
   - platform: state
     entity_id:
-    - binary_sensor.0x00158d000421a109_occupancy
+#    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
     - binary_sensor.ld2410_has_target
     to: 'on'
@@ -56,8 +56,9 @@
   trigger:
   - platform: state
     entity_id:
-    - binary_sensor.0x00158d000421a109_occupancy
+#    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
+    - binary_sensor.ld2410_has_target
     to: 'off'
     for:
       minutes: 1
@@ -78,8 +79,9 @@
   trigger:
   - platform: state
     entity_id:
-    - binary_sensor.0x00158d000421a109_occupancy
+#    - binary_sensor.0x00158d000421a109_occupancy
     - binary_sensor.motion_sensor_158d0003d12974
+    - binary_sensor.ld2410_has_target
     to: 'off'
     for:
       minutes: 1

@@ -1,0 +1,7 @@
+error 2024-03-26 14:20:03: Failed to execute LQI for 'вода'
+error 2024-03-26 14:21:46: Update or check for update already in progress for 'розетка BLE'
+error 2024-03-26 14:21:46: Update or check for update already in progress for 'розетка проектора'
+error 2024-03-26 14:21:46: Update or check for update already in progress for 'климат на кухне'
+error 2024-03-26 14:22:14: Failed to check if update available for 'розетка BLE' (OTA: Device didn't respond to OTA request)
+error 2024-03-26 14:22:14: Failed to check if update available for 'розетка проектора' (OTA: Device didn't respond to OTA request)
+error 2024-03-26 14:22:14: Failed to check if update available for 'климат на кухне' (OTA: Device didn't respond to OTA request)

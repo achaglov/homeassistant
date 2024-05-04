@@ -2,9 +2,9 @@
 
 
 import logging
-from collections.abc import Mapping, MutableMapping
+from collections.abc import Callable, Mapping, MutableMapping
 from dataclasses import dataclass, field
-from typing import Any, Callable, Optional
+from typing import Any
 
 from cachetools import TTLCache
 from homeassistant.const import (
@@ -58,7 +58,7 @@ class MetricInfo:
 
     depends_on: list[Metric]
     calculate: Callable[[Mapping[str, Any], Mapping[Metric, StateType]], StateType]
-    decimals: Optional[int] = None  # Round decimals before passing to the subscribers
+    decimals: int | None = None  # Round decimals before passing to the subscribers
     depended_by: list[Metric] = field(default_factory=list, init=False)
 
 
@@ -252,14 +252,14 @@ class BodyScaleMetricsHandler:
     ) -> bool:
         problem = None
         if state == STATE_UNAVAILABLE:
-            problem = f"{name_sensor} unavailable"
+            problem = f"{name_sensor}_unavailable"
         elif state < constraint_min:
-            problem = f"{name_sensor} low"
+            problem = f"{name_sensor}_low"
         elif state > constraint_max:
-            problem = f"{name_sensor} high"
+            problem = f"{name_sensor}_high"
 
         new_statues = []
-        for status in self._available_metrics.get(Metric.STATUS, "").split(","):
+        for status in self._available_metrics.get(Metric.STATUS, "").split("_and_"):
             status = status.strip()
             if status == PROBLEM_NONE:
                 continue
@@ -274,7 +274,7 @@ class BodyScaleMetricsHandler:
             new_statues.append(problem)
 
         if new_statues:
-            self._update_available_metric(Metric.STATUS, ", ".join(new_statues))
+            self._update_available_metric(Metric.STATUS, "_and_".join(new_statues))
             return problem is None
 
         self._update_available_metric(Metric.STATUS, PROBLEM_NONE)

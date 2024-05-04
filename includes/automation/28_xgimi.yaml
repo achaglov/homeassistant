@@ -1,0 +1,12 @@
+- alias: media_player_Xgimi_On 
+  initial_state: true
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.0xa4c138de02bef15d_power
+    above: 10
+  condition: []
+  action:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.cinema
+      metadata: {}

@@ -115,30 +115,31 @@
     for:
       minutes: 10
   - condition: state
-#Прихожая, движение
+#Гостиная, движение
     entity_id: binary_sensor.0x00158d000421a109_occupancy
     state: 'off'
     for:
       minutes: 10
   - condition: state
 #Кухня, движение 
+    entity_id: binary_sensor.0x00124b0029280242_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
     entity_id: binary_sensor.dvizhenie_na_kukhne_occupancy
     state: 'off'
     for:
       minutes: 10
+# Спальня
   - condition: state
     entity_id: binary_sensor.motion_sensor_158d0003021440
     state: 'off'
     for:
       minutes: 10
   - condition: state
+#Прихожая, движение
     entity_id: binary_sensor.motion_sensor_158d0003d12974
-    state: 'off'
-    for:
-      minutes: 10
-  - condition: state
-#Ванная, движение
-    entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
     state: 'off'
     for:
       minutes: 10
@@ -169,3 +170,116 @@
   action:
     - service: cover.open_cover
       entity_id: cover.0xa4c138345beaa3fc
+      
+
+# Закрытие штор в гостиной при включении света
+- alias: Livingroom_Curtian_close_for_light_on
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: light.yeelight_ceiling20_0x1588e1a5
+      from: 'off'
+      to: 'on'
+  condition:
+    - condition: state
+      entity_id: cover.0xa4c138460619e3ea
+      state: 'open'
+  action:
+    - service: cover.close_cover
+      entity_id:
+        - cover.0xa4c138460619e3ea
+  mode: single  
+  
+# Закрытие штор в гостиной за 10 минут до заката
+- alias: Livingroom_Curtain_sunset 
+  initial_state: true
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "-00:10:00"
+  condition:
+    - condition: state
+      entity_id: cover.0xa4c138460619e3ea
+      state: 'open'
+  action:
+    - service: cover.close_cover
+      entity_id: cover.0xa4c138460619e3ea
+  mode: single
+
+  
+# Открытие в 8 утра в рабочий день если никого нет дома
+- alias: Livingroom_Open cover 8_AM 
+  initial_state: true
+  trigger:
+    platform: time
+    at: '08:10'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  - condition: state
+    entity_id: binary_sensor.amazfit_gtr_lite
+    state: 'off'
+  - condition: state
+#Ванная, движение     
+    entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Гостиная, движение
+    entity_id: binary_sensor.0x00158d000421a109_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Кухня, движение 
+    entity_id: binary_sensor.0x00124b0029280242_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+    entity_id: binary_sensor.dvizhenie_na_kukhne_occupancy
+    state: 'off'
+    for:
+      minutes: 10
+# Спальня
+  - condition: state
+    entity_id: binary_sensor.motion_sensor_158d0003021440
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Прихожая, движение
+    entity_id: binary_sensor.motion_sensor_158d0003d12974
+    state: 'off'
+    for:
+      minutes: 10
+  - condition: state
+#Туалет, движение 
+    entity_id: binary_sensor.0x00158d0007274a75_occupancy
+    state: 'off'
+    for:
+      minutes: 10      
+  - condition: state
+    entity_id: cover.0xa4c138460619e3ea
+    state: 'closed'     
+  action:
+    - service: cover.open_cover
+      entity_id: cover.0xa4c138460619e3ea
+  mode: single    
+  
+# Открытие штор в гостиной в 10-30 утра 
+- alias: Livingroom_Open cover 10_30_AM 
+  initial_state: true
+  trigger:
+    platform: time
+    at: '10:30'
+  condition:
+  - condition: state
+    entity_id: cover.0xa4c138460619e3ea
+    state: 'closed'      
+  action:
+    - service: cover.open_cover
+      entity_id: cover.0xa4c138460619e3ea
+  mode: single

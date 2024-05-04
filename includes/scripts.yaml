@@ -5,7 +5,8 @@ clean_living_room:
             data:
               entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
-              params: [[24312,28988,30262,32188,1]]
+              params: [[24330,28903,29780,32053,1]]
+
 clean_badroom_room:
         alias: "Vacuum Badroom room"
         sequence:
@@ -13,7 +14,8 @@ clean_badroom_room:
             data:
               entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
-              params: [[24475,23410,29925,26010,1]]
+              params: [[24210,23427,29460,25977,1]]
+
 clean_kitchen_room:
         alias: "Vacuum Kitchen room"
         sequence:
@@ -21,7 +23,7 @@ clean_kitchen_room:
             data:
               entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
-              params: [[24541,26046,27191,27996,1]]
+              params: [[24131,26115,26231,28015,1]]
 
 clean_corridor_room:
         alias: "Vacuum Corridor room"
@@ -30,7 +32,7 @@ clean_corridor_room:
             data:
               entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
-              params: [[27382,26089,30432,28889,1]]
+              params: [[26283,26062,30033,28812,1]]
 
 clean_carpet_corridor:
         alias: "Vacuum carpet corridor"
@@ -39,7 +41,7 @@ clean_carpet_corridor:
             data:
               entity_id: vacuum.robot_pylesos
               command: app_zoned_clean
-              params: [[29110,26052,30410,27402,2]]
+              params: [[29381,26579,29981,27479,2]]
 
 clean_vacuum_cleaner:
         alias: "Vacuum cleaner clean"
@@ -48,7 +50,7 @@ clean_vacuum_cleaner:
             data:
               entity_id: vacuum.robot_pylesos
               command: app_goto_target
-              params: [26500,27100]
+              params: [26197,27362]
 
 cover_position_curtains_open:
   alias: "Sunrise Curtians open"

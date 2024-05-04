@@ -1,0 +1,22 @@
+- id: '1712923009951'
+  alias: dorbell_shot
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.door_window_sensor_158d000aca7b8a
+    from: 'on'
+    to: 'off'
+  condition: []
+  action:
+  - service: camera.snapshot
+    target:
+      device_id: 4e8463296668288a419f55aac6dc1f89
+      entity_id: camera.ezviz
+    data:
+      filename: /tmp/yourcamera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg
+  - service: notify.telegram
+    metadata: {}
+    data:
+      filename: /tmp/yourcamera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg
+  mode: single

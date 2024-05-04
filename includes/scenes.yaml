@@ -1,0 +1,23 @@
+- id: '1693982873559'
+  name: Cinema
+  entities:
+    switch.sonoff_100061d346:
+#      friendly_name: Бра в зале
+      state: 'off'
+    light.yeelight_ceiling20_0x1588e1a5:
+#      friendly_name: Свет в гостиной
+      state: 'off'
+    light.yeelight_ceiling20_0x1588e1a5_ambilight:
+#      friendly_name: Амбилайт в гостиной
+      state: 'off'
+    cover.0xa4c138460619e3ea:
+      current_position: 0
+      options:
+      position: 0
+      running: false
+      device_class: shade
+      icon: mdi:curtains
+#      friendly_name: Шторы в гостиной
+      state: 'closed'
+  icon: mdi:theater
+  metadata: {}

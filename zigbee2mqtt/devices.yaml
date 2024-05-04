@@ -28,10 +28,8 @@
 '0x00158d0003c779c9':
   friendly_name: вода
 '0x00158d000421a109':
-  friendly_name: движение в прихожей
+  friendly_name: движение в гостиной
   occupancy_timeout: 5
-'0x00158d0000c2f824':
-  friendly_name: входная дверь
 '0x00158d0002e2c1c7':
   friendly_name: табурет
 '0x00158d0007274a75':
@@ -44,11 +42,12 @@
   friendly_name: шторы в спальне
   invert_cover: false
 '0xa4c1382f021b16a1':
-  friendly_name: климат в гостиной
+  friendly_name: климат в спальне
   temperature_precision: 1
   humidity_precision: 1
 '0xa4c1380f4bf4cd3e':
-  friendly_name: удлинитель в спальне
+  friendly_name: реле удлинитель в спальне
+  state_action: true
 '0x00124b0029280242':
   friendly_name: движение на кухне 1
 '0x70b3d52b6001ac57':
@@ -57,3 +56,22 @@
   friendly_name: подсветка и вытяжка на кухне
 '0x00158d0002b46857':
   friendly_name: выключатель в гостиной
+'0xa4c138aef10251d5':
+  friendly_name: бактерицидная лампа
+'0xa4c138460619e3ea':
+  friendly_name: шторы в гостиной
+  invert_cover: false
+'0xa4c1385b9153cbd5':
+  friendly_name: датчик дыма
+'0xa4c138367ef577fa':
+  friendly_name: входная дверь
+'0xa4c138ddbc5c39c9':
+  friendly_name: датчик климата в гостиной
+'0xa4c138de02bef15d':
+  friendly_name: розетка проектора
+'0xa4c13854498264e2':
+  friendly_name: термоголовка
+'0xa4c1387d8ee6292e':
+  friendly_name: климат на улице
+'0xa4c13836353c3b70':
+  friendly_name: климат на кухне

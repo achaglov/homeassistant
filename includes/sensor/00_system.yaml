@@ -17,32 +17,22 @@
         friendly_name: "Средняя влажность"
         unit_of_measurement: "%"
         value_template: >
-          {% set bedroom = states('sensor.cgdk2_humidity') | float(default=0) %}
-          {% set kitchen = states('sensor.atc_humidity') | float(default=0) %}
+          {% set bedroom = states('sensor.0xa4c1382f021b16a1_humidity') | float(default=0) %}
+          {% set kitchen = states('sensor.0xa4c13836353c3b70_humidity') | float(default=0) %}
           {% set vannoi = states('sensor.klimat_v_vannoi_humidity') | float(default=0) %}
           {{ ((bedroom + kitchen) / 1.8) | round(0) }}
 
 #Ресурсы
-  - platform: systemmonitor
-    resources:
-    - type: processor_use
-    - type: disk_use_percent
-      arg: /
-    - type: memory_use_percent
-    - type: last_boot
-    - type: disk_free
-      arg: /
+#  - platform: systemmonitor
+#    resources:
+#    - type: processor_use
+#    - type: disk_use_percent
+#      arg: /
+#    - type: memory_use_percent
+#    - type: last_boot
+#    - type: disk_free
+#      arg: /
 
-
-#Температура CPU        
-  - platform: command_line
-    scan_interval: 300
-    name: CPU Temperature
-    command: 'cat /sys/class/thermal/thermal_zone0/temp'
-    #unit_of_measurement: '°C'
-    #value_template: '{{ value | multiply(0.001) }}'
-    unit_of_measurement: "°C"
-    value_template: '{{ value | multiply(0.001) | round(2) }}'
         
 # Создаём сенсор счётчик прошедшего времени с момента последнего обновления данных Ватериусом
 # Используем время последнего обновления показаний холодной воды, так как этот сенсор обновляется
@@ -65,7 +55,8 @@
         unique_id: radioactive
         unit_of_measurement: "µR/h"
         value_template: "{{ (states('sensor.radiation')|float(default=0.1) * 100)|round(2) }}"
-        
+
+###Меняем значение сенсоров на свое        
   - platform: template
     sensors:
       entrance_taburet_status:

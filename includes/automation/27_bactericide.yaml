@@ -1,0 +1,59 @@
+# Включение выключение кварцевания в ванной
+- alias: Bathroom bactericide Turn ON_OFF
+  initial_state: true
+  trigger:
+    - platform: time
+      at: "02:30:00"
+  condition:
+    - condition: state
+      entity_id: switch.0xa4c138aef10251d5
+      state: "off"
+    - condition: state
+      entity_id: switch.0x00158d0006d49f34_l1
+      state: "off"
+  action:
+    - service: timer.start
+      entity_id: timer.bactericide_bathroom_10m_off
+    - service: timer.start
+      entity_id: timer.fan_bathroom_off
+    - service: switch.turn_on
+      entity_id: switch.0x00158d0006d49f34_l2
+    - service: switch.turn_on
+      entity_id: switch.0xa4c138aef10251d5
+    - delay: "00:05:00"
+    - service: switch.turn_off
+      entity_id: switch.0xa4c138aef10251d5
+    - delay: "00:05:00"
+    - service: switch.turn_off
+      entity_id: switch.0x00158d0006d49f34_l2
+      
+#Выключение кварцевания если включили свет (присутствие)
+- alias: Bathroom bactericide Turn OFF
+  initial_state: true
+  trigger:
+  - platform: state
+    entity_id: switch.0x00158d0006d49f34_l1
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: switch.0xa4c138aef10251d5
+    state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.0xa4c138aef10251d5
+
+### Выключение кварцевания в случае поломки датчиков (через 30 минут)
+- alias: Bathroom bactericide Turn OFF Timer On
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: timer.finished
+      event_data: 
+        entity_id: timer.bactericide_bathroom_10m_off
+  condition:
+    - condition: state
+      entity_id: switch.0xa4c138aef10251d5
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.0xa4c138aef10251d5

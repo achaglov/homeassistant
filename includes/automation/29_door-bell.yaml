@@ -1,0 +1,32 @@
+# Звонок в дверь
+- alias: Door_bell_message
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.door_window_sensor_158d000aca7b8a
+      to: 'off'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Звонок в дверь в: {{ states('sensor.time') }}"
+        
+# Не работает        
+- alias: dorbell_shot
+  initial_state: false
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.door_window_sensor_158d000aca7b8a
+      from: "on"
+      to: "off"
+  condition: []
+  action:
+    - service: camera.snapshot
+      target:
+        device_id: 4e8463296668288a419f55aac6dc1f89
+        entity_id: camera.ezviz
+      data:
+        filename: /config/tmp/yourcamera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg
+    - service: telegram_bot.send_photo
+      data:
+        filename: tmp/1.jpg

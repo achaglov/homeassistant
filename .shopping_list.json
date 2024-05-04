@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "name": "Кондиционер ",
+    "id": "52722f6f5516456e9eac7401cc955bb5",
+    "complete": false
+  },
+  {
+    "name": "Жидкое мыло ",
+    "id": "a5d2d38eb42b47e793cb55c4533982b3",
+    "complete": false
+  },
+  {
+    "name": "Зубная паста ",
+    "id": "2ea43aeb5d7b4cd9ba212e5a66fca080",
+    "complete": false
+  },
+  {
+    "name": "Соль",
+    "id": "fc748cdf78934f478e57a69cdd9ac38e",
+    "complete": false
+  },
+  {
+    "name": "Мешок для мусора ",
+    "id": "40ac05fb6ffc4b14af7014b6047e2848",
+    "complete": false
+  },
+  {
+    "name": "Пленка пищевая",
+    "id": "aead58911caf4852846b1c9d3867af2a",
+    "complete": false
+  }
+]

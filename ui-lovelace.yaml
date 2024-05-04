@@ -13,8 +13,8 @@ views:
         - type: entities
           show_header_toggle: false
           entities:
-            - entity: sensor.temperature_ulitsa
-            - entity: sensor.humidity_ulitsa
+            - entity: sensor.0xa4c1387d8ee6292e_temperature
+            - entity: sensor.0xa4c1387d8ee6292e_humidity
             - entity: sensor.gdacs_55_126765868060865_59_72066044807435
         - type: custom:mini-graph-card
           entities:
@@ -57,10 +57,21 @@ views:
           show_header_toggle: false
           entities:
             - entity: sensor.cgdk2_temperature
-            - entity: sensor.0xa4c1382f021b16a1_temperature            
-            - entity: sensor.atc_temperature
+            - entity: sensor.0xa4c1382f021b16a1_temperature
+            - entity: sensor.0xa4c138ddbc5c39c9_temperature            
+            - entity: sensor.0xa4c13836353c3b70_temperature
             - entity: sensor.klimat_v_vannoi_temperature
             
+#        - type: thermostat
+#          entity: climate.0xa4c13854498264e2
+#          name: Термостат в спальне
+#          features:
+#          - type: climate-hvac-modes
+#            hvac_modes:
+#              - auto
+#              - heat
+#              - 'off' 
+          
         - type: 'custom:mini-humidifier'
           entity: humidifier.zhimi_humidifier_ca1
         - type: custom:mini-graph-card
@@ -75,11 +86,20 @@ views:
           show_header_toggle: false
           entities:
             - entity: sensor.0xa4c1382f021b16a1_humidity
-            - entity: sensor.atc_humidity
+            - entity: sensor.0xa4c138ddbc5c39c9_humidity
+            - entity: sensor.0xa4c13836353c3b70_humidity
             - entity: sensor.klimat_v_vannoi_humidity
             - entity: sensor.average_humidity
               name: 'Порог отключения вентиляции'
 #              icon: 'mdi:water-percent'
+
+        - type: custom:mini-graph-card
+          entities:
+            - sensor.co2_co2_level
+          name: CO2 в спальне
+          line_color: blue
+          line_width: 4
+          font_size: 150
             
         - type: 'custom:purifier-card'
           entity: fan.mi_air_purifier_3c
@@ -176,6 +196,8 @@ views:
               #name: Свет в ванной
             - entity: switch.0x00158d0006d49f34_l2            
               #name: Вентиляция в ванной
+            - entity: switch.0xa4c138aef10251d5            
+              #name: Бактерицидная лампа
             - entity: switch.0xa4c138316bba8173            
               #name: Свет в туалете
             - entity: switch.0x00158d0003c779c9
@@ -210,11 +232,18 @@ views:
 #               **Шторы** 
           - type: entity
             entity: cover.0xa4c138345beaa3fc
-            name: Шторы состояние
+#            name: Шторы в спальне
           - type: entities
 #            show_header_toggle: false
             entities:
               - entity: cover.0xa4c138345beaa3fc
+              
+          - type: entity
+            entity: cover.0xa4c138460619e3ea
+#            name: Шторы состояние
+          - type: entities
+            entities:
+              - entity: cover.0xa4c138460619e3ea
 
  
   - title: Сенсоры
@@ -251,7 +280,7 @@ views:
         - type: entities
           show_header_toggle: false
           entities:   
-            - entity: binary_sensor.0x00158d0000c2f824_contact
+            - entity: binary_sensor.0xa4c138367ef577fa_contact
 #              name: Входная дверь
             - entity: sensor.entrance_kreslo_status
 #              name: Офисное кресло
@@ -285,7 +314,11 @@ views:
             - entity: binary_sensor.smoke_sensor_158d00045f1f2d
 #              name: Задымление в спальне
 
-
+        - type: entities
+          show_header_toggle: false
+          entities:          
+            - entity: binary_sensor.0xa4c1385b9153cbd5_smoke
+#              name: Задымление на кухне
 
         - type: markdown
           content: >
@@ -457,7 +490,7 @@ views:
           content: >
              **Камера**
         - type: iframe
-          url: http://192.168.1.100/cam.php
+          url: http://192.168.1.101/cam.php
           aspect_ratio: 75%
           style:
             margin-left: 1000px
@@ -484,6 +517,43 @@ views:
         cards:
           - type: 'custom:mini-media-player'
             entity: media_player.yandex_station
+            artwork: cover
+            sound_mode: icon
+            shortcuts:
+              attribute: sound_mode
+              buttons:
+                - icon: 'mdi:account-voice'
+                  id: Произнеси текст
+                  type: sound_mode
+                - icon: 'mdi:robot'
+                  id: Выполни команду
+                  type: sound_mode
+                - icon: 'mdi:playlist-star'
+                  id: включи мою любимую музыку вперемешку
+                  type: command
+                - icon: 'mdi:playlist-music'
+                  id: включи плейлист дня
+                  type: command
+                - icon: 'mdi:heart'
+                  id: лайк
+                  type: command
+                - icon: 'mdi:heart-off'
+                  id: снять лайк
+                  type: command
+              columns: 6
+            hide:
+              sound_mode: false
+              runtime: false
+            tts:
+              platform: yandex_station
+
+
+
+      - type: vertical-stack
+        
+        cards:
+          - type: 'custom:mini-media-player'
+            entity: media_player.yandex_station_u00s4w500q3mgk
             artwork: cover
             sound_mode: icon
             shortcuts:
@@ -625,7 +695,7 @@ views:
            - type: gauge
              name: Температура CPU
              unit: 'C°'
-             entity: sensor.cpu_temperature
+             entity: sensor.system_monitor_processor_temperature
              severity:
                green: 0
                yellow: 60
@@ -657,7 +727,9 @@ views:
 #              name: Движение в гостиной
             - entity: sensor.0x00158d0002b46857_battery
 #              name: Выключатель в гостиной
-            - entity: sensor.0x00158d0000c2f824_battery
+            - entity: sensor.0xa4c138ddbc5c39c9_battery
+#              name: Климат в гостиной
+            - entity: sensor.0xa4c138367ef577fa_battery
 #              name: Входная дверь
             - entity: sensor.battery_158d0003559ebf
 #              name: Выключатель на кухне
@@ -682,7 +754,7 @@ views:
 #              name: Утечка в туалете
             - entity: sensor.battery_158d00045f1f2d
 #              name: Датчик дыма
-            - entity: sensor.atc_battery_level
+            - entity: sensor.0xa4c13836353c3b70_battery
 #              name: Температура и влажность на кухне
             - entity: sensor.klimat_v_vannoi_battery
 #              name: Температура и влажность в ванной
@@ -697,11 +769,14 @@ views:
             - entity: sensor.0x54ef4410000eca07_battery
 #              name: Батарея датчика освещенности на улице
             - entity: sensor.0xa4c1382f021b16a1_battery
-#              name: Батарея датчика климата в гостиной
-            - entity: sensor.battery_level_ulitsa
+#              name: Батарея датчика климата в спальне
+            - entity: sensor.0xa4c1387d8ee6292e_battery
 #              name: Батарея датчика климата на улице 
             - entity: sensor.ezviz_battery_level
 #              name: Батарея видеоглазка
+            - entity: sensor.battery_158d000aca7b8a
+#              name: Батарея дверного звонка
+
 
   - title: Датчик присутствия
     icon: mdi:target-account

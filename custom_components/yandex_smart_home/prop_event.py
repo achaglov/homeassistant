@@ -150,10 +150,10 @@ class ContactProperty(EventProperty):
     def supported(self) -> bool:
         if self.state.domain == binary_sensor.DOMAIN:
             return self.state.attributes.get(ATTR_DEVICE_CLASS) in (
-                binary_sensor.DEVICE_CLASS_DOOR,
-                binary_sensor.DEVICE_CLASS_GARAGE_DOOR,
-                binary_sensor.DEVICE_CLASS_WINDOW,
-                binary_sensor.DEVICE_CLASS_OPENING
+                binary_sensor.BinarySensorDeviceClass.DOOR,
+                binary_sensor.BinarySensorDeviceClass.GARAGE_DOOR,
+                binary_sensor.BinarySensorDeviceClass.WINDOW,
+                binary_sensor.BinarySensorDeviceClass.OPENING
             )
 
         return False
@@ -166,9 +166,9 @@ class MotionProperty(EventProperty):
     def supported(self) -> bool:
         if self.state.domain == binary_sensor.DOMAIN:
             return self.state.attributes.get(ATTR_DEVICE_CLASS) in (
-                binary_sensor.DEVICE_CLASS_MOTION,
-                binary_sensor.DEVICE_CLASS_OCCUPANCY,
-                binary_sensor.DEVICE_CLASS_PRESENCE
+                binary_sensor.BinarySensorDeviceClass.MOTION,
+                binary_sensor.BinarySensorDeviceClass.OCCUPANCY,
+                binary_sensor.BinarySensorDeviceClass.PRESENCE
             )
 
         return False
@@ -180,7 +180,7 @@ class GasProperty(EventProperty):
 
     def supported(self) -> bool:
         if self.state.domain == binary_sensor.DOMAIN:
-            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.DEVICE_CLASS_GAS
+            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.BinarySensorDeviceClass.GAS
 
         return False
 
@@ -191,7 +191,7 @@ class SmokeProperty(EventProperty):
 
     def supported(self) -> bool:
         if self.state.domain == binary_sensor.DOMAIN:
-            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.DEVICE_CLASS_SMOKE
+            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.BinarySensorDeviceClass.SMOKE
 
         return False
 
@@ -202,7 +202,7 @@ class BatteryLevelLowProperty(EventProperty):
 
     def supported(self) -> bool:
         if self.state.domain == binary_sensor.DOMAIN:
-            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.DEVICE_CLASS_BATTERY
+            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.BinarySensorDeviceClass.BATTERY
 
         return False
 
@@ -224,7 +224,7 @@ class WaterLeakProperty(EventProperty):
 
     def supported(self) -> bool:
         if self.state.domain == binary_sensor.DOMAIN:
-            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.DEVICE_CLASS_MOISTURE
+            return self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.BinarySensorDeviceClass.MOISTURE
 
         return False
 
@@ -260,11 +260,10 @@ class ButtonProperty(EventProperty):
         return False
 
     def get_value(self) -> str | None:
-        for value in [self.state.attributes.get('last_action'), self.state.attributes.get('action'), self.state.state]:
-            event_value = self.event_value(value)
+        if self.state.domain == binary_sensor.DOMAIN:
+            return self.event_value(self.state.attributes.get('last_action'))
 
-            if event_value:
-                return event_value
+        return self.event_value(self.state.state)
 
 
 @register_property
@@ -274,7 +273,7 @@ class VibrationBinarySensorProperty(EventProperty):
 
     def supported(self) -> bool:
         if self.state.domain == binary_sensor.DOMAIN:
-            if self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.DEVICE_CLASS_VIBRATION:
+            if self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.BinarySensorDeviceClass.VIBRATION:
                 return True
 
             return self.state.attributes.get('last_action') in [
@@ -286,7 +285,7 @@ class VibrationBinarySensorProperty(EventProperty):
         return False
 
     def get_value(self) -> str | None:
-        if self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.DEVICE_CLASS_VIBRATION:
+        if self.state.attributes.get(ATTR_DEVICE_CLASS) == binary_sensor.BinarySensorDeviceClass.VIBRATION:
             return self.event_value(self.state.state)
 
         return self.event_value(self.state.attributes.get('last_action'))
@@ -308,4 +307,4 @@ class VibrationSensorProperty(EventProperty):
         return False
 
     def get_value(self) -> str | None:
-        return self.event_value(self.state.attributes.get('action'))
+        return self.event_value(self.state.state)

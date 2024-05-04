@@ -45,7 +45,7 @@ from .http import async_register_http
 from .notifier import YandexNotifier, async_setup_notifier, async_start_notifier, async_unload_notifier
 
 _LOGGER = logging.getLogger(__name__)
-
+_PYTEST = False
 
 ENTITY_PROPERTY_SCHEMA = vol.All(
     cv.has_at_least_one_key(const.CONF_ENTITY_PROPERTY_ENTITY, const.CONF_ENTITY_PROPERTY_ATTRIBUTE),
@@ -175,7 +175,7 @@ async def async_setup(hass: HomeAssistant, yaml_config: ConfigType):
     async_register_http(hass)
     async_setup_notifier(hass)
 
-    def _device_discovery_listener(_: Event):
+    async def _device_discovery_listener(_: Event):
         for entry in hass.config_entries.async_entries(DOMAIN):
             if not entry.data[const.CONF_DEVICES_DISCOVERED]:
                 data = dict(entry.data)
@@ -219,7 +219,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         cloud_manager = CloudManager(hass, config, async_get_clientsession(hass))
         hass.data[DOMAIN][CLOUD_MANAGER] = cloud_manager
 
-        hass.loop.create_task(cloud_manager.connect())
+        # FIXME: mocking fails sometimes
+        if not _PYTEST:
+            hass.loop.create_task(cloud_manager.connect())  # pragma: no cover
+
         entry.async_on_unload(
             hass.bus.async_listen_once(
                 EVENT_HOMEASSISTANT_STOP, cloud_manager.disconnect
@@ -246,6 +249,11 @@ async def async_unload_entry(hass: HomeAssistant, _: ConfigEntry):
 async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry):
     if entry.data[const.CONF_CONNECTION_TYPE] == const.CONNECTION_TYPE_CLOUD:
         await delete_cloud_instance(hass, entry)
+
+
+async def async_migrate_entry(_: HomeAssistant, entry: ConfigEntry) -> bool:
+    entry.version = 1
+    return True
 
 
 async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry):

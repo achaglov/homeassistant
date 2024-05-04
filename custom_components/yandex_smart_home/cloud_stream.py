@@ -30,6 +30,11 @@ from homeassistant.helpers.event import async_call_later
 from multidict import MultiDictProxy
 import yarl
 
+try:
+    from homeassistant.helpers.http import KEY_HASS
+except ImportError:
+    KEY_HASS = 'hass'
+
 from .const import CLOUD_STREAM_BASE_URL
 
 _LOGGER = logging.getLogger(__name__)
@@ -54,7 +59,7 @@ class ResponseMeta:
 
 class WebRequest:
     def __init__(self, hass: HomeAssistant, url: yarl.URL):
-        self.app = {'hass': hass}
+        self.app = {KEY_HASS: hass}
         self._url = url
 
     @property
@@ -153,8 +158,9 @@ class CloudStream:
         view = views[request.view]()
 
         r = await view.get(web_request, self._stream.access_token, request.sequence, request.part_num)
+        body = r.body if r.body is not None else b''
         meta = ResponseMeta(status_code=r.status, headers=dict(r.headers))
-        response = bytes(json.dumps(asdict(meta)), 'utf-8') + b'\r\n' + r.body
+        response = bytes(json.dumps(asdict(meta)), 'utf-8') + b'\r\n' + body
         await self._ws.send_bytes(response, compress=False)
 
     def _try_reconnect(self):

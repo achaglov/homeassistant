@@ -1,5 +1,5 @@
 # Задымление в спальне сообщение1
-- alias: Smoke_message
+- alias: Smoke_message_badroom
   initial_state: true
   trigger:
     - platform: state
@@ -9,3 +9,17 @@
     - service: notify.telegram
       data:
         message: "Внимание! Задымление в спальне! "
+        
+# Задымление в спальне сообщение1
+- alias: Smoke_message_kitchen
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0xa4c1385b9153cbd5_smoke
+      to: 'on'
+  action:
+    - service: notify.telegram
+      data:
+        message: "Внимание! Задымление в спальне! "        
+        
+        

@@ -1,7 +1,11 @@
 homeassistant:
   customize: !include_dir_merge_named includes/customize
   packages: !include_dir_merge_named includes/packages
-  
+# Whitelist Folders
+  allowlist_external_dirs:
+    - /config/tmp
+  whitelist_external_dirs:
+    - /config/tmp  
   
   
 # Configure a default setup of Home Assistant (frontend, api, etc)
@@ -106,6 +110,42 @@ mqtt:
            'Напряжение в порядке'
         {% endif %}
 
+# Передаем показания счетчика электроэнергии в Ватериуса, для последующей передачи поставщику
+rest_command:
+  send_waterius_energy:
+    url: https://uc.waterius.ru
+    method: POST
+    payload: '{"ch0": {{ states("sensor.energometr_energy_total") }}, "data_type0": 2, 
+"key": "80079368485752160166374386507982"}'
+    content_type: 'application/json'
+
+
+# Пришлось вынести сюда после обновления command_line
+#command_line:
+#  - binary_sensor:
+#      name: Workday isdayoff.ru
+#      command: >-
+#        curl https://isdayoff.ru/{{ now().date().strftime("%Y%m%d") }}
+#      scan_interval: 600
+#      payload_on: '0'
+#      payload_off: '1'
+
+#  - binary_sensor:
+#      name: Workday isdayoff.ru Tomorrow
+#      command: >-
+#        curl https://isdayoff.ru/{{ (now().date() + timedelta(days=1)).strftime("%Y%m%d") }}
+#      scan_interval: 600
+#      payload_on: '0'
+#      payload_off: '1'
+
+#  - sensor:
+#      name: CPU Temperature
+#      command: 'cat /sys/class/thermal/thermal_zone0/temp'
+#      scan_interval: 300
+#      unit_of_measurement: "°C"
+#      value_template: '{{ value | multiply(0.001) | round(2) }}'
+
+
 
 #Вынос во внешние файлы
 group: !include includes/groups.yaml
@@ -119,3 +159,6 @@ timer: !include includes/timer.yaml
 binary_sensor: !include_dir_merge_list includes/bi-sensor
 sensor: !include_dir_merge_list includes/sensor
 automation: !include_dir_merge_list includes/automation
+
+
+   

@@ -16,6 +16,7 @@ from homeassistant.components import (
     light,
     lock,
     media_player,
+    remote,
     scene,
     script,
     sensor,
@@ -130,6 +131,12 @@ TYPE_SENSOR_WATER_LEAK = TYPE_SENSOR + '.water_leak'
 TYPE_SENSOR_BUTTON = TYPE_SENSOR + '.button'
 TYPE_SENSOR_GAS = TYPE_SENSOR + '.gas'
 TYPE_SENSOR_SMOKE = TYPE_SENSOR + '.smoke'
+TYPE_SMART_METER = PREFIX_TYPES + 'smart_meter'
+TYPE_SMART_METER_COLD_WATER = TYPE_SMART_METER + '.cold_water'
+TYPE_SMART_METER_ELECTRICITY = TYPE_SMART_METER + '.electricity'
+TYPE_SMART_METER_GAS = TYPE_SMART_METER + '.gas'
+TYPE_SMART_METER_HEAT = TYPE_SMART_METER + '.heat'
+TYPE_SMART_METER_HOT_WATER = TYPE_SMART_METER + '.hot_water'
 TYPE_PET_DRINKING_FOUNTAIN = PREFIX_TYPES + 'pet_drinking_fountain'
 TYPE_PET_FEEDER = PREFIX_TYPES + 'pet_feeder'
 TYPE_OTHER = PREFIX_TYPES + 'other'
@@ -167,6 +174,12 @@ TYPES = (
     TYPE_SENSOR_BUTTON,
     TYPE_SENSOR_GAS,
     TYPE_SENSOR_SMOKE,
+    TYPE_SMART_METER,
+    TYPE_SMART_METER_COLD_WATER,
+    TYPE_SMART_METER_ELECTRICITY,
+    TYPE_SMART_METER_GAS,
+    TYPE_SMART_METER_HEAT,
+    TYPE_SMART_METER_HOT_WATER,
     TYPE_PET_DRINKING_FOUNTAIN,
     TYPE_PET_FEEDER,
     TYPE_OTHER,
@@ -189,6 +202,7 @@ DOMAIN_TO_YANDEX_TYPES = {
     light.DOMAIN: TYPE_LIGHT,
     lock.DOMAIN: TYPE_OPENABLE,
     media_player.DOMAIN: TYPE_MEDIA_DEVICE,
+    remote.DOMAIN: TYPE_SWITCH,
     scene.DOMAIN: TYPE_OTHER,
     script.DOMAIN: TYPE_OTHER,
     sensor.DOMAIN: TYPE_SENSOR,
@@ -215,6 +229,8 @@ DEVICE_CLASS_TO_YANDEX_TYPES = {
     (sensor.DOMAIN, DEVICE_CLASS_BUTTON): TYPE_SENSOR_BUTTON,
     (sensor.DOMAIN, sensor.SensorDeviceClass.CO): TYPE_SENSOR_CLIMATE,
     (sensor.DOMAIN, sensor.SensorDeviceClass.CO2): TYPE_SENSOR_CLIMATE,
+    (sensor.DOMAIN, sensor.SensorDeviceClass.ENERGY): TYPE_SMART_METER_ELECTRICITY,
+    (sensor.DOMAIN, sensor.SensorDeviceClass.GAS): TYPE_SMART_METER_GAS,
     (sensor.DOMAIN, sensor.SensorDeviceClass.HUMIDITY): TYPE_SENSOR_CLIMATE,
     (sensor.DOMAIN, sensor.SensorDeviceClass.ILLUMINANCE): TYPE_SENSOR_ILLUMINATION,
     (sensor.DOMAIN, sensor.SensorDeviceClass.PM1): TYPE_SENSOR_CLIMATE,
@@ -223,6 +239,7 @@ DEVICE_CLASS_TO_YANDEX_TYPES = {
     (sensor.DOMAIN, sensor.SensorDeviceClass.PRESSURE): TYPE_SENSOR_CLIMATE,
     (sensor.DOMAIN, sensor.SensorDeviceClass.TEMPERATURE): TYPE_SENSOR_CLIMATE,
     (sensor.DOMAIN, sensor.SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS): TYPE_SENSOR_CLIMATE,
+    (sensor.DOMAIN, sensor.SensorDeviceClass.WATER): TYPE_SMART_METER_COLD_WATER,
     (switch.DOMAIN, switch.SwitchDeviceClass.OUTLET): TYPE_SOCKET,
 }
 
@@ -548,8 +565,12 @@ MODE_INSTANCE_MODES = (
 FLOAT_INSTANCE_AMPERAGE = 'amperage'
 FLOAT_INSTANCE_BATTERY_LEVEL = 'battery_level'
 FLOAT_INSTANCE_CO2_LEVEL = 'co2_level'
+FLOAT_INSTANCE_ELECTRICITY_METER = 'electricity_meter'
+FLOAT_INSTANCE_GAS_METER = 'gas_meter'
+FLOAT_INSTANCE_HEAT_METER = 'heat_meter'
 FLOAT_INSTANCE_HUMIDITY = 'humidity'
 FLOAT_INSTANCE_ILLUMINATION = 'illumination'
+FLOAT_INSTANCE_METER = 'meter'
 FLOAT_INSTANCE_PM10_DENSITY = 'pm10_density'
 FLOAT_INSTANCE_PM1_DENSITY = 'pm1_density'
 FLOAT_INSTANCE_PM2_5_DENSITY = 'pm2.5_density'
@@ -559,12 +580,17 @@ FLOAT_INSTANCE_TEMPERATURE = 'temperature'
 FLOAT_INSTANCE_TVOC = 'tvoc'
 FLOAT_INSTANCE_VOLTAGE = 'voltage'
 FLOAT_INSTANCE_WATER_LEVEL = 'water_level'
+FLOAT_INSTANCE_WATER_METER = 'water_meter'
 FLOAT_INSTANCES = (
     FLOAT_INSTANCE_AMPERAGE,
     FLOAT_INSTANCE_BATTERY_LEVEL,
     FLOAT_INSTANCE_CO2_LEVEL,
+    FLOAT_INSTANCE_ELECTRICITY_METER,
+    FLOAT_INSTANCE_GAS_METER,
+    FLOAT_INSTANCE_HEAT_METER,
     FLOAT_INSTANCE_HUMIDITY,
     FLOAT_INSTANCE_ILLUMINATION,
+    FLOAT_INSTANCE_METER,
     FLOAT_INSTANCE_PM10_DENSITY,
     FLOAT_INSTANCE_PM1_DENSITY,
     FLOAT_INSTANCE_PM2_5_DENSITY,
@@ -574,6 +600,7 @@ FLOAT_INSTANCES = (
     FLOAT_INSTANCE_TVOC,
     FLOAT_INSTANCE_VOLTAGE,
     FLOAT_INSTANCE_WATER_LEVEL,
+    FLOAT_INSTANCE_WATER_METER,
 )
 
 # https://yandex.ru/dev/dialogs/smart-home/doc/concepts/event-instance.html
@@ -689,6 +716,8 @@ XIAOMI_AIRPURIFIER_PRESET_MIDDLE = 'Middle'
 
 # https://github.com/home-assistant/core/blob/d5a8f1af1d2dc74a12fb6870a4f1cb5318f88bf9/homeassistant/components/xiaomi_miio/humidifier.py#L316
 XIAOMI_HUMIDIFIER_PRESET_MID = 'Mid'
+# leshow.humidifier.jsq1
+XIAOMI_HUMIDIFIER_CONST_HUMIDITY = 'Const Humidity'
 
 # https://github.com/airens/tion_home_assistant#climateset_fan_mode
 TION_FAN_SPEED_1 = '1'
@@ -717,6 +746,9 @@ FAN_SPEED_MID_HIGH = 'mid_high'
 
 # SmartIR
 FAN_SPEED_HIGHEST = 'highest'
+
+# https://github.com/home-assistant/core/blob/2981d7ed0ec78f2271f5b6fac26a98d1b1b280df/homeassistant/components/esphome/climate.py#L110
+FAN_SPEED_QUIET = 'quiet'
 
 # https://github.com/humbertogontijo/python-roborock/blob/1616217a06e20d51921de984134555bcc0775a92/roborock/code_mappings.py#L61
 CLEANUP_MODE_OFF = 'off'

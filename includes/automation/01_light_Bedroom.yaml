@@ -76,10 +76,10 @@
 # Сценарий Рассвет за 30 минут до будильника в рабочий день
 - id: '0105'
   alias: Bedroom_light_workday_sunrise
-  initial_state: true
+  initial_state: true 
   trigger:
     platform: time
-    at: '06:30'
+    at: '06:31'
   condition:
     - condition: state  
       entity_id: binary_sensor.amazfit_gtr_lite
@@ -87,9 +87,9 @@
     - condition: state
       entity_id: binary_sensor.workday_sensor
       state: 'on' 
-    - condition: numeric_state
-      entity_id: sensor.0x54ef4410000eca07_illuminance_lux
-      below: 200
+#    - condition: numeric_state
+#      entity_id: sensor.0x54ef4410000eca07_illuminance_lux
+#      below: 200
     - condition: state
       entity_id: light.yeelight_ceiling3_0x0000000007d1efa6
       state: 'off'

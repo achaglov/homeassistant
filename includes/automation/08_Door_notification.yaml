@@ -3,47 +3,55 @@
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.0x00158d0000c2f824_contact
+      entity_id: binary_sensor.0xa4c138367ef577fa_contact
       from: 'off'
       to: 'on'
   condition:
   - condition: state
     entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
+# движение в ванной
     state: 'off'
     for:
       minutes: 10
   - condition: state
     entity_id: binary_sensor.0x00158d000421a109_occupancy
+# Движение в гостиной 
     state: 'off'
     for:
       minutes: 10
   - condition: state
     entity_id: binary_sensor.dvizhenie_na_kukhne_occupancy
+# Движение на кухне 
     state: 'off'
     for:
       minutes: 10
   - condition: state
     entity_id: binary_sensor.motion_sensor_158d0003021440
+# Движение в спальне 
     state: 'off'
     for:
       minutes: 10
   - condition: state
     entity_id: binary_sensor.motion_sensor_158d0003d12974
+# Движение в прихожей 
     state: 'off'
     for:
       minutes: 10
   - condition: state
     entity_id: binary_sensor.0x00158d0003cc2d64_occupancy
+# Движение в ванной 
     state: 'off'
     for:
       minutes: 10
   - condition: state
     entity_id: binary_sensor.0x00158d0007274a75_occupancy
+# Движение в туалете 
     state: 'off'
     for:
       minutes: 10
   - condition: state
     entity_id: binary_sensor.amazfit_gtr_lite
+# Amazfit GTR Lite 
     state: 'off'
       
   action:
@@ -53,17 +61,17 @@
     - delay: 00:00:05
     - service: telegram_bot.send_photo
       data:
-        url: http://192.168.1.100/cam.php        
+        url: http://192.168.1.101/cam.php        
     - delay: 00:00:04
     - service: telegram_bot.send_photo
       data:
-        url: http://192.168.1.100/cam.php    
+        url: http://192.168.1.101/cam.php    
         
 - alias: Door_open_message_10_min 
   initial_state: true
   trigger:
     - platform: state
-      entity_id: binary_sensor.0x00158d0000c2f824_contact
+      entity_id: binary_sensor.0xa4c138367ef577fa_contact
       from: 'off'
       to: 'on'
       for:

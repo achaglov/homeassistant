@@ -1,13 +1,15 @@
 """Sensor module."""
-from collections.abc import Mapping
-from typing import Any, Callable, Optional
+from collections.abc import Callable, Mapping
+from typing import Any
 
 from homeassistant.components.sensor import (
+    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import PERCENTAGE, UnitOfMass
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
@@ -52,6 +54,7 @@ async def async_setup_entry(
             handler,
             SensorEntityDescription(
                 key=ATTR_BMI,
+                translation_key="bmi",
                 icon="mdi:human",
             ),
             Metric.BMI,
@@ -61,6 +64,9 @@ async def async_setup_entry(
             handler,
             SensorEntityDescription(
                 key=ATTR_BMR,
+                translation_key="basal_metabolism",
+                suggested_display_precision=0,
+                native_unit_of_measurement="kcal",
             ),
             Metric.BMR,
         ),
@@ -68,6 +74,8 @@ async def async_setup_entry(
             handler,
             SensorEntityDescription(
                 key=ATTR_VISCERAL,
+                translation_key="visceral_fat",
+                suggested_display_precision=0,
             ),
             Metric.VISCERAL_FAT,
         ),
@@ -75,8 +83,9 @@ async def async_setup_entry(
             handler,
             SensorEntityDescription(
                 key=CONF_SENSOR_WEIGHT,
-                icon="mdi:weight-kilogram",
-                native_unit_of_measurement="kg",
+                translation_key="weight",
+                native_unit_of_measurement=UnitOfMass.KILOGRAMS,
+                device_class=SensorDeviceClass.WEIGHT,
             ),
             Metric.WEIGHT,
             lambda _, config: {ATTR_IDEAL: get_ideal_weight(config)},
@@ -90,20 +99,25 @@ async def async_setup_entry(
                     handler,
                     SensorEntityDescription(
                         key=ATTR_LBM,
+                        translation_key="lean_body_mass",
                     ),
                     Metric.LBM,
                 ),
                 BodyScaleSensor(
                     handler,
                     SensorEntityDescription(
-                        key=ATTR_FAT, native_unit_of_measurement="%"
+                        key=ATTR_FAT,
+                        translation_key="body_fat",
+                        native_unit_of_measurement=PERCENTAGE,
                     ),
                     Metric.FAT_PERCENTAGE,
                 ),
                 BodyScaleSensor(
                     handler,
                     SensorEntityDescription(
-                        key=ATTR_PROTEIN, native_unit_of_measurement="%"
+                        key=ATTR_PROTEIN,
+                        translation_key="protein",
+                        native_unit_of_measurement=PERCENTAGE,
                     ),
                     Metric.PROTEIN_PERCENTAGE,
                 ),
@@ -111,8 +125,9 @@ async def async_setup_entry(
                     handler,
                     SensorEntityDescription(
                         key=ATTR_WATER,
+                        translation_key="water",
                         icon="mdi:water-percent",
-                        native_unit_of_measurement="%",
+                        native_unit_of_measurement=PERCENTAGE,
                     ),
                     Metric.WATER_PERCENTAGE,
                 ),
@@ -120,6 +135,9 @@ async def async_setup_entry(
                     handler,
                     SensorEntityDescription(
                         key=ATTR_BONES,
+                        translation_key="bone_mass",
+                        native_unit_of_measurement=UnitOfMass.KILOGRAMS,
+                        device_class=SensorDeviceClass.WEIGHT,
                     ),
                     Metric.BONE_MASS,
                 ),
@@ -127,6 +145,9 @@ async def async_setup_entry(
                     handler,
                     SensorEntityDescription(
                         key=ATTR_MUSCLE,
+                        translation_key="muscle_mass",
+                        native_unit_of_measurement=UnitOfMass.KILOGRAMS,
+                        device_class=SensorDeviceClass.WEIGHT,
                     ),
                     Metric.MUSCLE_MASS,
                 ),
@@ -134,6 +155,8 @@ async def async_setup_entry(
                     handler,
                     SensorEntityDescription(
                         key=ATTR_METABOLIC,
+                        translation_key="metabolic_age",
+                        suggested_display_precision=0,
                     ),
                     Metric.METABOLIC_AGE,
                 ),
@@ -141,6 +164,8 @@ async def async_setup_entry(
                     handler,
                     SensorEntityDescription(
                         key=ATTR_BODY_SCORE,
+                        translation_key="body_score",
+                        suggested_display_precision=0,
                     ),
                     Metric.BODY_SCORE,
                 ),
@@ -153,17 +178,17 @@ async def async_setup_entry(
 class BodyScaleSensor(BodyScaleBaseEntity, SensorEntity):  # type: ignore[misc]
     """Body scale sensor."""
 
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
     def __init__(
         self,
         handler: BodyScaleMetricsHandler,
         entity_description: SensorEntityDescription,
         metric: Metric,
-        get_attributes: Optional[
-            Callable[[StateType, Mapping[str, Any]], Mapping[str, Any]]
-        ] = None,
+        get_attributes: None
+        | (Callable[[StateType, Mapping[str, Any]], Mapping[str, Any]]) = None,
     ):
         super().__init__(handler, entity_description)
-        self.entity_description.state_class = SensorStateClass.MEASUREMENT
         self._metric = metric
         self._get_attributes = get_attributes
 

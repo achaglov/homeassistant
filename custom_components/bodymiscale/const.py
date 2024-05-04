@@ -2,10 +2,10 @@
 
 from homeassistant.const import Platform
 
-MIN_REQUIRED_HA_VERSION = "2022.4.0b0"
+MIN_REQUIRED_HA_VERSION = "2023.9.0"
 NAME = "BodyMiScale"
 DOMAIN = "bodymiscale"
-VERSION = "3.0.7"
+VERSION = "2024.1.3"
 
 ISSUE_URL = "https://github.com/dckiller51/bodymiscale/issues"
 
@@ -35,7 +35,7 @@ ATTR_PROTEIN = "protein"
 ATTR_VISCERAL = "visceral_fat"
 ATTR_WATER = "water"
 
-UNIT_POUNDS = "lbs"
+UNIT_POUNDS = "lb"
 
 PROBLEM_NONE = "none"
 
@@ -49,7 +49,7 @@ If you have any issues with this you need to open an issue here:
 -------------------------------------------------------------------
 """
 
-CONSTRAINT_HEIGHT_MIN = 0
+CONSTRAINT_HEIGHT_MIN = 50
 CONSTRAINT_HEIGHT_MAX = 220
 CONSTRAINT_IMPEDANCE_MIN = 0
 CONSTRAINT_IMPEDANCE_MAX = 3000
